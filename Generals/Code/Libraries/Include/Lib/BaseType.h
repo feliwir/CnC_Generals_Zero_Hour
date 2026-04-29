@@ -34,6 +34,7 @@
 
 #include <math.h>
 #include <string.h>
+#include <stdint.h>
 
 /*
 **	Turn off some unneeded warnings.
@@ -126,8 +127,8 @@ typedef char							Byte;							// 1 byte		USED TO BE "SignedByte"
 typedef char							Char;							// 1 byte of text
 typedef bool							Bool;							// 
 // note, the types below should use "long long", but MSVC doesn't support it yet
-typedef __int64						Int64;							// 8 bytes 
-typedef unsigned __int64	UnsignedInt64;	  	// 8 bytes 
+typedef int64_t							Int64;							// 8 bytes 
+typedef uint64_t						UnsignedInt64;	  				// 8 bytes 
 
 #include "Lib/Trig.h"
 
@@ -174,14 +175,15 @@ inline Real deg2rad(Real rad) { return rad * (PI/180); }
 // note, this function depends on the cpu rounding mode, which we set to CHOP every frame, 
 // but apparently tends to be left in unpredictable modes by various system bits of
 // code, so use this function with caution -- it might not round in the way you want.
-__forceinline long fast_float2long_round(float f)
+inline long fast_float2long_round(float f)
 {
 	long i;
 
-	__asm {
-		fld [f]
-		fistp [i]
-	}
+	// __asm {
+	// 	fld [f]
+	// 	fistp [i]
+	// }
+	i = lroundf(f);
 
 	return i;
 }
