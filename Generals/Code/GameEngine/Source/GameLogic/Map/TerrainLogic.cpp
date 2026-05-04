@@ -1186,14 +1186,14 @@ void TerrainLogic::enableWaterGrid( Bool enable )
 			char *c;
 
 			// create stripped map name
-			c = strrchr( TheGlobalData->m_mapName.str(), '\\' );
+			c = (char*)strrchr( TheGlobalData->m_mapName.str(), '\\' );
 			if( c )
 				strippedMapNameOnly.set( c );
 			else
 				strippedMapNameOnly = TheGlobalData->m_mapName;
 
 			// create stripped compare name
-			c = strrchr( TheGlobalData->m_vertexWaterAvailableMaps[ i ].str(), '\\' );
+			c = (char*)strrchr( TheGlobalData->m_vertexWaterAvailableMaps[ i ].str(), '\\' );
 			if( c )
 				strippedCompareMapNameOnly.set( c );
 			else

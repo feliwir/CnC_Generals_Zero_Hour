@@ -79,7 +79,7 @@ target_sources(
           hlod.cpp
           hlod.h
           hmdldef.cpp
-          hmdldef.H
+          hmdldef.h
           hmorphanim.cpp
           hmorphanim.h
           hrawanim.cpp
@@ -178,12 +178,10 @@ target_sources(
           snappts.h
           sortingrenderer.cpp
           sortingrenderer.h
-        #   soundrobj.cpp
-        #   soundrobj.h
+          # soundrobj.cpp soundrobj.h
           sphereobj.cpp
           sphereobj.h
-        #   sr_util.cpp
-        #   sr_util.h
+          # sr_util.cpp sr_util.h
           statistics.cpp
           statistics.h
           streak.cpp
@@ -233,10 +231,7 @@ target_sources(
           ww3dtrig.h)
 
 if(WIN32)
-  target_sources(
-    g_ww3d2
-    PRIVATE framgrab.cpp
-            framgrab.h)
+  target_sources(g_ww3d2 PRIVATE framgrab.cpp framgrab.h)
 endif()
 
 set_target_properties(g_ww3d2 PROPERTIES OUTPUT_NAME "WW3D2")

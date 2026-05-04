@@ -32,7 +32,6 @@
 #define _CRC_H_
 
 #include "Lib/BaseType.h"
-#include "winsock2.h" // for htonl
 
 class CRC
 {

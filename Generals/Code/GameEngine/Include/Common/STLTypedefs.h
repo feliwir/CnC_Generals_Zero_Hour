@@ -64,13 +64,19 @@ class STLSpecialAlloc;
 
 // FORWARD DECLARATIONS
 class Object;
-enum NameKeyType;
-enum ObjectID;
-enum DrawableID;
+enum NameKeyType : int;
+enum ObjectID : int;
+enum DrawableID : int;
 
+#ifdef min
+#undef min
+#endif
+#ifdef max
+#undef max
+#endif
 #include <algorithm>
 #include <bitset>
-#include <hash_map>
+#include <unordered_map>
 #include <list>
 #include <map>
 #include <queue>

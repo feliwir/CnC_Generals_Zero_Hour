@@ -27,6 +27,11 @@
 #ifndef __STACKDUMP_H_
 #define __STACKDUMP_H_
 
+#include <windows.h>
+#ifndef _WIN32
+class EXCEPTION_POINTERS;
+#endif
+
 #ifndef IG_DEGBUG_STACKTRACE
 #define IG_DEBUG_STACKTRACE	1
 #endif

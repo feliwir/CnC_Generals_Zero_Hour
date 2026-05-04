@@ -55,7 +55,7 @@
 #include "Common/INI.h"
 #include "Common/Registry.h"
 #include "GameClient/GlobalLanguage.h"
-#include "Common/Filesystem.h"
+#include "Common/FileSystem.h"
 
 //-----------------------------------------------------------------------------
 // DEFINES ////////////////////////////////////////////////////////////////////
@@ -125,7 +125,9 @@ GlobalLanguage::~GlobalLanguage()
 	while( it != m_localFonts.end())
 	{
 		AsciiString font = *it;
+#ifdef _WIN32
 		RemoveFontResource(font.str());
+#endif
 		//SendMessage( HWND_BROADCAST, WM_FONTCHANGE, 0, 0);
 		++it;
 	}
@@ -137,7 +139,7 @@ void GlobalLanguage::init( void )
 	INI ini;
 	AsciiString fname;
 	fname.format("Data\\%s\\Language.ini", GetRegistryLanguage().str());
-
+#ifdef _WIN32
 	OSVERSIONINFO	osvi;
 	osvi.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
 	//GS NOTE: Must call doesFileExist in either case so that NameKeyGenerator will stay in sync
@@ -148,12 +150,13 @@ void GlobalLanguage::init( void )
 	{	//check if we're running Win9x variant since they may need different fonts
 		fname = tempName;
 	}
-
+#endif
 	ini.load( fname, INI_LOAD_OVERWRITE, NULL );
 	StringListIt it = m_localFonts.begin();
 	while( it != m_localFonts.end())
 	{
 		AsciiString font = *it;
+		#ifdef _WIN32
 		if(AddFontResource(font.str()) == 0)
 		{
 			DEBUG_ASSERTCRASH(FALSE,("GlobalLanguage::init Failed to add font %s", font.str()));
@@ -162,6 +165,7 @@ void GlobalLanguage::init( void )
 		{
 			//SendMessage( HWND_BROADCAST, WM_FONTCHANGE, 0, 0);
 		}
+		#endif
 		++it;
 	}
 

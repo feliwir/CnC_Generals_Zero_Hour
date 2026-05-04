@@ -1710,7 +1710,7 @@ void Player::killPlayer(void)
 
 	m_isPlayerDead = TRUE; // this is so OCLs don't ever again spawn useful units for us.
 
-	for (it = m_playerTeamPrototypes.begin(); it != m_playerTeamPrototypes.end(); ++it) {
+	for (PlayerTeamList::iterator it = m_playerTeamPrototypes.begin(); it != m_playerTeamPrototypes.end(); ++it) {
 		for (DLINK_ITERATOR<Team> iter = (*it)->iterate_TeamInstanceList(); !iter.done(); iter.advance()) {
 			Team *team = iter.cur();
 			if (!team) {
@@ -3019,8 +3019,8 @@ void Player::changeBattlePlan( BattlePlanStatus plan, Int delta, BattlePlanBonus
 	else if( removeBonus )
 	{
 		//First, inverse the bonuses
-		bonus->m_armorScalar				= 1.0f / __max( bonus->m_armorScalar, 0.01f );
-		bonus->m_sightRangeScalar		= 1.0f / __max( bonus->m_sightRangeScalar, 0.01f );
+		bonus->m_armorScalar				= 1.0f / max( bonus->m_armorScalar, 0.01f );
+		bonus->m_sightRangeScalar		= 1.0f / max( bonus->m_sightRangeScalar, 0.01f );
 		if( bonus->m_bombardment > 0 )
 		{
 			bonus->m_bombardment			= -1;
@@ -3152,8 +3152,8 @@ void Player::removeBattlePlanBonusesForObject( Object *obj ) const
 	//Copy bonuses, and invert them.
 	BattlePlanBonuses* bonus = newInstance(BattlePlanBonuses);
 	*bonus = *m_battlePlanBonuses;
-	bonus->m_armorScalar					= 1.0f / __max( bonus->m_armorScalar, 0.01f );
-	bonus->m_sightRangeScalar			= 1.0f / __max( bonus->m_sightRangeScalar, 0.01f );
+	bonus->m_armorScalar					= 1.0f / max( bonus->m_armorScalar, 0.01f );
+	bonus->m_sightRangeScalar			= 1.0f / max( bonus->m_sightRangeScalar, 0.01f );
 	bonus->m_bombardment					= -ALL_PLANS; //Safe to remove as it clears the weapon bonus flag
 	bonus->m_searchAndDestroy			= -ALL_PLANS; //Safe to remove as it clears the weapon bonus flag
 	bonus->m_holdTheLine					= -ALL_PLANS; //Safe to remove as it clears the weapon bonus flag

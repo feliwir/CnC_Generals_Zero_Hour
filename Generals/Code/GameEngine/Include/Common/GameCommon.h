@@ -204,7 +204,7 @@ extern const char *TheVeterancyNames[];
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-enum CommandSourceType 
+enum CommandSourceType : int
 { 
 
 	CMD_FROM_PLAYER = 0, 
@@ -299,7 +299,7 @@ public:																																								\
 	inline DLINK_ITERATOR<OBJCLASS> iterate_##LISTNAME() const													\
 	{																																										\
 		DEBUG_ASSERTCRASH(!BOGUSPTR(m_dlinkhead_##LISTNAME.m_head), ("bogus head ptr"));	\
-		return DLINK_ITERATOR<OBJCLASS>(m_dlinkhead_##LISTNAME.m_head, OBJCLASS::dlink_next_##LISTNAME);	\
+		return DLINK_ITERATOR<OBJCLASS>(m_dlinkhead_##LISTNAME.m_head, &OBJCLASS::dlink_next_##LISTNAME);	\
 	}																																										\
 	inline OBJCLASS *getFirstItemIn_##LISTNAME() const																	\
 	{																																										\

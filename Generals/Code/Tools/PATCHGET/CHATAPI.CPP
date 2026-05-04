@@ -21,7 +21,7 @@
 //
 
 #include <list>
-#include "GameSpy/ghttp/ghttp.h"
+#include <gamespy/ghttp/ghttp.h>
 #include "downloadManager.h"
 
 #include "chatapi.h"

@@ -55,7 +55,7 @@ template <class T> class OVERRIDE
 		// Provide useful constructores to go from a T* to an OVERRIDE<T>
 		OVERRIDE(const T *overridable = NULL);
 		// Copy constructor
-		OVERRIDE(OVERRIDE<T> &overridable);
+		OVERRIDE(const OVERRIDE<T> &overridable);
 		// Operator= for copying from another OVERRIDE and T*
 		__inline OVERRIDE &operator=( const OVERRIDE<T>& override );
 		__inline OVERRIDE &operator=( const T* overridable );
@@ -84,7 +84,7 @@ OVERRIDE<T>::OVERRIDE(const T *overridable)
 
 //-------------------------------------------------------------------------------------------------
 template <class T>
-OVERRIDE<T>::OVERRIDE(OVERRIDE<T> &overridable)
+OVERRIDE<T>::OVERRIDE(const OVERRIDE<T> &overridable)
 {
 	m_overridable = overridable.m_overridable;
 }

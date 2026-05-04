@@ -49,7 +49,9 @@
 
 #include <stdio.h>
 #include <fcntl.h>
+#ifdef _WIN32
 #include <io.h>
+#endif
 #include <string.h>
 #include <sys/stat.h>
 

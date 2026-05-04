@@ -44,12 +44,12 @@
 class Object;
 class Player;
 class SpecialPowerTemplate;
-enum SpecialPowerType;
-enum WeaponSlotType;
-enum CommandSourceType;
-enum CanAttackResult;
+enum SpecialPowerType : int;
+enum WeaponSlotType : int;
+enum CommandSourceType : int;
+enum CanAttackResult : int;
 
-enum CanEnterType
+enum CanEnterType : int
 {
 	CHECK_CAPACITY,
 	DONT_CHECK_CAPACITY,

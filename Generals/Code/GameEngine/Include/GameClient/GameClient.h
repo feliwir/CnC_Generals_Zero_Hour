@@ -31,7 +31,7 @@
 #ifndef _GAME_INTERFACE_H_
 #define _GAME_INTERFACE_H_
 
-#include "common/GameType.h"
+#include "Common/GameType.h"
 #include "Common/MessageStream.h"		// for GameMessageTranslator
 #include "Common/Snapshot.h"
 #include "Common/STLTypedefs.h"
@@ -57,7 +57,7 @@ struct RayEffectData;
 
 /// Function pointers for use by GameClient callback functions.
 typedef void (*GameClientFuncPtr)( Drawable *draw, void *userData ); 
-typedef std::hash_map<DrawableID, Drawable *, rts::hash<DrawableID>, rts::equal_to<DrawableID> > DrawablePtrHash;
+typedef std::unordered_map<DrawableID, Drawable *, rts::hash<DrawableID>, rts::equal_to<DrawableID> > DrawablePtrHash;
 typedef DrawablePtrHash::iterator DrawablePtrHashIt;
 
 //-----------------------------------------------------------------------------

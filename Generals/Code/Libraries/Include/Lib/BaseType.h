@@ -35,6 +35,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdint.h>
+#include <compat.h>
 
 /*
 **	Turn off some unneeded warnings.

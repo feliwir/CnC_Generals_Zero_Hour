@@ -100,18 +100,18 @@ class ObjectRepulsorHelper;
 class ObjectWeaponStatusHelper;
 class ObjectDefectionHelper;
 
-enum CommandSourceType;
-enum DamageType;
-enum HackerAttackMode;
-enum NameKeyType;
-enum SpecialPowerType;
-enum WeaponBonusConditionType;
-enum WeaponChoiceCriteria;
-enum WeaponSetConditionType;
-enum WeaponSetType;
-enum WeaponStatus;
-enum RadarPriorityType;
-enum CanAttackResult;
+enum CommandSourceType : int;
+enum DamageType : int;
+enum HackerAttackMode : int;
+enum NameKeyType : int;
+enum SpecialPowerType : int;
+enum WeaponBonusConditionType : int;
+enum WeaponChoiceCriteria : int;
+enum WeaponSetConditionType : int;
+enum WeaponSetType : int;
+enum WeaponStatus : int;
+enum RadarPriorityType : int;
+enum CanAttackResult : int;
 
 // For ObjectStatusBits and TheObjectStatusBitNames
 #include "GameLogic/ObjectStatusBits.h"
@@ -435,7 +435,7 @@ public:
 	void setCommandSetStringOverride( AsciiString newCommandSetString ) { m_commandSetStringOverride = newCommandSetString; }
 
  	/// People are faking their commandsets, and, Suprise!, they are authoritative.  Challenge everything.
- 	Bool Object::canProduceUpgrade( const UpgradeTemplate *upgrade );
+ 	Bool canProduceUpgrade( const UpgradeTemplate *upgrade );
 
 	// Weapons & Damage -------------------------------------------------------------------------------------------------
 	void reloadAllAmmo(Bool now);

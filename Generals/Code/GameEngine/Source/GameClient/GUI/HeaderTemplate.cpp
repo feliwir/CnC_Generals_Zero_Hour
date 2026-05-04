@@ -55,7 +55,7 @@
 #include "PreRTS.h"
 
 #include "Common/INI.h"
-#include "Common/Filesystem.h"
+#include "Common/FileSystem.h"
 #include "Common/Registry.h"
 #include "GameClient/HeaderTemplate.h"
 #include "GameClient/GameFont.h"
@@ -144,6 +144,7 @@ void HeaderTemplateManager::init( void )
 	INI ini;
 	AsciiString fname;
 	fname.format("Data\\%s\\HeaderTemplate.ini", GetRegistryLanguage().str());
+#ifdef _WIN32
 	OSVERSIONINFO	osvi;
 	osvi.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
 	if (GetVersionEx(&osvi))
@@ -156,6 +157,7 @@ void HeaderTemplateManager::init( void )
 				fname = tempName;
 		}
 	}
+#endif
 	ini.load( fname, INI_LOAD_OVERWRITE, NULL );
 	populateGameFonts();
 }

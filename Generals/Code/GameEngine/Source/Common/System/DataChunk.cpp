@@ -28,8 +28,8 @@
 
 #include "PreRTS.h"	// This must go first in EVERY cpp file int the GameEngine
 
-#include "stdlib.h"
-#include "string.h"
+#include <stdlib.h>
+#include <string.h>
 #include "Compression.h"
 #include "Common/DataChunk.h"
 #include "Common/File.h"

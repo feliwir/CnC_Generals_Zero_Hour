@@ -46,12 +46,13 @@
 #define __WEBBROWSER_H__
 
 #include "Common/SubsystemInterface.h"
-#include <atlbase.h>
 #include <windows.h>
 #include <Common/GameMemory.h>
+#ifdef _WIN32
+#include <atlbase.h>
 #include "EABrowserDispatch/BrowserDispatch.h"
 #include "FEBDispatch.h"
-
+#endif
 class GameWindow;
 
 class WebBrowserURL : public MemoryPoolObject
@@ -75,7 +76,7 @@ public:
 };
 
 
-
+#ifdef _WIN32
 class WebBrowser :
 		public FEBDispatch<WebBrowser, IBrowserDispatch, &IID_IBrowserDispatch>,
 		public SubsystemInterface
@@ -124,4 +125,29 @@ class WebBrowser :
 	};
 
 extern CComObject<WebBrowser> *TheWebBrowser;
+#else
+class WebBrowser : public SubsystemInterface
+{
+public:
+	void init( void ) {}
+	void reset( void ) {}
+	void update( void ) {}
+
+	// Create an instance of the embedded browser for Dune Emperor.
+	virtual Bool createBrowserWindow(char *tag, GameWindow *win) { return false; }
+	virtual void closeBrowserWindow(GameWindow *win) { }
+
+	WebBrowserURL *makeNewURL(AsciiString tag) { return NULL; }
+	WebBrowserURL *findURL(AsciiString tag) { return NULL; }
+protected:
+	// Protected to prevent direct construction via new, use CreateInstance() instead.
+	WebBrowser() {}
+	virtual ~WebBrowser() {}
+	// Protected to prevent copy and assignment
+	WebBrowser(const WebBrowser&) {}
+	const WebBrowser& operator=(const WebBrowser&) {}
+};
+
+extern WebBrowser *TheWebBrowser;
+#endif // _WIN32
 #endif // __WEBBROWSER_H__

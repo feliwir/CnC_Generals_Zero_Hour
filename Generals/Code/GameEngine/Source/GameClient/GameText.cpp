@@ -56,6 +56,7 @@
 #include "Common/File.h"
 #include "Common/FileSystem.h"
 
+#include <windows.h>
 
 #ifdef _INTERNAL
 // for occasional debugging...

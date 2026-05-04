@@ -36,7 +36,7 @@
 #include "Common/GameType.h"
 #include "Common/Snapshot.h"
 #include "Lib/BaseType.h"
-#include "WW3D2/ColType.h"			///< we don't generally do this, but we need the W3D collision types
+#include "WW3D2/coltype.h"			///< we don't generally do this, but we need the W3D collision types
 
 #define DEFAULT_VIEW_WIDTH 640
 #define DEFAULT_VIEW_HEIGHT 480
@@ -66,6 +66,8 @@ enum PickType
 // ------------------------------------------------------------------------------------------------
 /** The implementation of common view functionality. */
 // ------------------------------------------------------------------------------------------------
+enum FilterModes : int;
+enum FilterTypes : int;
 class View : public Snapshot
 {
 
@@ -135,11 +137,11 @@ public:
 	virtual void cameraModFinalLookToward(Coord3D *pLoc){}			///< Sets a look at point during camera movement.
 	virtual void cameraModFinalMoveTo(Coord3D *pLoc){ };			///< Sets a final move to.
 
-	virtual enum FilterModes getViewFilterMode(void) {return (enum FilterModes)0;}			///< Turns on viewport special effect (black & white mode)
-	virtual enum FilterTypes getViewFilterType(void) {return (enum FilterTypes)0;}			///< Turns on viewport special effect (black & white mode)
-	virtual Bool setViewFilterMode(enum FilterModes filterMode) { return FALSE; }			///< Turns on viewport special effect (black & white mode)
+	virtual FilterModes getViewFilterMode(void) {return (FilterModes)0;}			///< Turns on viewport special effect (black & white mode)
+	virtual FilterTypes getViewFilterType(void) {return (FilterTypes)0;}			///< Turns on viewport special effect (black & white mode)
+	virtual Bool setViewFilterMode(FilterModes filterMode) { return FALSE; }			///< Turns on viewport special effect (black & white mode)
 	virtual void setViewFilterPos(const Coord3D *pos) { };			///<  Passes a position to the special effect filter.
-	virtual Bool setViewFilter(	enum FilterTypes filter) { return FALSE;}			///< Turns on viewport special effect (black & white mode)
+	virtual Bool setViewFilter(FilterTypes filter) { return FALSE;}			///< Turns on viewport special effect (black & white mode)
 
 	virtual void setFadeParameters(Int fadeFrames, Int direction) { };
 	virtual void set3DWireFrameMode(Bool enable) { };

@@ -28,7 +28,13 @@
 
 #include "PreRTS.h"	// This must go first in EVERY cpp file int the GameEngine
 
+#ifdef _WIN32
 #include <winsock.h>	// This one has to be here. Prevents collisions with windsock2.h
+#else  //UNIX
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <sys/socket.h>  
+#endif
 
 #include "GameNetwork/GameSpy/PingThread.h"
 #include "mutex.h"
@@ -248,14 +254,16 @@ AsciiString Pinger::getPingString( Int timeout )
 void PingThreadClass::Thread_Function()
 {
 	try {
-	_set_se_translator( DumpExceptionInfo ); // Hook that allows stack trace.
 	PingRequest req;
+#ifdef _WIN32
+	_set_se_translator( DumpExceptionInfo ); // Hook that allows stack trace.
 
 	WSADATA wsaData;
 
 	// Fire up winsock (prob already done, but doesn't matter)
 	WORD wVersionRequested = MAKEWORD(1, 1);
 	WSAStartup( wVersionRequested, &wsaData );
+#endif
 
 	while ( running )
 	{
@@ -274,7 +282,7 @@ void PingThreadClass::Thread_Function()
 			}
 			else
 			{
-				HOSTENT *hostStruct;
+				hostent *hostStruct;
 				in_addr *hostNode;
 				hostStruct = gethostbyname(hostnameBuffer);
 				if (hostStruct == NULL)
@@ -322,7 +330,9 @@ void PingThreadClass::Thread_Function()
 		Switch_Thread();
 	}
 
+#ifdef _WIN32
 	WSACleanup();
+#endif
 	} catch ( ... ) {
 		DEBUG_CRASH(("Exception in ping thread!"));
 	}
@@ -347,9 +357,9 @@ typedef struct ip_option_information
    UnsignedByte Tos;         /* Type Of Service (usually 0) */
    UnsignedByte Flags;       /* IP header flags (usually 0) */
    UnsignedByte OptionsSize; /* Size of options data (usually 0, max 40) */
-   UnsignedByte FAR *OptionsData;   /* Options data buffer */
+   UnsignedByte *OptionsData;   /* Options data buffer */
 }
-IPINFO, *PIPINFO, FAR *LPIPINFO;
+IPINFO, *PIPINFO, *LPIPINFO;
 
 
 /* Note 1: The Reply Buffer will have an array of ICMP_ECHO_REPLY
@@ -364,10 +374,10 @@ typedef struct icmp_echo_reply
    UnsignedInt RTTime;      /* Round Trip Time in milliseconds */
    UnsignedShort DataSize;   /* reply data size */
    UnsignedShort Reserved;   /* */
-   void FAR *Data;     /* reply data buffer */
+   void *Data;     /* reply data buffer */
    struct ip_option_information Options; /* reply options */
 }
-ICMPECHO, *PICMPECHO, FAR *LPICMPECHO;
+ICMPECHO, *PICMPECHO, *LPICMPECHO;
 
 
 DWORD WINAPI IcmpSendEcho(
@@ -453,6 +463,7 @@ Int PingThreadClass::doPing(UnsignedInt IP, Int timeout)
    /*
     *  Load the ICMP.DLL
     */
+#ifdef _WIN32
    hICMP_DLL = LoadLibrary("ICMP.DLL");
    if (hICMP_DLL == 0)
    {
@@ -467,7 +478,7 @@ Int PingThreadClass::doPing(UnsignedInt IP, Int timeout)
    lpfnIcmpCloseHandle = (int (__stdcall *)(void *))GetProcAddress( (HINSTANCE)hICMP_DLL, "IcmpCloseHandle");
    lpfnIcmpSendEcho = (unsigned long (__stdcall *)(void *, unsigned long, void *, unsigned short,
                        void *, void *, unsigned long, unsigned long))GetProcAddress( (HINSTANCE)hICMP_DLL, "IcmpSendEcho" );
-
+#endif
    if ((!lpfnIcmpCreateFile) ||
          (!lpfnIcmpCloseHandle) ||
          (!lpfnIcmpSendEcho))
@@ -565,9 +576,10 @@ Int PingThreadClass::doPing(UnsignedInt IP, Int timeout)
 cleanup:
 
    // Shut down...
+#ifdef _WIN32
    if (hICMP_DLL)
       FreeLibrary((HINSTANCE)hICMP_DLL);
-
+#endif
    return pingTime;
 }
 

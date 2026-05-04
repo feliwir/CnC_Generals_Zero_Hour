@@ -33,7 +33,7 @@
 #define __THINGSORT_H_
 
 //-------------------------------------------------------------------------------------------------
-enum EditorSortingType
+enum EditorSortingType : int
 {
 	ES_FIRST = 0,
 

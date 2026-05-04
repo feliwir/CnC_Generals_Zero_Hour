@@ -38,7 +38,7 @@
 
 #include "GameLogic/Damage.h"
 
-#include "WWMath/Matrix3D.h"
+#include "WWMath/matrix3d.h"
 
 // FORWARD REFERENCES /////////////////////////////////////////////////////////////////////////////
 struct FieldParse;
@@ -50,7 +50,7 @@ class Weapon;
 class WeaponTemplate;
 class INI;
 class ParticleSystemTemplate;
-enum NameKeyType;
+enum NameKeyType : int;
 
 //-------------------------------------------------------------------------------------------------
 const Int NO_MAX_SHOTS_LIMIT = 0x7fffffff;
@@ -169,7 +169,7 @@ static const char *TheWeaponCollideMaskNames[] =
 // Note: these values are saved in save files, so you MUST NOT REMOVE OR CHANGE
 // existing values!
 //
-enum WeaponBonusConditionType
+enum WeaponBonusConditionType : int
 {
 	// The access and use of this enum has the bit shifting built in, so this is a 0,1,2,3,4,5 enum
 	WEAPONBONUSCONDITION_INVALID = -1,

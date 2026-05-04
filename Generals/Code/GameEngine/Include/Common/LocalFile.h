@@ -54,6 +54,10 @@
 
 #include "Common/File.h"
 
+#ifndef _WIN32
+#define USE_BUFFERED_IO
+#endif
+
 // srj sez: this was purely an experiment in optimization.
 // at the present time, it doesn't appear to be a good one.
 // but I am leaving the code in for now.

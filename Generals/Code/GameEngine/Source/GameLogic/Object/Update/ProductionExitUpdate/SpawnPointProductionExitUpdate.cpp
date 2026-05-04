@@ -39,7 +39,7 @@
 #include "GameLogic/TerrainLogic.h"
 #include "GameLogic/Module/SpawnPointProductionExitUpdate.h"
 
-#include "WWMath/Matrix3D.h"		///< @todo Replace with our own matrix library
+#include "WWMath/matrix3d.h"		///< @todo Replace with our own matrix library
 
 //-------------------------------------------------------------------------------------------------
 SpawnPointProductionExitUpdate::SpawnPointProductionExitUpdate( Thing *thing, const ModuleData* moduleData ) : UpdateModule( thing, moduleData )
@@ -71,7 +71,8 @@ void SpawnPointProductionExitUpdate::exitObjectViaDoor( Object *newObj, ExitDoor
 	Object *creationObject = getObject();
 	if (creationObject)
 	{
-		for( Int positionIndex = 0; positionIndex < m_spawnPointCount; positionIndex++ )
+		Int positionIndex;
+		for( positionIndex = 0; positionIndex < m_spawnPointCount; positionIndex++ )
 		{
 			if( m_spawnPointOccupier[positionIndex] == INVALID_ID )
 				break;
@@ -156,7 +157,7 @@ void SpawnPointProductionExitUpdate::initializeBonePositions()
 	const SpawnPointProductionExitUpdateModuleData* md = getSpawnPointProductionExitUpdateModuleData();
 	m_spawnPointCount = myDrawable->getPristineBonePositions( md->m_spawnPointBoneNameData.str(), 1, NULL, boneTransforms, MAX_SPAWN_POINTS );
 
-	for( matrixIndex = 0; matrixIndex < m_spawnPointCount; matrixIndex++ )
+	for( Int matrixIndex = 0; matrixIndex < m_spawnPointCount; matrixIndex++ )
 	{
 		Matrix3D *currentTransform = &(boneTransforms[matrixIndex]);
 		// Convert their matrix one by one

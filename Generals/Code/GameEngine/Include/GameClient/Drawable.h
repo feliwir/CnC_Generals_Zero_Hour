@@ -37,7 +37,7 @@
 #include "Common/Thing.h"
 #include "Common/Geometry.h"
 #include "GameClient/Color.h"
-#include "WWMath/Matrix3D.h"
+#include "WWMath/matrix3d.h"
 #include "GameClient/DrawableInfo.h"
 
 // FORWARD REFERENCES /////////////////////////////////////////////////////////////////////////////
@@ -55,7 +55,7 @@ class Shadow;
 class ModuleInfo;
 class Anim2DTemplate;
 class Image;
-enum BodyDamageType;
+enum BodyDamageType : int;
 
 // this is a very worthwhile performance win. left conditionally defined for now, just 
 // in case, but probably should be made permanent soon. (srj)
@@ -249,7 +249,7 @@ enum TintStatus
 // Note: these values are saved in save files, so you MUST NOT REMOVE OR CHANGE
 // existing values!
 //
-enum TerrainDecalType
+enum TerrainDecalType : int
 {
 #ifdef ALLOW_DEMORALIZE
 	TERRAIN_DECAL_DEMORALIZED = 0,

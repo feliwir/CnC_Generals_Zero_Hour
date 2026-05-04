@@ -40,7 +40,7 @@
 #include "Common/SubsystemInterface.h"
 #include "GameClient/ClientRandomValue.h"
 
-#include "WWMath/Matrix3D.h"		///< @todo Replace with our own matrix library
+#include "WWMath/matrix3d.h"		///< @todo Replace with our own matrix library
 #include "Common/STLTypedefs.h"
 
  
@@ -56,7 +56,7 @@ class INI;
 class DebugWindowDialog;		// really ParticleEditorDialog
 class RenderInfoClass;			// ick
 
-enum ParticleSystemID
+enum ParticleSystemID : int
 {
 	INVALID_PARTICLE_SYSTEM_ID = 0
 };
@@ -82,7 +82,7 @@ struct RGBColorKeyframe
 	UnsignedInt frame;
 };
 
-enum ParticlePriorityType
+enum ParticlePriorityType : int
 {
 	INVALID_PRIORITY = 0, 
 	PARTICLE_PRIORITY_LOWEST = 1,
@@ -725,7 +725,7 @@ public:
 
 	typedef std::list<ParticleSystem*> ParticleSystemList;
 	typedef std::list<ParticleSystem*>::iterator ParticleSystemListIt;
-	typedef std::hash_map<AsciiString, ParticleSystemTemplate *, rts::hash<AsciiString>, rts::equal_to<AsciiString> > TemplateMap;
+	typedef std::unordered_map<AsciiString, ParticleSystemTemplate *, rts::hash<AsciiString>, rts::equal_to<AsciiString> > TemplateMap;
 
 	ParticleSystemManager( void );
 	virtual ~ParticleSystemManager();

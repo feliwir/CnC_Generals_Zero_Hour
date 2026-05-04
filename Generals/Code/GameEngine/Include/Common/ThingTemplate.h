@@ -60,10 +60,10 @@ class ProductionPrerequisite;
 struct FieldParse;
 class Player;
 class INI;
-enum RadarPriorityType;
-enum ScienceType;
-enum EditorSortingType;
-enum ShadowType;
+enum RadarPriorityType : int;
+enum ScienceType : int;
+enum EditorSortingType : int;
+enum ShadowType : int;
 class WeaponTemplateSet;
 class ArmorTemplateSet;
 class FXList;
@@ -218,7 +218,7 @@ static const char *BuildCompletionNames[] =
 };
 #endif  // end DEFINE_BUILD_COMPLETION_NAMES
 
-enum BuildableStatus
+enum BuildableStatus : int
 {
 	// saved into savegames... do not change or remove values!
 	BSTATUS_YES = 0,
@@ -279,7 +279,7 @@ public:
 	ModuleInfo() { }
 
 	void addModuleInfo(ThingTemplate *thingTemplate, const AsciiString& name, const AsciiString& moduleTag, const ModuleData* data, Int interfaceMask, Bool inheritable);
-	const ModuleInfo::Nugget *ModuleInfo::getNuggetWithTag( const AsciiString& tag ) const;
+	const ModuleInfo::Nugget *getNuggetWithTag( const AsciiString& tag ) const;
 
 	Int getCount() const 
 	{ 

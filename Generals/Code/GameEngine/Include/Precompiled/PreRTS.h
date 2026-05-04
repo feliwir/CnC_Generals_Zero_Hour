@@ -40,31 +40,20 @@ class STLSpecialAlloc;
 // different .cpp files, so I bit the bullet and included it here.
 // PLEASE DO NOT ABUSE WINDOWS OR IT WILL BE REMOVED ENTIRELY. :-)
 //--------------------------------------------------------------------------------- System Includes 
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <atlbase.h>
 #include <windows.h>
-
+#endif
 #include <assert.h>
 #include <ctype.h>
-#include <direct.h>
-#include <EXCPT.H>
 #include <float.h>
-#include <fstream.h>
-#include <imagehlp.h>
-#include <io.h>
+#include <fstream>
 #include <limits.h>
-#include <lmcons.h>
-#include <mapicode.h>
 #include <math.h>
 #include <memory.h>
-#include <mmsystem.h>
 #include <objbase.h>
 #include <ocidl.h>
-#include <process.h>
-#include <shellapi.h>
-#include <shlobj.h>
-#include <shlguid.h>
-#include <snmp.h>
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -73,8 +62,16 @@ class STLSpecialAlloc;
 #include <sys/stat.h>
 #include <sys/timeb.h>
 #include <sys/types.h>
-#include <TCHAR.H>
+#include <tchar.h>
 #include <time.h>
+
+#ifdef _WIN32
+#include <mmsystem.h>
+#include <process.h>
+#include <shellapi.h>
+#include <shlobj.h>
+#include <shlguid.h>
+#include <snmp.h>
 #include <vfw.h>
 #include <winerror.h>
 #include <wininet.h>
@@ -83,8 +80,8 @@ class STLSpecialAlloc;
 #ifndef DIRECTINPUT_VERSION
 #	define DIRECTINPUT_VERSION	0x800
 #endif
-
 #include <dinput.h>
+#endif
 
 //------------------------------------------------------------------------------------ STL Includes
 // srj sez: no, include STLTypesdefs below, instead, thanks
@@ -101,7 +98,7 @@ class STLSpecialAlloc;
 
 //------------------------------------------------------------------------------------ RTS Includes
 // Icky. These have to be in this order.
-#include "Lib/Basetype.h"
+#include "Lib/BaseType.h"
 #include "Common/STLTypedefs.h"
 #include "Common/Errors.h"
 #include "Common/Debug.h"

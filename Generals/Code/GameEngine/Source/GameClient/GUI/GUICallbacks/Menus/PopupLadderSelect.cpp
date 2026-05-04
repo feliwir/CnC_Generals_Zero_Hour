@@ -135,7 +135,7 @@ static void populateLadderListBox( void )
 	GadgetListBoxGetSelected(listboxLadderSelect, &selIndex);
 	if (selIndex < 0)
 		return;
-	selID = (Int)GadgetListBoxGetItemData(listboxLadderSelect, selIndex);
+	selID = (intptr_t)GadgetListBoxGetItemData(listboxLadderSelect, selIndex);
 	if (!selID)
 		return;
 	updateLadderDetails(selID, staticTextLadderName, listboxLadderDetails);
@@ -378,7 +378,7 @@ WindowMsgHandledType PopupLadderSelectSystem( GameWindow *window, UnsignedInt ms
 				if (selectPos < 0)
 					break;
 
-				ladderIndex = (Int)GadgetListBoxGetItemData( listboxLadderSelect, selectPos, 0 );
+				ladderIndex = (intptr_t)GadgetListBoxGetItemData( listboxLadderSelect, selectPos, 0 );
 				const LadderInfo *li = TheLadderList->findLadderByIndex( ladderIndex );
 				if (li && li->cryptedPassword.isNotEmpty())
 				{
@@ -444,7 +444,7 @@ WindowMsgHandledType PopupLadderSelectSystem( GameWindow *window, UnsignedInt ms
 			if (selIndex < 0)
 				break;
 
-			selID = (Int)GadgetListBoxGetItemData(listboxLadderSelect, selIndex);
+			selID = (intptr_t)GadgetListBoxGetItemData(listboxLadderSelect, selIndex);
 			if (!selID)
 				break;
 
@@ -576,7 +576,7 @@ static void updateLadderDetails( Int selID, GameWindow *staticTextLadderName, Ga
 
 	// maps
 	AsciiStringList validMaps = info->validMaps;
-	for (it = validMaps.begin(); it != validMaps.end(); ++it)
+	for (AsciiStringListIterator it = validMaps.begin(); it != validMaps.end(); ++it)
 	{
 		const MapMetaData *md = TheMapCache->findMap(*it);
 		if (md)
@@ -635,7 +635,7 @@ WindowMsgHandledType RCGameDetailsMenuSystem( GameWindow *window, UnsignedInt ms
 			{
 				GameWindow *control = (GameWindow *)mData1;
 				Int controlID = control->winGetWindowId();
-				Int selectedID = (Int)window->winGetUserData();
+				Int selectedID = (intptr_t)window->winGetUserData();
 				if(!selectedID)
 					break;
 				closeRightClickMenu(window);

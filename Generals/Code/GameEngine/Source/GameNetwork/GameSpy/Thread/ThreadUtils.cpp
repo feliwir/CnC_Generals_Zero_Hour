@@ -35,7 +35,8 @@ std::wstring MultiByteToWideCharSingleLine( const char *orig )
 	Int len = strlen(orig);
 	WideChar *dest = NEW WideChar[len+1];
 
-	MultiByteToWideChar(CP_UTF8, 0, orig, -1, dest, len);
+	// MultiByteToWideChar(CP_UTF8, 0, orig, -1, dest, len);
+	mbstowcs(dest, orig, len);
 	WideChar *c = NULL;
 	do
 	{
@@ -65,11 +66,13 @@ std::wstring MultiByteToWideCharSingleLine( const char *orig )
 std::string WideCharStringToMultiByte( const WideChar *orig )
 {
 	std::string ret;
-	Int len = WideCharToMultiByte( CP_UTF8, 0, orig, wcslen(orig), NULL, 0, NULL, NULL ) + 1;
+	// Int len = WideCharToMultiByte( CP_UTF8, 0, orig, wcslen(orig), NULL, 0, NULL, NULL ) + 1;
+	Int len = wcstombs(NULL, orig, 0) + 1;
 	if (len > 0)
 	{
 		char *dest = NEW char[len];
-		WideCharToMultiByte( CP_UTF8, 0, orig, -1, dest, len, NULL, NULL );
+		// WideCharToMultiByte( CP_UTF8, 0, orig, -1, dest, len, NULL, NULL );
+		wcstombs(dest, orig, len);
 		dest[len-1] = 0;
 		ret = dest;
 		delete dest;

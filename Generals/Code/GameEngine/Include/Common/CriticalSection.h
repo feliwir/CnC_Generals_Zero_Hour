@@ -37,17 +37,26 @@
 extern PerfGather TheCritSecPerfGather;
 #endif
 
+#ifndef _WIN32
+#include <mutex>
+#endif
+
 class CriticalSection
 {
+#ifdef _WIN32
 	CRITICAL_SECTION m_windowsCriticalSection;
-
+#else
+	std::mutex m_mutex;
+#endif
 	public:
 		CriticalSection()
 		{
 			#ifdef PERF_TIMERS
 			AutoPerfGather a(TheCritSecPerfGather);
 			#endif
+			#ifdef _WIN32
 			InitializeCriticalSection( &m_windowsCriticalSection );
+			#endif
 		}
 
 		virtual ~CriticalSection()
@@ -55,7 +64,9 @@ class CriticalSection
 			#ifdef PERF_TIMERS
 			AutoPerfGather a(TheCritSecPerfGather);
 			#endif
+			#ifdef _WIN32
 			DeleteCriticalSection( &m_windowsCriticalSection );
+			#endif
 		}
 
 	public:	// Use these when entering/exiting a critical section.
@@ -64,7 +75,11 @@ class CriticalSection
 			#ifdef PERF_TIMERS
 			AutoPerfGather a(TheCritSecPerfGather);
 			#endif
+			#ifdef _WIN32
 			EnterCriticalSection( &m_windowsCriticalSection );
+			#else
+			m_mutex.lock();
+			#endif
 		}
 		
 		void exit( void )
@@ -72,7 +87,11 @@ class CriticalSection
 			#ifdef PERF_TIMERS
 			AutoPerfGather a(TheCritSecPerfGather);
 			#endif
+			#ifdef _WIN32
 			LeaveCriticalSection( &m_windowsCriticalSection );
+			#else
+			m_mutex.unlock();
+			#endif
 		}
 };
 

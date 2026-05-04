@@ -438,8 +438,10 @@ void CheckForCDAtGameStart( gameStartCallback callback )
 	if (!IsFirstCDPresent())
 	{
 		// popup a dialog asking for a CD
+#ifdef _WIN32
 		ExMessageBoxOkCancel(TheGameText->fetch("GUI:InsertCDPrompt"), TheGameText->fetch("GUI:InsertCDMessage"),
 			callback, checkCDCallback, cancelStartBecauseOfNoCD);
+#endif
 	}
 	else
 	{
@@ -451,7 +453,7 @@ Bool sandboxOk = FALSE;
 static void startPressed(void)
 {
 
-	BOOL isReady = FALSE;
+	Bool isReady = FALSE;
 	Int playerCount = TheSkirmishGameInfo->getNumPlayers();
 	AsciiString lowerMap = TheSkirmishGameInfo->getMap();
 	lowerMap.toLower();
@@ -722,8 +724,9 @@ void positionStartSpots( AsciiString mapName, GameWindow *buttonMapStartPosition
 
 		positionAdditionalImages(&mmd, mapWindow, TRUE);
 
-		AsciiString waypointName;				
-		for(Int i = 0; i < mmd.m_numPlayers && mmd.m_isMultiplayer; ++i )
+		AsciiString waypointName;
+		Int i;		
+		for(i = 0; i < mmd.m_numPlayers && mmd.m_isMultiplayer; ++i )
 		{
 			waypointName.format("Player_%d_Start", i+1); // start pos waypoints are 1-based
 			WaypointMap::iterator wmIt = mmd.m_waypoints.find(waypointName);
@@ -792,7 +795,7 @@ void updateMapStartSpots( GameInfo *myGame, GameWindow *buttonMapStartPositions[
 			buttonMapStartPositions[i]->winSetTooltip(TheGameText->fetch("TOOLTIP:StartPosition"));
 		}
 	}
-	for( i = 0; i < MAX_SLOTS; ++i)
+	for( Int i = 0; i < MAX_SLOTS; ++i)
 	{
 		GameSlot *gs =myGame->getSlot(i);
 		if(onLoadScreen)
@@ -832,7 +835,7 @@ static void handlePlayerSelection(int index)
 	Int playerType, selIndex;
 	GadgetComboBoxGetSelectedPos(combo, &selIndex);
   UnicodeString title = GadgetComboBoxGetText(combo);
-	playerType = (Int)GadgetComboBoxGetItemData(combo, selIndex);
+	playerType = (intptr_t)GadgetComboBoxGetItemData(combo, selIndex);
 	GameInfo *myGame = TheSkirmishGameInfo;
 
 	if (myGame)
@@ -851,7 +854,7 @@ static void handleColorSelection(int index)
 	GameWindow *combo = comboBoxColor[index];
 	Int color, selIndex;
 	GadgetComboBoxGetSelectedPos(combo, &selIndex);
-	color = (Int)GadgetComboBoxGetItemData(combo, selIndex);
+	color = (intptr_t)GadgetComboBoxGetItemData(combo, selIndex);
 
 	GameInfo *myGame = TheSkirmishGameInfo;
 
@@ -891,7 +894,7 @@ static void handlePlayerTemplateSelection(int index)
 	GameWindow *combo = comboBoxPlayerTemplate[index];
 	Int playerTemplate, selIndex;
 	GadgetComboBoxGetSelectedPos(combo, &selIndex);
-	playerTemplate = (Int)GadgetComboBoxGetItemData(combo, selIndex);
+	playerTemplate = (intptr_t)GadgetComboBoxGetItemData(combo, selIndex);
 	GameInfo *myGame = TheSkirmishGameInfo;
 
 	if (myGame)
@@ -944,7 +947,7 @@ static void handleTeamSelection(int index)
 	GameWindow *combo = comboBoxTeam[index];
 	Int team, selIndex;
 	GadgetComboBoxGetSelectedPos(combo, &selIndex);
-	team = (Int)GadgetComboBoxGetItemData(combo, selIndex);
+	team = (intptr_t)GadgetComboBoxGetItemData(combo, selIndex);
 	GameInfo *myGame = TheSkirmishGameInfo;
 
 	if (myGame)
@@ -1061,7 +1064,7 @@ void InitSkirmishGameGadgets( void )
 		DEBUG_ASSERTCRASH(buttonMapStartPosition[i], ("Could not find the ButtonMapStartPosition[%d]",i ));
 	}
    
-	for (i = 0; i < MAX_SLOTS; ++i)
+	for (Int i = 0; i < MAX_SLOTS; ++i)
 	{
 		PopulateColorComboBox(i, comboBoxColor, TheSkirmishGameInfo );
 		GadgetComboBoxSetSelectedPos(comboBoxColor[i], 0);

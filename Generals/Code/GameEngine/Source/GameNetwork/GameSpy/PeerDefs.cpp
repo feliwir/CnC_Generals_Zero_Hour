@@ -22,6 +22,7 @@
 
 #include "PreRTS.h"	// This must go first in EVERY cpp file int the GameEngine
 #include <set>
+#include <filesystem>
 
 #include "Common/GameState.h"
 #include "Common/RandomValue.h"
@@ -535,8 +536,12 @@ void GameSpyInfo::markAsStagingRoomHost( void )
 	m_joinedStagingRoom = FALSE; m_isHosting = TRUE;
 	m_localStagingRoom.reset();
 	m_localStagingRoom.enterGame();
+#ifdef _WIN32
 	m_localStagingRoom.setSeed(GetTickCount());
-	
+#else
+	m_localStagingRoom.setSeed((UnsignedInt)time(NULL));
+#endif
+
 	GameSlot newSlot;
 	UnicodeString uName;
 	uName.translate(m_localName);
@@ -610,12 +615,9 @@ void SetUpGameSpy( const char *motdBuffer, const char *configBuffer )
 		configBuffer = "";
 	TearDownGameSpy();
 
-	AsciiString dir = TheGlobalData->getPath_UserData();
-	CreateDirectory(dir.str(), NULL);
-	dir.format("%sGeneralsOnline", TheGlobalData->getPath_UserData().str());
-	CreateDirectory(dir.str(), NULL);
+	AsciiString dir;
 	dir.format("%sGeneralsOnline\\Ladders", TheGlobalData->getPath_UserData().str());
-	CreateDirectory(dir.str(), NULL);
+	std::filesystem::create_directories(dir.str());
 
 	TheGameSpyBuddyMessageQueue = GameSpyBuddyMessageQueueInterface::createNewMessageQueue();
 	TheGameSpyBuddyMessageQueue->startThread();

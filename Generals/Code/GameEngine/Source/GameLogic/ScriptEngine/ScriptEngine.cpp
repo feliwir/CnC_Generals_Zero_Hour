@@ -28,7 +28,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #include "PreRTS.h"	// This must go first in EVERY cpp file int the GameEngine
 
-#include "common/DataChunk.h"
+#include "Common/DataChunk.h"
 #include "Common/File.h"
 #include "Common/FileSystem.h"
 #include "Common/GameEngine.h"
@@ -401,6 +401,7 @@ m_ChooseVictimAlwaysUsesNormal(false)
 //-------------------------------------------------------------------------------------------------
 ScriptEngine::~ScriptEngine()
 {
+#ifdef _WIN32
 	if (st_DebugDLL) {
 		FARPROC proc = GetProcAddress(st_DebugDLL, "DestroyDebugDialog");
 		if (proc) {
@@ -420,6 +421,7 @@ ScriptEngine::~ScriptEngine()
 		FreeLibrary(st_ParticleDLL);
 		st_ParticleDLL = NULL;
 	}
+#endif
 
 #ifdef DO_VTUNE_STUFF
 	_cleanUpVTune();
@@ -434,6 +436,7 @@ ScriptEngine::~ScriptEngine()
 void ScriptEngine::init( void )
 {
 	if (TheGlobalData->m_windowed)
+#ifdef _WIN32
 		if (TheGlobalData->m_scriptDebug) {
 			st_DebugDLL = LoadLibrary("DebugWindow.dll");
 		} else {
@@ -459,6 +462,7 @@ void ScriptEngine::init( void )
 			proc();
 		}
 	}
+#endif
 
 #ifdef DO_VTUNE_STUFF
 	_initVTune();
@@ -7705,7 +7709,7 @@ void ScriptEngine::doUnfreezeTime( void )
 Bool ScriptEngine::isTimeFrozenDebug(void)
 {
 	typedef Bool (*funcptr)(void);
-
+#ifdef _WIN32
 	if (st_DebugDLL) {
 		if (st_LastCurrentFrame != st_CurrentFrame) {
 			st_LastCurrentFrame = st_CurrentFrame;
@@ -7720,6 +7724,7 @@ Bool ScriptEngine::isTimeFrozenDebug(void)
 		}
 		return !st_CanAppCont;
 	}
+#endif
 	return false;
 }
 
@@ -7729,7 +7734,7 @@ Bool ScriptEngine::isTimeFrozenDebug(void)
 Bool ScriptEngine::isTimeFast(void)
 {
 	typedef Bool (*funcptr)(void);
-
+#ifdef _WIN32
 	if (st_DebugDLL) {
 		FARPROC proc = GetProcAddress(st_DebugDLL, "CanAppContinue");
  		proc = GetProcAddress(st_DebugDLL, "RunAppFast");
@@ -7749,19 +7754,21 @@ Bool ScriptEngine::isTimeFast(void)
 			return false;
 		}
 	}
+#endif
 	return false;
 }
 
 void ScriptEngine::forceUnfreezeTime(void)
 {
 	typedef void (*funcptr)(void);
-
+#ifdef _WIN32
 	if (st_DebugDLL) {
 		FARPROC proc = GetProcAddress(st_DebugDLL, "ForceAppContinue");
 		if (proc) {
 			((funcptr)proc)();
 		}
 	}
+#endif
 }
 
 void ScriptEngine::AppendDebugMessage(const AsciiString& strToAdd, Bool forcePause)
@@ -7773,7 +7780,7 @@ void ScriptEngine::AppendDebugMessage(const AsciiString& strToAdd, Bool forcePau
 	if (!st_DebugDLL) {
 		return;
 	}
-
+#ifdef _WIN32
 	FARPROC proc;
 	if (forcePause) {
 		proc = GetProcAddress(st_DebugDLL, "AppendMessageAndPause");
@@ -7788,6 +7795,7 @@ void ScriptEngine::AppendDebugMessage(const AsciiString& strToAdd, Bool forcePau
 	msg.format("%d ", TheGameLogic->getFrame());
 	msg.concat(strToAdd);
 	((funcptr)proc)(msg.str());
+#endif
 }
 
 void ScriptEngine::AdjustDebugVariableData(const AsciiString& variableName, Int value, Bool forcePause)
@@ -8648,7 +8656,7 @@ void _appendMessage(const AsciiString& str, Bool isTrueMessage, Bool shouldPause
 	if (!st_DebugDLL) {
 		return;
 	}
-
+#ifdef _WIN32
 	FARPROC proc;
 	if (shouldPause) {
 		proc = GetProcAddress(st_DebugDLL, "AppendMessageAndPause");
@@ -8660,6 +8668,7 @@ void _appendMessage(const AsciiString& str, Bool isTrueMessage, Bool shouldPause
 	}
 
 	((funcptr)proc)(msg.str());
+#endif
 }
 
 void _adjustVariable(const AsciiString& str, Int value, Bool shouldPause)
@@ -8669,6 +8678,7 @@ void _adjustVariable(const AsciiString& str, Int value, Bool shouldPause)
 		return;
 	}
 
+#ifdef _WIN32
 	FARPROC proc;
 	if (shouldPause) {
 		proc = GetProcAddress(st_DebugDLL, "AdjustVariableAndPause");
@@ -8684,6 +8694,7 @@ void _adjustVariable(const AsciiString& str, Int value, Bool shouldPause)
 	sprintf(buff, "%d", value);
 
 	((funcptr)proc)(str.str(), buff);
+#endif
 }
 
 void _updateFrameNumber( void )
@@ -8693,7 +8704,7 @@ void _updateFrameNumber( void )
 	if (!st_DebugDLL) {
 		return;
 	}
-
+#ifdef _WIN32
 	FARPROC proc;
 	proc = GetProcAddress(st_DebugDLL, "SetFrameNumber");
 	if (!proc) {
@@ -8703,6 +8714,7 @@ void _updateFrameNumber( void )
 	UnsignedInt frameNum = TheGameLogic->getFrame();
 
 	((funcptr)proc)(frameNum);
+#endif
 }
 
 void _appendAllParticleSystems( void )
@@ -8711,6 +8723,7 @@ void _appendAllParticleSystems( void )
 	if (!st_ParticleDLL) {
 		return;
 	}
+#ifdef _WIN32
 	FARPROC proc;
 
 	proc = GetProcAddress(st_ParticleDLL, "RemoveAllParticleSystems");
@@ -8731,6 +8744,7 @@ void _appendAllParticleSystems( void )
 	for (; begin != end; ++begin) {
 		((funcptr)proc)((*begin).first.str());
 	}
+#endif
 }
 
 // all ThingTemplates can be thrown with a particle system, so...
@@ -8740,6 +8754,8 @@ void _appendAllThingTemplates( void )
 	if (!st_ParticleDLL) {
 		return;
 	}
+
+#ifdef _WIN32
 	FARPROC proc;
 
 	proc = GetProcAddress(st_ParticleDLL, "RemoveAllThingTemplates");
@@ -8759,7 +8775,7 @@ void _appendAllThingTemplates( void )
 		((funcptr)proc)(pTemplate->getName().str());
 		pTemplate = pTemplate->friend_getNextTemplate();
 	}
-
+#endif
 }
 
 
@@ -8775,6 +8791,7 @@ void _addUpdatedParticleSystem( AsciiString particleSystemName )
 		return;
 	}
 	
+#ifdef _WIN32
 	FARPROC proc, proc2;
 	proc = GetProcAddress(st_ParticleDLL, "AppendParticleSystem");
 	if (!proc) {
@@ -8794,6 +8811,7 @@ void _addUpdatedParticleSystem( AsciiString particleSystemName )
 
 	((funcptr)proc)(pTemplate->getName().str());
 	((funcptr2)proc2)(pTemplate);
+#endif
 }
 
 AsciiString _getParticleSystemName( void )
@@ -8804,6 +8822,7 @@ AsciiString _getParticleSystemName( void )
 		return AsciiString::TheEmptyString;
 	}
 
+#ifdef _WIN32
 	FARPROC proc;
 	proc = GetProcAddress(st_ParticleDLL, "GetSelectedParticleSystemName");
 	if (!proc) {
@@ -8815,6 +8834,9 @@ AsciiString _getParticleSystemName( void )
 	((funcptr) proc)(buff);
 
 	return AsciiString(buff);
+#else
+	return AsciiString::TheEmptyString;
+#endif
 }
 
 void _updatePanelParameters( ParticleSystemTemplate *particleTemplate )
@@ -8825,13 +8847,15 @@ void _updatePanelParameters( ParticleSystemTemplate *particleTemplate )
 		return;
 	}
 
+#ifdef _WIN32
 	FARPROC proc;	
 	proc = GetProcAddress(st_ParticleDLL, "UpdateCurrentParticleSystem");
 	if (!proc) {
 		return;
 	}
-
+	
 	((funcptr) proc)(particleTemplate);
+#endif
 }
 
 void _updateAsciiStringParmsToSystem( ParticleSystemTemplate *particleTemplate )
@@ -8841,7 +8865,7 @@ void _updateAsciiStringParmsToSystem( ParticleSystemTemplate *particleTemplate )
 	if (!st_ParticleDLL || !particleTemplate) {
 		return;
 	}
-
+#ifdef _WIN32
 	FARPROC proc;	
 	proc = GetProcAddress(st_ParticleDLL, "GetSelectedParticleAsciiStringParm");
 
@@ -8867,6 +8891,7 @@ void _updateAsciiStringParmsToSystem( ParticleSystemTemplate *particleTemplate )
 	if (otherTemp == particleTemplate) {
 		particleTemplate->m_attachedSystemName.set(buff);	
 	}
+#endif
 }
 
 extern void _updateAsciiStringParmsFromSystem( ParticleSystemTemplate *particleTemplate )
@@ -8876,7 +8901,7 @@ extern void _updateAsciiStringParmsFromSystem( ParticleSystemTemplate *particleT
 	if (!st_ParticleDLL || !particleTemplate) {
 		return;
 	}
-
+#ifdef _WIN32
 	FARPROC proc;	
 	proc = GetProcAddress(st_ParticleDLL, "UpdateParticleAsciiStringParm");
 
@@ -8887,7 +8912,7 @@ extern void _updateAsciiStringParmsFromSystem( ParticleSystemTemplate *particleT
 	((funcptr) proc)(0, particleTemplate->m_particleTypeName.str(), NULL);	// PARM_ParticleTypeName
 	((funcptr) proc)(1, particleTemplate->m_slaveSystemName.str(), NULL);	// PARM_SlaveSystemName
 	((funcptr) proc)(2, particleTemplate->m_attachedSystemName.str(), NULL);	// PARM_AttachedSystemName
-
+#endif
 }
 
 #define BACKUP_FILE_NAME	"Data\\INI\\ParticleSystem"
@@ -9376,6 +9401,7 @@ static int _getEditorBehavior( void )
 		return 0x00;
 	}
 
+#ifdef _WIN32
 	FARPROC proc;	
 	proc = GetProcAddress(st_ParticleDLL, "NextParticleEditorBehavior");
 
@@ -9384,6 +9410,7 @@ static int _getEditorBehavior( void )
 	}
 
 	return ((funcptr)proc)();
+#endif
 }
 
 static void _updateAndSetCurrentSystem( void )
@@ -9524,6 +9551,7 @@ static int _getNewCurrentParticleCap( void )
 		return -1;
 	}
 
+#ifdef _WIN32
 	FARPROC proc;	
 	proc = GetProcAddress(st_ParticleDLL, "GetNewParticleCap");
 
@@ -9532,6 +9560,7 @@ static int _getNewCurrentParticleCap( void )
 	}
 
 	return ((funcptr)proc)();
+#endif
 }
 
 static void _updateCurrentParticleCap( void )
@@ -9542,6 +9571,7 @@ static void _updateCurrentParticleCap( void )
 		return;
 	}
 
+#ifdef _WIN32
 	FARPROC proc;	
 	proc = GetProcAddress(st_ParticleDLL, "UpdateCurrentParticleCap");
 
@@ -9550,6 +9580,7 @@ static void _updateCurrentParticleCap( void )
 	}
 
 	((funcptr)proc)(TheGlobalData->m_maxParticleCount);
+#endif
 }
 
 static void _updateCurrentParticleCount( void )
@@ -9560,6 +9591,7 @@ static void _updateCurrentParticleCount( void )
 		return;
 	}
 
+#ifdef _WIN32
 	FARPROC proc;	
 	proc = GetProcAddress(st_ParticleDLL, "UpdateCurrentNumParticles");
 
@@ -9568,6 +9600,7 @@ static void _updateCurrentParticleCount( void )
 	}
 
 	((funcptr)proc)(TheParticleSystemManager->getParticleCount());
+#endif
 }
 
 static void _reloadTextures( void )

@@ -973,7 +973,7 @@ GlobalData::GlobalData()
 	
 	// lets CRC the executable!  Whee!
 	const Int blockSize = 65536;
-	Char buffer[ _MAX_PATH ];
+	Char buffer[ 512 ];
 	CRC exeCRC;
 	GetModuleFileName( NULL, buffer, sizeof( buffer ) );
 	File *fp = TheFileSystem->openFile(buffer, File::READ | File::BINARY);
@@ -1174,6 +1174,7 @@ void GlobalData::parseGameDataDefinition( INI* ini )
 
 	TheWritableGlobalData->m_userDataDir.clear();
 
+#ifdef _WIN32
 	char temp[_MAX_PATH];
 	if (::SHGetSpecialFolderPath(NULL, temp, CSIDL_PERSONAL, true))
 	{
@@ -1184,6 +1185,7 @@ void GlobalData::parseGameDataDefinition( INI* ini )
 		CreateDirectory(temp, NULL);
 		TheWritableGlobalData->m_userDataDir = temp;
 	}
+#endif
 
 	// override INI values with user preferences
 	OptionPreferences optionPref;

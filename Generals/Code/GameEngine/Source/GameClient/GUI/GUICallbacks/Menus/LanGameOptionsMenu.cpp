@@ -196,7 +196,8 @@ static void playerTooltip(GameWindow *window,
 													UnsignedInt mouse)
 {
 	Int idx = -1;
-	for (Int i=0; i<MAX_SLOTS; ++i)
+	Int i;
+	for (i=0; i<MAX_SLOTS; ++i)
 	{
 		if (window && window == GadgetComboBoxGetEditBox(comboBoxPlayer[i]))
 		{
@@ -399,7 +400,7 @@ static void handleColorSelection(int index)
 	GameWindow *combo = comboBoxColor[index];
 	Int color, selIndex;
 	GadgetComboBoxGetSelectedPos(combo, &selIndex);
-	color = (Int)GadgetComboBoxGetItemData(combo, selIndex);
+	color = (intptr_t)GadgetComboBoxGetItemData(combo, selIndex);
 
 	LANGameInfo *myGame = TheLAN->GetMyGame();
 
@@ -457,7 +458,7 @@ static void handlePlayerTemplateSelection(int index)
 	GameWindow *combo = comboBoxPlayerTemplate[index];
 	Int playerTemplate, selIndex;
 	GadgetComboBoxGetSelectedPos(combo, &selIndex);
-	playerTemplate = (Int)GadgetComboBoxGetItemData(combo, selIndex);
+	playerTemplate = (intptr_t)GadgetComboBoxGetItemData(combo, selIndex);
 	LANGameInfo *myGame = TheLAN->GetMyGame();
 
 	if (myGame)
@@ -569,7 +570,7 @@ static void handleTeamSelection(int index)
 	GameWindow *combo = comboBoxTeam[index];
 	Int team, selIndex;
 	GadgetComboBoxGetSelectedPos(combo, &selIndex);
-	team = (Int)GadgetComboBoxGetItemData(combo, selIndex);
+	team = (intptr_t)GadgetComboBoxGetItemData(combo, selIndex);
 	LANGameInfo *myGame = TheLAN->GetMyGame();
 
 	if (myGame)

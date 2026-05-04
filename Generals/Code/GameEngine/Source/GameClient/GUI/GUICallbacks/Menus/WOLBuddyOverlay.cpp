@@ -98,7 +98,7 @@ static GameWindow *parentIgnore = NULL;
 static GameWindow *listboxIgnore = NULL;
 
 static Bool isOverlayActive = false;
-void insertChat( BuddyMessage msg );
+static void insertChat( BuddyMessage msg );
 // RightClick pointers ---------------------------------------------------------------------
 static GameWindow *rcMenu = NULL;
 static WindowLayout *noticeLayout = NULL;
@@ -177,7 +177,7 @@ void InitBuddyControls(Int type)
 		buddyControls.listboxChatID = TheNameKeyGenerator->nameToKey( AsciiString( "WOLBuddyOverlay.wnd:ListboxBuddyChat" ) );
 		buddyControls.listboxBuddies = TheWindowManager->winGetWindowFromId( NULL,  buddyControls.listboxBuddiesID );
 		buddyControls.listboxChat = TheWindowManager->winGetWindowFromId( NULL,  buddyControls.listboxChatID);
-		GadgetTextEntrySetText(buddyControls.textEntryEdit, UnicodeString.TheEmptyString);
+		GadgetTextEntrySetText(buddyControls.textEntryEdit, UnicodeString::TheEmptyString);
 		buddyControls.isInit = TRUE;
 		break;
 	case BUDDY_WINDOW_DIPLOMACY:
@@ -187,7 +187,7 @@ void InitBuddyControls(Int type)
 		buddyControls.listboxChatID = TheNameKeyGenerator->nameToKey( AsciiString( "Diplomacy.wnd:ListboxBuddyChat" ) );
 		buddyControls.listboxBuddies = TheWindowManager->winGetWindowFromId( NULL,  buddyControls.listboxBuddiesID );
 		buddyControls.listboxChat = TheWindowManager->winGetWindowFromId( NULL,  buddyControls.listboxChatID);
-		GadgetTextEntrySetText(buddyControls.textEntryEdit, UnicodeString.TheEmptyString);
+		GadgetTextEntrySetText(buddyControls.textEntryEdit, UnicodeString::TheEmptyString);
 		buddyControls.isInit = TRUE;
 		break;
 	case BUDDY_WINDOW_WELCOME_SCREEN:
@@ -220,8 +220,8 @@ WindowMsgHandledType BuddyControlSystem( GameWindow *window, UnsignedInt msg,
 					if(rc->pos < 0)
 						break;
 
-					GPProfile profileID = (GPProfile)GadgetListBoxGetItemData(control, rc->pos, 0);
-					RCItemType itemType = (RCItemType)(Int)GadgetListBoxGetItemData(control, rc->pos, 1);
+					GPProfile profileID = (GPProfile)(intptr_t)GadgetListBoxGetItemData(control, rc->pos, 0);
+					RCItemType itemType = (RCItemType)(intptr_t)GadgetListBoxGetItemData(control, rc->pos, 1);
 					UnicodeString nick = GadgetListBoxGetText(control, rc->pos);
 
 					GadgetListBoxSetSelected(control, rc->pos);
@@ -272,7 +272,7 @@ WindowMsgHandledType BuddyControlSystem( GameWindow *window, UnsignedInt msg,
 				GadgetListBoxGetSelected(buddyControls.listboxBuddies, &selected);
 				if (selected >= 0)
 				{
-					GPProfile selectedProfile = (GPProfile)GadgetListBoxGetItemData(buddyControls.listboxBuddies, selected);
+					GPProfile selectedProfile = (GPProfile)(intptr_t)GadgetListBoxGetItemData(buddyControls.listboxBuddies, selected);
 					BuddyInfoMap *m = TheGameSpyInfo->getBuddyMap();
 					BuddyInfoMap::iterator recipIt = m->find(selectedProfile);
 					if (recipIt == m->end())
@@ -399,7 +399,7 @@ void updateBuddyInfo( void )
 
 	GadgetListBoxGetSelected(buddyControls.listboxBuddies, &selected);
 	if (selected >= 0)
-		selectedProfile = (GPProfile)GadgetListBoxGetItemData(buddyControls.listboxBuddies, selected);
+		selectedProfile = (GPProfile)(intptr_t)GadgetListBoxGetItemData(buddyControls.listboxBuddies, selected);
 
 	selected = -1;
 	GadgetListBoxReset(buddyControls.listboxBuddies);
@@ -754,7 +754,7 @@ void WOLBuddyOverlayInit( WindowLayout *layout, void *userData )
 	parentBuddies->winHide(FALSE);
 	parentIgnore->winHide(TRUE);
 
-	//GadgetTextEntrySetText(textEntry, UnicodeString.TheEmptyString);
+	//GadgetTextEntrySetText(textEntry, UnicodeString::TheEmptyString);
 
 	PopulateOldBuddyMessages();
 
@@ -892,7 +892,7 @@ WindowMsgHandledType WOLBuddyOverlaySystem( GameWindow *window, UnsignedInt msg,
 						break;
 
 					Bool isBuddy = false, isRequest = false;
-					GPProfile profileID = (GPProfile)GadgetListBoxGetItemData(control, rc->pos);
+					GPProfile profileID = (GPProfile)(intptr_t)GadgetListBoxGetItemData(control, rc->pos);
 					UnicodeString nick = GadgetListBoxGetText(control, rc->pos);
 					BuddyInfoMap *buddies = TheGameSpyInfo->getBuddyMap();
 					BuddyInfoMap::iterator bIt;

@@ -35,8 +35,8 @@
 #include "Common/BattleHonors.h"
 #include "Common/CustomMatchPreferences.h"
 #include "Common/GameSpyMiscPreferences.h"
-#include "Common/Filesystem.h"
-#include "GameClient/mouse.h"
+#include "Common/FileSystem.h"
+#include "GameClient/Mouse.h"
 #include "GameClient/GameText.h"
 #include "GameClient/WindowLayout.h"
 #include "GameClient/Gadget.h"
@@ -329,7 +329,7 @@ void BattleHonorTooltip(GameWindow *window,
 		return;
 	}
 
-	Int battleHonor = (Int)GadgetListBoxGetItemData( window, row, col );
+	Int battleHonor = (intptr_t)GadgetListBoxGetItemData( window, row, col );
 	if (battleHonor == 0)
 	{
 		//DEBUG_CRASH(("No Battle Honor in listbox row %d, col %d!", row, col));
@@ -1234,6 +1234,7 @@ void GameSpyPlayerInfoOverlayInit( WindowLayout *layout, void *userData )
 	GadgetCheckBoxSetChecked(checkBoxAsianFont,!pref.getDisallowAsianText());
 	GadgetCheckBoxSetChecked(checkBoxNonAsianFont,!pref.getDisallowNonAsianText());
 
+#ifdef _WIN32
 	OSVERSIONINFO	osvi;
 	osvi.dwOSVersionInfoSize=sizeof(OSVERSIONINFO);
 	if (GetVersionEx(&osvi))
@@ -1246,7 +1247,7 @@ void GameSpyPlayerInfoOverlayInit( WindowLayout *layout, void *userData )
 				checkBoxNonAsianFont->winEnable(FALSE);
 		}
 	}
-
+#endif
 	//TheWindowManager->winSetModal(parent);
 } // GameSpyPlayerInfoOverlayInit
 
@@ -1321,7 +1322,7 @@ WindowMsgHandledType GameSpyPlayerInfoOverlayInput( GameWindow *window, Unsigned
 
 	return MSG_IGNORED;
 }// GameSpyPlayerInfoOverlayInput
-void messageBoxYes( void );
+static void messageBoxYes( void );
 //-------------------------------------------------------------------------------------------------
 /** Overlay window system callback */
 //-------------------------------------------------------------------------------------------------

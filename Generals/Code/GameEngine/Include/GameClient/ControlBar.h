@@ -60,19 +60,19 @@ class UpgradeTemplate;
 class ControlBarResizer;
 class GameWindowTransitionsHandler;
 
-enum ProductionID;
+enum ProductionID : int;
 
-enum CommandSourceType;
-enum ProductionType;
-enum GadgetGameMessage;
-enum ScienceType;
-enum TimeOfDay;
-enum RadiusCursorType;
+enum CommandSourceType : int;
+enum ProductionType : int;
+enum GadgetGameMessage : int;
+enum ScienceType : int;
+enum TimeOfDay : int;
+enum RadiusCursorType : int;
 
 //-------------------------------------------------------------------------------------------------
 /** Command options */
 //-------------------------------------------------------------------------------------------------
-enum CommandOption
+enum CommandOption : int
 {
 	COMMAND_OPTION_NONE					= 0x00000000,
 	NEED_TARGET_ENEMY_OBJECT		= 0x00000001, // command now needs user to select enemy target
@@ -161,7 +161,7 @@ const UnsignedInt COMMAND_OPTION_NEED_OBJECT_TARGET =
 	* IMPORTANT: Make sure the GUICommandType enum and the TheGuiCommandNames[] have the same
 	*						 entries in the same order */
 //-------------------------------------------------------------------------------------------------
-enum GUICommandType
+enum GUICommandType : int
 {
 	GUI_COMMAND_NONE = 0,									///< invalid command
 	GUI_COMMAND_DOZER_CONSTRUCT,					///< dozer construct

@@ -195,6 +195,7 @@ void setFPMode( void )
 	// anything as long as it is consistent, really, but this
 	// is in the (vain?) hope of any slight speed boost.
 	//
+#ifdef _WIN32
 	_fpreset();
 
 	UnsignedInt curVal = _statusfp();
@@ -204,6 +205,7 @@ void setFPMode( void )
 	newVal = (newVal & ~_MCW_PC) | (_PC_24   & _MCW_PC);
 
 	_controlfp(newVal, _MCW_PC | _MCW_RC);
+#endif
 }
 
 // ------------------------------------------------------------------------------------------------
@@ -423,7 +425,7 @@ void GameLogic::reset( void )
 
 	// set the hash to be rather large. We need to optimize this value later.
 	m_objHash.clear();
-	m_objHash.resize(OBJ_HASH_SIZE);
+	m_objHash.reserve(OBJ_HASH_SIZE);
 	m_gamePaused = FALSE;
 	m_inputEnabledMemory = TRUE;
 	m_mouseVisibleMemory = TRUE;
@@ -1876,7 +1878,11 @@ void GameLogic::startNewGame( Bool saveGame )
 	{
 		updateLoadProgress(101); // keep greater then 100
 		testTimeOut();
+#ifdef _WIN32
 		Sleep(100);
+#else
+		usleep(100 * 1000);
+#endif
 	}
 
 	// if we're in a load game, don't fade yet
@@ -1890,7 +1896,11 @@ void GameLogic::startNewGame( Bool saveGame )
 			{
 				TheDisplay->draw();
 				setFPMode();
+#ifdef _WIN32
 				Sleep(33);
+#else
+				usleep(33 * 1000);
+#endif
 			}
 			
 		}

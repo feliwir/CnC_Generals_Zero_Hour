@@ -236,7 +236,7 @@ DEBUG_LOG(( "%d: GetGameLogicRandomValue = %d (%d - %d), %s line %d\n",
 //
 // Integer random value
 //
-Int GetGameClientRandomValue( int lo, int hi, char *file, int line )
+Int GetGameClientRandomValue( int lo, int hi, const char *file, int line )
 {
 	UnsignedInt delta = hi - lo + 1;
 	Int rval;
@@ -259,7 +259,7 @@ DEBUG_LOG(( "%d: GetGameClientRandomValue = %d (%d - %d), %s line %d\n",
 //
 // Integer random value
 //
-Int GetGameAudioRandomValue( int lo, int hi, char *file, int line )
+Int GetGameAudioRandomValue( int lo, int hi, const char *file, int line )
 {
 	UnsignedInt delta = hi - lo + 1;
 	Int rval;

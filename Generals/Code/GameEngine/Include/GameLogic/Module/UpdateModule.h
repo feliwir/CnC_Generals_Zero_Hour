@@ -32,6 +32,7 @@
 #ifndef __UpdateModule_H_
 #define __UpdateModule_H_
 
+#include "Lib/BaseType.h"
 #include "Common/Module.h"
 #include "Common/GameType.h"
 #include "Common/DisabledTypes.h"
@@ -62,7 +63,7 @@ class WeaponTemplate;
 class DamageInfo;
 class ParticleSystemTemplate;
 class CommandButton;
-enum CommandOption;
+enum CommandOption : int;
 
 //-------------------------------------------------------------------------------------------------
 enum UpdateSleepTime 

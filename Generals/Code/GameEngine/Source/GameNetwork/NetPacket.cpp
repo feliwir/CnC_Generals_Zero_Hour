@@ -158,7 +158,7 @@ NetPacketList NetPacket::ConstructBigCommandPacketList(NetCommandRef *ref) {
 
 	if (!DoesCommandRequireACommandID(msg->getNetCommandType())) {
 		DEBUG_CRASH(("Trying to wrap a command that doesn't have a unique command ID"));
-		return NULL;
+		return NetPacketList();
 	}
 
 	UnsignedInt bufferSize = GetBufferSizeNeededForCommand(msg);  // need to implement.  I have a drinking problem.
@@ -5239,7 +5239,7 @@ NetCommandMsg * NetPacket::readGameMessage(UnsignedByte *data, Int &i)
 		lasttype = parserArgType->getType();
 		argsLeftForType = parserArgType->getArgCount();
 	}
-	for (j = 0; j < totalArgCount; ++j) {
+	for (Int j = 0; j < totalArgCount; ++j) {
 		readGameMessageArgumentFromPacket(lasttype, msg, data, i);
 
 		--argsLeftForType;
@@ -5560,7 +5560,7 @@ NetCommandMsg * NetPacket::readPacketRouterAckMessage(UnsignedByte *data, Int &i
 NetCommandMsg * NetPacket::readDisconnectChatMessage(UnsignedByte *data, Int &i) {
 	NetDisconnectChatCommandMsg *msg = newInstance(NetDisconnectChatCommandMsg);
 
-	UnsignedShort text[256];
+	wchar_t text[256];
 	UnsignedByte length;
 	memcpy(&length, data + i, sizeof(UnsignedByte));
 	++i;
@@ -5583,7 +5583,7 @@ NetCommandMsg * NetPacket::readDisconnectChatMessage(UnsignedByte *data, Int &i)
 NetCommandMsg * NetPacket::readChatMessage(UnsignedByte *data, Int &i) {
 	NetChatCommandMsg *msg = newInstance(NetChatCommandMsg);
 
-	UnsignedShort text[256];
+	wchar_t text[256];
 	UnsignedByte length;
 	Int playerMask;
 	memcpy(&length, data + i, sizeof(UnsignedByte));

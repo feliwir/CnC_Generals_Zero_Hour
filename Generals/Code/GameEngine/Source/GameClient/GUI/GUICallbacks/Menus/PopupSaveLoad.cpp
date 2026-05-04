@@ -699,7 +699,11 @@ WindowMsgHandledType SaveLoadMenuSystem( GameWindow *window, UnsignedInt msg,
 					AsciiString filepath = TheGameState->getFilePathInSaveDirectory(selectedGameInfo->filename);
 
 					// delete the file
+#ifdef _WIN32
 					DeleteFile( filepath.str() );
+#else
+					remove( filepath.str() );
+#endif
 					
 					// repopulate the listbox
 					TheGameState->populateSaveGameListbox( listboxGames, currentLayoutType );

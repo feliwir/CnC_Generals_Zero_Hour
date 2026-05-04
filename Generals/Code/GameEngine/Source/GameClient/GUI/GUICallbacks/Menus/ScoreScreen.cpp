@@ -511,7 +511,7 @@ WindowMsgHandledType ScoreScreenSystem( GameWindow *window, UnsignedInt msg,
 				if( controlID == TheNameKeyGenerator->nameToKey(name))
 				{
 					Bool notBuddy = TRUE;
-					Int playerID = (Int)GadgetButtonGetData(TheWindowManager->winGetWindowFromId(NULL,controlID));
+					Int playerID = (intptr_t)GadgetButtonGetData(TheWindowManager->winGetWindowFromId(NULL,controlID));
 											// request to add a buddy
 					BuddyInfoMap *buddies = TheGameSpyInfo->getBuddyMap();
 					BuddyInfoMap::iterator bIt;
@@ -631,7 +631,11 @@ void PlayMovieAndBlock(AsciiString movieTitle)
 
 		if(!videoStream->isFrameReady())
 		{
+#ifdef _WIN32
 			Sleep(1);
+#else
+			usleep(1);
+#endif
 			continue;
 		}
 
@@ -1434,7 +1438,7 @@ winName.format("ScoreScreen.wnd:StaticTextScore%d", pos);
 						}
 					}
 					DEBUG_LOG(("Game ended on frame %d - TheGameLogic->getFrame()=%d\n", lastFrameOfGame-1, TheGameLogic->getFrame()-1));
-					for (i=0; i<MAX_SLOTS; ++i)
+					for (Int i=0; i<MAX_SLOTS; ++i)
 					{
 						const GameSlot *slot = TheGameInfo->getConstSlot(i);
 						DEBUG_LOG(("latestHumanInGame=%d, slot->isOccupied()=%d, slot->disconnected()=%d, slot->isAI()=%d, slot->lastFrameInGame()=%d\n",
@@ -1667,7 +1671,7 @@ winName.format("ScoreScreen.wnd:StaticTextScore%d", pos);
 					stats.lastGeneral = ptIdx;
 
 					Int gameSize = 0;
-					for (i=0; i<MAX_SLOTS; ++i)
+					for (Int i=0; i<MAX_SLOTS; ++i)
 					{
 						if (TheGameSpyGame->getConstSlot(i)->isOccupied() && TheGameSpyGame->getConstSlot(i)->getPlayerTemplate() != PLAYERTEMPLATE_OBSERVER)
 							++gameSize;

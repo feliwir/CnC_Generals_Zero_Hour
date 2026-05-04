@@ -33,7 +33,7 @@
 //-------------------------------------------------------------------------------------------------
 /** Object status bits */
 //-------------------------------------------------------------------------------------------------
-enum ObjectStatusBits
+enum ObjectStatusBits : int
 {
 	OBJECT_STATUS_NONE									= 0,					///< no status bit
 	OBJECT_STATUS_DESTROYED							=	(1 << 0),		///< has been destroyed, pending delete

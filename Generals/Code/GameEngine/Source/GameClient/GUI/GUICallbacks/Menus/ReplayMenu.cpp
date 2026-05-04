@@ -39,7 +39,7 @@
 #include "Common/Version.h"
 #include "GameClient/WindowLayout.h"
 #include "GameClient/Gadget.h"
-#include "GameClient/GadgetListbox.h"
+#include "GameClient/GadgetListBox.h"
 #include "GameClient/Shell.h"
 #include "GameClient/KeyDefs.h"
 #include "GameClient/GameWindowManager.h"
@@ -628,6 +628,7 @@ void deleteReplay( void )
 	filename = TheRecorder->getReplayDir();
 	translate.translate(GetReplayFilenameFromListbox(listboxReplayFiles, selected));
 	filename.concat(translate);
+#ifdef _WIN32
 	if(DeleteFile(filename.str()) == 0)
 	{
 		char buffer[1024];
@@ -637,6 +638,17 @@ void deleteReplay( void )
 		errorStr.translate(translate);
 		MessageBoxOk(TheGameText->fetch("GUI:Error"),errorStr, NULL);
 	}
+#else
+	if(remove(filename.str()) != 0)
+	{
+		wchar_t buffer[1024];
+		wprintf(buffer, 1024, L"Unable to delete file %ls", filename.str());
+		UnicodeString errorStr;
+		errorStr.set(buffer);
+		MessageBoxOk(TheGameText->fetch("GUI:Error"),errorStr, NULL);
+	}
+#endif
+
 	//Load the listbox shiznit
 	GadgetListBoxReset(listboxReplayFiles);
 	PopulateReplayFileListbox(listboxReplayFiles);
@@ -658,6 +670,7 @@ void copyReplay( void )
 	translate.translate(GetReplayFilenameFromListbox(listboxReplayFiles, selected));
 	filename.concat(translate);
 	
+#ifdef _WIN32
 	char path[1024];
 	LPITEMIDLIST pidl;
 	SHGetSpecialFolderLocation(NULL, CSIDL_DESKTOPDIRECTORY, &pidl);
@@ -675,6 +688,8 @@ void copyReplay( void )
 		errorStr.trim();
 		MessageBoxOk(TheGameText->fetch("GUI:Error"),errorStr, NULL);
 	}
-
+#else
+	// TODO: implement file copy for other platforms, and error handling
+#endif
 }
 

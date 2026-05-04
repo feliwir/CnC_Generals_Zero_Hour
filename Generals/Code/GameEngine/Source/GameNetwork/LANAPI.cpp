@@ -25,6 +25,7 @@
 #include "PreRTS.h"	// This must go first in EVERY cpp file int the GameEngine
 
 #define WIN32_LEAN_AND_MEAN  // only bare bones windows stuff wanted
+#include <windows.h>
 
 #include "Common/CRC.h"
 #include "Common/GameState.h"
@@ -887,9 +888,13 @@ void LANAPI::RequestGameCreate( UnicodeString gameName, Bool isDirectConnect )
 	// Create the local game object
 	m_inLobby = false;
 	LANGameInfo *myGame = NEW LANGameInfo;
-	
+
+#ifdef _WIN32
 	myGame->setSeed(GetTickCount());
-	
+#else
+	myGame->setSeed(time(NULL));
+#endif
+
 //	myGame->setInProgress(false);
 	myGame->enterGame();
 	UnicodeString s;

@@ -52,7 +52,7 @@
 #include "Common/CriticalSection.h"
 #endif
 #include "Common/Debug.h"
-#include "Common/registry.h"
+#include "Common/Registry.h"
 #include "Common/SystemInfo.h"
 #include "Common/UnicodeString.h"
 #include "GameClient/GameText.h"
@@ -148,7 +148,11 @@ inline Bool ignoringAsserts()
 // ----------------------------------------------------------------------------
 inline HWND getThreadHWND()
 {
+#ifdef _WIN32
 	return (theMainThreadID == GetCurrentThreadId())?ApplicationHWnd:NULL;
+#else
+	return NULL;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -269,7 +273,7 @@ static int doCrashBox(const char *buffer, Bool logResult)
 			if (logResult)
 				DebugLog("[Retry]\n");
 #endif
-			::DebugBreak();
+			__debugbreak();
 			break;
 		case IDIGNORE:
 #ifdef DEBUG_LOGGING
@@ -700,7 +704,7 @@ void ReleaseCrash(const char *reason)
 
 	if (!GetRegistryLanguage().compareNoCase("german2") || !GetRegistryLanguage().compareNoCase("german") )
 	{
-		::MessageBox(NULL, "Es ist ein gravierender Fehler aufgetreten. Solche Fehler können durch viele verschiedene Dinge wie Viren, überhitzte Hardware und Hardware, die den Mindestanforderungen des Spiels nicht entspricht, ausgelöst werden. Tipps zur Vorgehensweise findest du in den Foren unter www.generals.ea.com, Informationen zum Technischen Kundendienst im Handbuch zum Spiel.", "Fehler...", MB_OK|MB_TASKMODAL|MB_ICONERROR);
+		::MessageBox(NULL, "Es ist ein gravierender Fehler aufgetreten. Solche Fehler kï¿½nnen durch viele verschiedene Dinge wie Viren, ï¿½berhitzte Hardware und Hardware, die den Mindestanforderungen des Spiels nicht entspricht, ausgelï¿½st werden. Tipps zur Vorgehensweise findest du in den Foren unter www.generals.ea.com, Informationen zum Technischen Kundendienst im Handbuch zum Spiel.", "Fehler...", MB_OK|MB_TASKMODAL|MB_ICONERROR);
 	} 
 	else
 	{

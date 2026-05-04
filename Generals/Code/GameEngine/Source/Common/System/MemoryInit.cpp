@@ -55,6 +55,10 @@
 //#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
 #endif
 
+#ifndef _MAX_PATH
+#define _MAX_PATH 512
+#endif
+
 //-----------------------------------------------------------------------------
 void userMemoryManagerGetDmaParms(Int *numSubPools, const PoolInitRec **pParms)
 {

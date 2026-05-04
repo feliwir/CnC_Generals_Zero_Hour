@@ -27,7 +27,11 @@
 #include "Common/BezierSegment.h"
 #include "Common/BezFwdIterator.h"
 
-#include <D3DX8Math.h>
+#ifdef _WIN32
+#include <d3dx8math.h>
+#else
+#include <glm/glm.hpp>
+#endif
 
 //-------------------------------------------------------------------------------------------------
 BezierSegment::BezierSegment()
@@ -102,6 +106,7 @@ void BezierSegment::evaluateBezSegmentAtT(Real tValue, Coord3D *outResult) const
 	if (!outResult)
 		return;
 
+#ifdef _WIN32
 	D3DXVECTOR4	tVec(tValue * tValue * tValue, tValue * tValue, tValue, 1);
 
 	D3DXVECTOR4 xCoords(m_controlPoints[0].x, m_controlPoints[1].x, m_controlPoints[2].x, m_controlPoints[3].x);
@@ -114,6 +119,19 @@ void BezierSegment::evaluateBezSegmentAtT(Real tValue, Coord3D *outResult) const
 	outResult->x = D3DXVec4Dot(&xCoords, &tResult);
 	outResult->y = D3DXVec4Dot(&yCoords, &tResult);
 	outResult->z = D3DXVec4Dot(&zCoords, &tResult);
+#else // SAGE_USE_GLM
+	glm::vec4 tVec(tValue * tValue * tValue, tValue * tValue, tValue, 1);
+
+	glm::vec4 xCoords(m_controlPoints[0].x, m_controlPoints[1].x, m_controlPoints[2].x, m_controlPoints[3].x);
+	glm::vec4 yCoords(m_controlPoints[0].y, m_controlPoints[1].y, m_controlPoints[2].y, m_controlPoints[3].y);
+	glm::vec4 zCoords(m_controlPoints[0].z, m_controlPoints[1].z, m_controlPoints[2].z, m_controlPoints[3].z);
+
+	glm::vec4 tResult = BezierSegment::s_bezBasisMatrix * tVec;
+	
+	outResult->x = glm::dot(xCoords, tResult);
+	outResult->y = glm::dot(yCoords, tResult);
+	outResult->z = glm::dot(zCoords, tResult);
+#endif
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -238,9 +256,18 @@ void BezierSegment::splitSegmentAtT(Real tValue, BezierSegment &outSeg1, BezierS
 
 //-------------------------------------------------------------------------------------------------
 // The Basis Matrix for a bezier segment
+#ifdef _WIN32
 const D3DXMATRIX BezierSegment::s_bezBasisMatrix(
 	-1.0f,  3.0f, -3.0f,  1.0f,
 	 3.0f, -6.0f,  3.0f,  0.0f,
 	-3.0f,  3.0f,  0.0f,  0.0f,
 	 1.0f,  0.0f,  0.0f,  0.0f
 );
+#else
+const glm::mat4 BezierSegment::s_bezBasisMatrix(
+	-1.0f,  3.0f, -3.0f,  1.0f,
+	 3.0f, -6.0f,  3.0f,  0.0f,
+	-3.0f,  3.0f,  0.0f,  0.0f,
+	 1.0f,  0.0f,  0.0f,  0.0f
+);
+#endif

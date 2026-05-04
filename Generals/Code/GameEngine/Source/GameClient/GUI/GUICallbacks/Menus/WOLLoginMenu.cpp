@@ -117,13 +117,13 @@ static AsciiString obfuscate( AsciiString in )
 {
 	char *buf = NEW char[in.getLength() + 1];
 	strcpy(buf, in.str());
-	static const char *xor = "1337Munkee";
+	static const char *xor_ = "1337Munkee";
 	char *c = buf;
-	const char *c2 = xor;
+	const char *c2 = xor_;
 	while (*c)
 	{
 		if (!*c2)
-			c2 = xor;
+			c2 = xor_;
 		if (*c != *c2)
 			*c = *c++ ^ *c2++;
 		else
@@ -589,7 +589,7 @@ void WOLLoginMenuInit( WindowLayout *layout, void *userData )
 #endif // ALLOW_NON_PROFILED_LOGIN
 		// Read login names from registry...
 		GadgetComboBoxReset(comboBoxEmail);
-		GadgetTextEntrySetText(textEntryPassword, UnicodeString.TheEmptyString);
+		GadgetTextEntrySetText(textEntryPassword, UnicodeString::TheEmptyString);
 
 		// look for cached nicks to add
 		AsciiString lastName;
@@ -967,6 +967,7 @@ static Bool isAgeOkay(AsciiString &month, AsciiString &day, AsciiString year)
 	// test the year first
 	#define DATE_BUFFER_SIZE 256
 	char dateBuffer[ DATE_BUFFER_SIZE ];
+#ifdef _WIN32
 	GetDateFormat( LOCALE_SYSTEM_DEFAULT,
 								 0, NULL,
 								 "yyyy",
@@ -997,6 +998,7 @@ static Bool isAgeOkay(AsciiString &month, AsciiString &day, AsciiString year)
 	userVal = atoi(day.str());
 	if(sysVal - userVal< 0)
 		return FALSE;
+#endif
 //	day.format("%02.2d",userVal);
 	return TRUE;
 }

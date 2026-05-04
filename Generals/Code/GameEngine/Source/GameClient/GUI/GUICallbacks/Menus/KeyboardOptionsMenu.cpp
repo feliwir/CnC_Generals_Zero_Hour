@@ -68,6 +68,10 @@
 #include "GameNetwork/FirewallHelper.h"
 #include "GameNetwork/IPEnumeration.h"
 
+#ifndef VK_RETURN
+#define	VK_RETURN           0x0D
+#endif
+
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
 WindowMsgHandledType KeyboardTextEntryInput( GameWindow *window, UnsignedInt msg,
 													 WindowMsgData mData1, WindowMsgData mData2 );

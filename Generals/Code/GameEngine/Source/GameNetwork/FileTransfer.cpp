@@ -59,7 +59,11 @@ static Bool doFileTransfer( AsciiString filename, MapTransferLoadScreen *ls, Int
 		Bool sentFile = FALSE;
 		if (TheGameInfo->amIHost())
 		{
+#ifdef _WIN32
 			Sleep(500);
+#else
+			usleep(500*1000);
+#endif
 			fileCommandID = TheNetwork->sendFileAnnounce(filename, mask);
 		}
 		else

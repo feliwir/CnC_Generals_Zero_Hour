@@ -366,7 +366,7 @@ UpgradeTemplate *UpgradeCenter::newUpgrade( const AsciiString& name )
 
 	// Make a unique bitmask for this new template by keeping track of what bits have been assigned
 	// damn MSFT! proper ANSI syntax for a proper 64-bit constant is "1LL", but MSVC doesn't recognize it
-	Int64 newMask = 1i64 << m_nextTemplateMaskBit;
+	Int64 newMask = 1 << m_nextTemplateMaskBit;
 	m_nextTemplateMaskBit++;
 	DEBUG_ASSERTCRASH( m_nextTemplateMaskBit < 64, ("Can't have over 64 types of Upgrades and have a Bitfield function.") );
 	newUpgrade->friend_setUpgradeMask( newMask );

@@ -171,7 +171,9 @@ void initSubsystem(SUBSYSTEM*& sysref, AsciiString name, SUBSYSTEM* sys, Xfer *p
 
 //-------------------------------------------------------------------------------------------------
 extern HINSTANCE ApplicationHInstance;  ///< our application instance
+#ifdef _WINDOWS
 extern CComModule _Module;
+#endif
 
 //-------------------------------------------------------------------------------------------------
 static void updateTGAtoDDS();
@@ -192,7 +194,9 @@ GameEngine::GameEngine( void )
 	m_quitting = FALSE;
 	m_isActive = FALSE;
 
+#ifdef _WINDOWS
 	_Module.Init(NULL, ApplicationHInstance);
+#endif
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -227,7 +231,9 @@ GameEngine::~GameEngine()
 
 	Drawable::killStaticImages();
 
+#ifdef _WINDOWS
 	_Module.Term();
+#endif
 
 #ifdef PERF_TIMERS
 	PerfGather::termPerfDump();
@@ -695,7 +701,11 @@ void GameEngine::execute( void )
 					DWORD limit = (1000.0f/m_maxFPS)-1;
 					while (TheGlobalData->m_useFpsLimit && (now - prevTime) < limit) 
 					{
+#ifdef WINDOWS
 						::Sleep(0);
+#else
+						usleep(1);
+#endif
 						now = timeGetTime();
 					}
 					//Int slept = now - prevTime;

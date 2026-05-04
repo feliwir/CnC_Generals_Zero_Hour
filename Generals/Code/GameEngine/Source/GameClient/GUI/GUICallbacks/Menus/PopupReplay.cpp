@@ -285,6 +285,7 @@ void reallySaveReplay(void)
 
 	if (TheLocalFileSystem->doesFileExist(filename.str()))
 	{
+#ifdef _WIN32
 		if(DeleteFile(filename.str()) == 0)
 		{
 			wchar_t buffer[1024];
@@ -307,8 +308,12 @@ void reallySaveReplay(void)
 			PopulateReplayFileListbox(listboxGames);
 			return;
 		}
+#else
+		// TODO: implement file copy for other platforms, and error handling
+#endif
 	}
 
+#ifdef _WIN32
 	// copy the replay to the right place
 	if(CopyFile(oldFilename.str(),filename.str(), FALSE) == 0)
 	{
@@ -325,6 +330,7 @@ void reallySaveReplay(void)
 		MessageBoxOk(TheGameText->fetch("GUI:Error"),errorStr, NULL);
 		return;
 	}
+#endif
 
 	// get the listbox that will have the save games in it
 	GameWindow *listboxGames = TheWindowManager->winGetWindowFromId( parent, listboxGamesKey );

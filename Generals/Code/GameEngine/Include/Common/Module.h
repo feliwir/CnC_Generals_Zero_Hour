@@ -41,8 +41,8 @@
 #include "Common/Snapshot.h"
 
 // FORWARD REFERENCES /////////////////////////////////////////////////////////////////////////////
-enum TimeOfDay;
-enum StaticGameLODLevel;
+enum TimeOfDay : int;
+enum StaticGameLODLevel : int;
 class Drawable;
 class Object;
 class Player;

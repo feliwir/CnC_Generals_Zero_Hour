@@ -54,7 +54,7 @@
 #include "Common/FileSystem.h"
 #include "Win32Device/Common/Win32LocalFileSystem.h"
 #include "Win32Device/Common/Win32BIGFileSystem.h"
-#include "Common/SubSystemInterface.h"
+#include "Common/SubsystemInterface.h"
 #include "GameClient/MapUtil.h"
 #include "W3DDevice/Common/W3DModuleFactory.h"
 

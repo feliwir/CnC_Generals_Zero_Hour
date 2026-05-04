@@ -83,7 +83,7 @@ target_sources(
 
 set_target_properties(g_wwmath PROPERTIES OUTPUT_NAME "WWMath")
 
-target_include_directories(g_wwmath PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(g_wwmath PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../)
 target_include_directories(g_wwmath
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../WWLib)
 

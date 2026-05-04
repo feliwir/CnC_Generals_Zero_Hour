@@ -431,7 +431,7 @@ void GameClient::reset( void )
 {
 	Drawable *draw, *nextDraw;
 	m_drawableHash.clear();
-	m_drawableHash.resize(DRAWABLE_HASH_SIZE);
+	m_drawableHash.reserve(DRAWABLE_HASH_SIZE);
 	
 	// need to reset the in game UI to clear drawables before they are destroyed
 	TheInGameUI->reset();
@@ -536,7 +536,11 @@ void GameClient::update( void )
 						TheWindowManager->update();
 						// redraw all views, update the GUI
 						TheDisplay->draw();
+#ifdef _WIN32
 						Sleep(100);
+#else
+						usleep(100000);
+#endif
 					}
 					setFPMode();
 
@@ -1142,7 +1146,7 @@ void GameClient::preloadAssets( TimeOfDay timeOfDay )
 	};
 
 	GlobalMemoryStatus(&before);
-	for (i=0; *textureNames[i]; ++i)
+	for (Int i=0; *textureNames[i]; ++i)
 		TheDisplay->preloadTextureAssets(textureNames[i]);
 	GlobalMemoryStatus(&after);
 

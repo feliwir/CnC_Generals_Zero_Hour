@@ -69,7 +69,7 @@
 #endif
 
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
-static enum {
+enum {
 	COLUMN_NAME = 0,
 	COLUMN_MAP,
 	COLUMN_LADDER,
@@ -210,7 +210,7 @@ static void gameTooltip(GameWindow *window,
 		return;
 	}
 
-	Int gameID = (Int)GadgetListBoxGetItemData(window, row, 0);
+	Int gameID = (intptr_t)GadgetListBoxGetItemData(window, row, 0);
 	GameSpyStagingRoom *room = TheGameSpyInfo->findStagingRoomByID(gameID);
 	if (!room)
 	{
@@ -459,7 +459,7 @@ static void clearBuddyGames(void)
 
 struct GameSortStruct
 {
-	bool operator()(GameSpyStagingRoom *g1, GameSpyStagingRoom *g2)
+	bool operator()(GameSpyStagingRoom *g1, GameSpyStagingRoom *g2) const
 	{
 		// sort CRC mismatches to the bottom
 		Bool g1Good = (g1->getExeCRC() != TheGlobalData->m_exeCRC || g1->getIniCRC() != TheGlobalData->m_iniCRC);
@@ -672,7 +672,7 @@ void RefreshGameListBox( GameWindow *win, Bool showMap )
 	GadgetListBoxGetSelected(win, &selectedIndex);
 	if (selectedIndex != -1 )
 	{
-		selectedID = (Int)GadgetListBoxGetItemData(win, selectedIndex);
+		selectedID = (intptr_t)GadgetListBoxGetItemData(win, selectedIndex);
 	}
 	int prevPos = GadgetListBoxGetTopVisibleEntry( win );
 
