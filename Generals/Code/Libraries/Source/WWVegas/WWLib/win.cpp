@@ -39,6 +39,7 @@ bool GameInFocus = false;
  *   6/21/01    DEL : Created.                                                                 *
  *=============================================================================================*/
 #ifdef _DEBUG
+#ifdef _WINDOWS
 void __cdecl Print_Win32Error(unsigned long win32Error)
 {
 	LPVOID lpMsgBuf;
@@ -49,5 +50,11 @@ void __cdecl Print_Win32Error(unsigned long win32Error)
 	WWDEBUG_SAY(((const char*)lpMsgBuf));
 	LocalFree(lpMsgBuf);
 }
+#else
+void __cdecl Print_Win32Error(unsigned long win32Error)
+{
+	WWDEBUG_SAY(("Win32 Error: %lu", win32Error));
+}
+#endif
 #endif
 

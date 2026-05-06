@@ -28,7 +28,7 @@ extern "C"
         return str;
     }
 
-    void reverse(char s[])
+    inline void reverse(char s[])
     {
         int i, j;
         char c;
@@ -42,7 +42,7 @@ extern "C"
     }
 
     /* itoa:  convert n to characters in s */
-    void itoa(int n, char s[], int base)
+    inline void itoa(int n, char s[], int base)
     {
         int i, sign;
 

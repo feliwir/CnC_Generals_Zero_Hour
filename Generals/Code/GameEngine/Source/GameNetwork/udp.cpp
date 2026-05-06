@@ -43,12 +43,13 @@
 
 //-------------------------------------------------------------------------
 
-#if (defined(_DEBUG) || defined(_INTERNAL)) && defined(_WINDOWS)
+#if (defined(_DEBUG) || defined(_INTERNAL))
 
 #define CASE(x) case (x): return #x;
 
 AsciiString GetWSAErrorString( Int error )
 {
+#ifdef _WINDOWS
 	switch (error)
 	{
 		CASE(WSABASEERR)
@@ -108,8 +109,9 @@ AsciiString GetWSAErrorString( Int error )
 			AsciiString ret;
 			ret.format("Not a Winsock error (%d)", error);
 			return ret;
-		}
+		}    
 	}
+#endif
 	return AsciiString::TheEmptyString; // will not be hit, ever.
 }
 

@@ -37,7 +37,12 @@
 #include <windows.h>
 
 // USER INCLUDES //////////////////////////////////////////////////////////////
+#ifdef SAGE_USE_SDL3
+#include "SDL3Device/GameClient/SDL3Mouse.h"
+#define Win32Mouse SDL3Mouse
+#else
 #include "Win32Device/GameClient/Win32Mouse.h"
+#endif
 
 // EXTERNAL ///////////////////////////////////////////////////////////////////
 extern HINSTANCE ApplicationHInstance;  ///< our application instance

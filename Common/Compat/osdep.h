@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <time.h>
 
-int GetTickCount()
+inline int GetTickCount()
 {
     struct timespec ts;
     if (clock_gettime(CLOCK_MONOTONIC, &ts) != 0)

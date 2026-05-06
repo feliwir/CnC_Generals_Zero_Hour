@@ -93,11 +93,7 @@ void ThreadClass::Stop(unsigned ms)
 
 void ThreadClass::Sleep_Ms(unsigned ms)
 {
-#ifdef _WINDOWS
-	Sleep(ms)
-#else
-	usleep(ms * 1000);
-#endif
+	Sleep(ms);
 }
 
 #ifndef _UNIX

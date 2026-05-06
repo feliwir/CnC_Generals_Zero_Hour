@@ -631,11 +631,7 @@ void PlayMovieAndBlock(AsciiString movieTitle)
 
 		if(!videoStream->isFrameReady())
 		{
-#ifdef _WIN32
 			Sleep(1);
-#else
-			usleep(1);
-#endif
 			continue;
 		}
 

@@ -499,11 +499,7 @@ void SinglePlayerLoadScreen::init( GameInfo *game )
 
 			if(!m_videoStream->isFrameReady())
 			{
-#ifdef _WIN32
 				Sleep(1);	
-#else 
-				usleep(1000);
-#endif
 				continue;
 			}
 
@@ -547,11 +543,7 @@ void SinglePlayerLoadScreen::init( GameInfo *game )
 		// if we're min speced
 		m_videoStream->frameGoto(m_videoStream->frameCount()); // zero based
 		while(!m_videoStream->isFrameReady())
-#ifdef _WIN32
 			Sleep(1);
-#else
-			usleep(1000);
-#endif
 		m_videoStream->frameDecompress();
 		m_videoStream->frameRender(m_videoBuffer);
 		if(m_videoBuffer)
@@ -581,11 +573,7 @@ void SinglePlayerLoadScreen::init( GameInfo *game )
 
 			TheWindowManager->update();
 			TheDisplay->draw();
-#ifdef _WIN32
 			Sleep(100);
-#else
-			usleep(100000);
-#endif
 			currTime = timeGetTime();
 		}
 		
@@ -724,11 +712,7 @@ void ShellGameLoadScreen::init( GameInfo *game )
 		while(showTime + 3000 > timeGetTime())
 		{	
 			LoadScreen::update(0);
-#ifdef _WIN32
 			Sleep(100);
-#else
-			usleep(100000);
-#endif
 		}
 
 	}

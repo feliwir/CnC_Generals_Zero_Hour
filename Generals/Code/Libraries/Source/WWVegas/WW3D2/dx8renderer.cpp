@@ -1357,7 +1357,7 @@ void DX8SkinFVFCategoryContainer::Render(void)
 			}	//while
 		}//lock
 
-		SNAPSHOT_SAY(("Set vb: %x ib: %x\n",vb,index_buffer));
+		SNAPSHOT_SAY(("Set vb: %x ib: %x\n",&vb,index_buffer));
 
 		DX8Wrapper::Set_Vertex_Buffer(vb);
 		DX8Wrapper::Set_Index_Buffer(index_buffer,0);
@@ -1654,7 +1654,7 @@ void DX8TextureCategoryClass::Render(void)
 	VertexMaterialClass *vmaterial=(VertexMaterialClass *)Peek_Material();	//ugly cast from const but we'll restore it after changes so okay. -MW
 	DX8Wrapper::Set_Material(vmaterial);
 
-	SNAPSHOT_SAY(("Set_Shader(%x)\n",Get_Shader()));
+	// SNAPSHOT_SAY(("Set_Shader(%x)\n",Get_Shader()));
 	ShaderClass theShader = Get_Shader();
 
 	//Setup an alpha blend version of this shader just in case it's needed. -MW

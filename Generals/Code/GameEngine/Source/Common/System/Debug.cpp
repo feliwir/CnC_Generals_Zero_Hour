@@ -342,9 +342,9 @@ void DebugInit(int flags)
 	if (theDebugFlags == 0 && strcmp(gAppPrefix, "wb_") != 0) 
 	{
 		theDebugFlags = flags;
-
+	#ifdef _WINDOWS
 		theMainThreadID = GetCurrentThreadId();
-
+	#endif
 	#ifdef DEBUG_LOGGING
 
 		char dirbuf[ _MAX_PATH ];
@@ -554,7 +554,9 @@ void DebugSetFlags(int flags)
 // ----------------------------------------------------------------------------
 SimpleProfiler::SimpleProfiler()
 {
+#ifdef _WINDOWS
 	QueryPerformanceFrequency((LARGE_INTEGER*)&m_freq);
+#endif
 	m_startThisSession = 0;
 	m_totalThisSession = 0;
 	m_totalAllSessions = 0;
@@ -565,7 +567,9 @@ SimpleProfiler::SimpleProfiler()
 void SimpleProfiler::start()
 {
 	DEBUG_ASSERTCRASH(m_startThisSession == 0, ("already started"));
+#ifdef _WINDOWS
 	QueryPerformanceCounter((LARGE_INTEGER*)&m_startThisSession);
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -573,8 +577,10 @@ void SimpleProfiler::stop()
 {
 	if (m_startThisSession != 0) 
 	{
-		__int64 stop;
+		int64_t stop;
+	#ifdef _WINDOWS
 		QueryPerformanceCounter((LARGE_INTEGER*)&stop);
+	#endif
 		m_totalThisSession = stop - m_startThisSession;
 		m_totalAllSessions += stop - m_startThisSession;
 		m_startThisSession = 0;

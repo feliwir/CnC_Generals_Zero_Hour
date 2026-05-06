@@ -14,39 +14,43 @@ typedef enum eSetWindowPosFlags
 #define HWND_TOPMOST ((HWND) - 1)
 #define HWND_NOTOPMOST ((HWND) - 2)
 
-void SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, UINT uFlags)
+inline void SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, UINT uFlags)
 {
 }
-void GetWindowRect(HWND hWnd, RECT *pRect)
+inline void GetWindowRect(HWND hWnd, RECT *pRect)
 {
 }
 
-void GetClientRect(HWND hWnd, RECT *pRect);
+inline void GetClientRect(HWND hWnd, RECT *pRect)
+{
+}
 
-HWND GetDesktopWindow()
+inline HWND GetDesktopWindow()
 {
     return (HWND)0;
 }
-HDC GetDC(HWND hWnd)
+
+inline HDC GetDC(HWND hWnd)
 {
     return (HDC)0;
 }
-int ReleaseDC(HWND hWnd, HDC hDC)
+
+inline int ReleaseDC(HWND hWnd, HDC hDC)
 {
     return 0;
 }
 
-void SetDeviceGammaRamp(HDC hDC, LPVOID lpRamp)
+inline void SetDeviceGammaRamp(HDC hDC, LPVOID lpRamp)
 {
 }
 
 #define GWL_STYLE 1
-DWORD GetWindowLong(HWND hWnd, int nIndex)
+inline DWORD GetWindowLong(HWND hWnd, int nIndex)
 {
     return 0;
 }
 
-void AdjustWindowRect(RECT *pRect, DWORD dwStyle, BOOL bMenu)
+inline void AdjustWindowRect(RECT *pRect, DWORD dwStyle, BOOL bMenu)
 {
 }
 
@@ -61,6 +65,7 @@ void AdjustWindowRect(RECT *pRect, DWORD dwStyle, BOOL bMenu)
 #define MB_ABORTRETRYIGNORE 0
 #define MB_ICONERROR 0
 #define MB_SYSTEMMODAL 0
+#define MB_YESNO 0
 
 #define IDIGNORE 0
 #define IDABORT 1
@@ -84,7 +89,7 @@ inline int MessageBoxW(void *, const wchar_t *text, const wchar_t *caption, unsi
 
 #define SW_HIDE 0
 #define SW_SHOW 5
-void ShowWindow(HWND hWnd, int nCmdShow)
+inline void ShowWindow(HWND hWnd, int nCmdShow)
 {
 }
 
@@ -93,7 +98,7 @@ void ShowWindow(HWND hWnd, int nCmdShow)
 #define O_BINARY 0
 #endif
 
-void SetWindowTextW(HWND hWnd, const wchar_t *text)
+inline void SetWindowTextW(HWND hWnd, const wchar_t *text)
 {
     fprintf(stderr, "%ls\n", text);
 }
@@ -104,7 +109,7 @@ void SetWindowTextW(HWND hWnd, const wchar_t *text)
 #define MAX_COMPUTERNAME_LENGTH 15
 #endif
 
-int GetComputerName(char *buffer, unsigned long *size)
+inline int GetComputerName(char *buffer, unsigned long *size)
 {
     const char *name = "unknown";
     size_t nameLen = strlen(name);
@@ -117,13 +122,14 @@ int GetComputerName(char *buffer, unsigned long *size)
     {
         *size = 0;
     }
+    return 1;
 }
 
 #ifndef UNLEN
 #define UNLEN 256
 #endif
 
-int GetUserName(char *buffer, unsigned long *size)
+inline int GetUserName(char *buffer, unsigned long *size)
 {
     const char *name = "unknown";
     size_t nameLen = strlen(name);
@@ -136,13 +142,22 @@ int GetUserName(char *buffer, unsigned long *size)
     {
         *size = 0;
     }
+    return 1;
 }
 
-bool IsIconic(HWND hWnd)
+inline bool IsIconic(HWND hWnd)
 {
     return false;
 }
 
-void SetCursor(void*)
+inline void SetCursor(void*)
 {
 }
+
+#ifndef SEVERITY_ERROR
+#define SEVERITY_ERROR 1
+#endif
+
+#ifndef FACILITY_ITF
+#define FACILITY_ITF 7
+#endif

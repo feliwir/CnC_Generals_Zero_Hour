@@ -21,12 +21,19 @@
 // Author: Matthew D. Campbell, November 2001
 
 // SYSTEM INCLUDES ////////////////////////////////////////////////////////////
-#define WIN32_LEAN_AND_MEAN  // only bare bones windows stuff wanted
-#include <windows.h>
-#include <lmcons.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#ifdef _WIN32
+#include <windows.h>
+#include <lmcons.h>
+#else
+#include <unistd.h>
+#include <pwd.h>
+#include <sys/types.h>
+#include <sys/utsname.h>
+#endif
 
 // Local defines
 #define VERSION_BUILDNUM "VERSION_LOCALBUILDNUM"
@@ -46,6 +53,7 @@ static void writeVersion(char *file, int build)
 	{
 		if (filePtr)
 		{
+#ifdef _WIN32
 			unsigned long bufSize = UNLEN + 1;
 			char userName[UNLEN + 1];
 			if (!GetUserName(userName, &bufSize))
@@ -59,6 +67,19 @@ static void writeVersion(char *file, int build)
 			{
 				strcpy(computerName, "unknown");
 			}
+#else
+			char userName[256];
+			char computerName[256];
+			if (getlogin_r(userName, sizeof(userName))!=0)
+			{
+				strcpy(userName, "unknown");
+			}
+
+			if (gethostname(computerName, sizeof(computerName)) == -1)
+			{
+				strcpy(computerName, "unknown");
+			}
+#endif
 
 			printf("Build is by %s at %s\n", userName, computerName);
 
@@ -124,25 +145,8 @@ static char* strtrim(char* buffer)
 	return buffer;
 }
 
-int APIENTRY WinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPSTR     lpCmdLine,
-                     int       nCmdShow)
+int main(int argc, char *argv[])
 {
-	/*
-	** Convert WinMain arguments to simple main argc and argv
-	*/
-	int argc = 1;
-	char * argv[20];
-	argv[0] = NULL;
-
-	char * token = strtok(lpCmdLine, " ");
-	while (argc < 20 && token != NULL)
-	{
-		argv[argc++] = strtrim(token);
-		token = strtok(NULL, " ");
-	}
-
 	int build = 0;
 
 	if (argc != 2)

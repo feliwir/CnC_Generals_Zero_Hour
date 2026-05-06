@@ -133,7 +133,13 @@ Bool GetStringFromRegistry(AsciiString path, AsciiString key, AsciiString& val)
 
 	return getStringFromRegistry(HKEY_CURRENT_USER, fullPath.str(), key.str(), val);
 }
-#endif
+#else
+Bool GetStringFromRegistry(AsciiString path, AsciiString key, AsciiString& val)
+{
+	return FALSE;
+}
+#endif // _WINDOWS
+
 
 Bool GetUnsignedIntFromRegistry(AsciiString path, AsciiString key, UnsignedInt& val)
 {

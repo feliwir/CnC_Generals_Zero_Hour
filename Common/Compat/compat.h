@@ -42,7 +42,12 @@
 #endif
 #endif
 
-int GetLastError()
+inline int GetLastError()
+{
+    return 0;
+}
+
+inline int WSAGetLastError()
 {
     return 0;
 }

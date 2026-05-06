@@ -578,7 +578,7 @@ static void drawTerrainNormal( Drawable *draw, void *userData )
 }
 
 #if defined(_DEBUG) || defined(_INTERNAL)
-void drawDrawableExtents( Drawable *draw, void *userData );  // FORWARD DECLARATION
+static void drawDrawableExtents( Drawable *draw, void *userData );  // FORWARD DECLARATION
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 static void drawContainedDrawable( Object *obj, void *userData )

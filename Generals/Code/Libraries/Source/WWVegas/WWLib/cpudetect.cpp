@@ -132,41 +132,19 @@ const char* CPUDetectClass::Get_Processor_Manufacturer_Name()
 static unsigned Calculate_Processor_Speed(int64_t& ticks_per_second)
 {
 	struct {
-		unsigned timer0_h;
-		unsigned timer0_l;
-		unsigned timer1_h;
-		unsigned timer1_l;
+		uint64_t timer0;
+		uint64_t timer1;
 	} Time;
 
-#ifdef WIN32
-   __asm {
-      ASM_RDTSC;
-      mov Time.timer0_h, eax
-      mov Time.timer0_l, edx
-   }
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-      __asm__("rdtsc");
-      __asm__("mov %eax, __Time.timer1_h");
-      __asm__("mov %edx, __Time.timer1_l");
-#endif
+	Time.timer0 = _rdtsc();
 
 	unsigned start=TIMEGETTIME();
 	unsigned elapsed;
 	while ((elapsed=TIMEGETTIME()-start)<200) {
-#ifdef WIN32
-      __asm {
-         ASM_RDTSC;
-         mov Time.timer1_h, eax
-         mov Time.timer1_l, edx
-      }
-#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
-      __asm__ ("rdtsc");
-      __asm__("mov %eax, __Time.timer1_h");
-      __asm__("mov %edx, __Time.timer1_l");
-#endif
+		Time.timer1 = _rdtsc();
 	}
 
-	int64_t t=*(int64_t*)&Time.timer1_h-*(int64_t*)&Time.timer0_h;
+	int64_t t=Time.timer1-Time.timer0;
 	ticks_per_second=(int64_t)((1000.0/(double)elapsed)*(double)t);	// Ticks per second
 	return unsigned((double)t/(double)(elapsed*1000));
 }

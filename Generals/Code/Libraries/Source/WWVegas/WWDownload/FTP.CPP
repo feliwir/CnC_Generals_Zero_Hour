@@ -27,15 +27,34 @@
 #include <sys/types.h>
 #include <sys/timeb.h>
 #include <stdlib.h>
+#ifdef _WINDOWS
 #include <process.h>
-#include <sys/stat.h>
 #include <io.h>
+#include "winsock.h"
+#include <direct.h>
+#else
+#include "windows.h"
+#include "compat.h"
+#include <unistd.h>
+#define closesocket close
+#define _getcwd getcwd
+#define _chmod chmod
+#define _S_IWRITE S_IWRITE
+#define _S_IREAD S_IREAD
+#include <netdb.h>
+#define HOSTENT hostent
+#include <sys/ioctl.h>
+#define ioctlsocket ioctl
+#define SOCKET_ERROR -1
+#include <filesystem>
+// TODO: this is a hack to get the splitpath function to compile on linux
+#define _splitpath(a,b,c,d,e) (void)0
+#endif
+#include <sys/stat.h>
 #include <time.h>
 #include "assert.h"
 #include "ftp.h"
-#include "winsock.h"
 #include <time.h>
-#include <direct.h>
 #include <errno.h>
 //#include "wlib/wstring.h"
 
@@ -125,7 +144,7 @@ static bool Use_Non_Blocking_Mode(void)
 	DWORD type=0;
 	DWORD value=0;
 
-
+#ifdef _WINDOWS
 	// Try and open the named key
 	regRetval=RegOpenKeyEx(HKEY_LOCAL_MACHINE,"SOFTWARE\\Westwood\\Earth And Beyond Beta 2",0,KEY_READ,&regKey);
 	if (regRetval!=ERROR_SUCCESS)
@@ -142,6 +161,9 @@ static bool Use_Non_Blocking_Mode(void)
 		return(TRUE);
 
 	return(bool(value));
+#else
+	return(TRUE);
+#endif
 }
 
 
@@ -269,11 +291,15 @@ int Cftp::AsyncGetHostByName(char * szName, struct sockaddr_in &address )
 		/* Kick off gethostname thread */
 		gThreadFlag = 0;
       memset(&gThreadAddress,0,sizeof(gThreadAddress));
-
+		#ifdef _WINDOWS
 		if( CreateThread( NULL, 0, gethostbynameA, szName, 0, &threadid ) == NULL )
 		{
 			return( FTP_FAILED );
 		}
+		#else
+		return( FTP_FAILED );
+		#endif
+
 		stat = 1;
 	}
 	if( stat == 1 )
@@ -400,6 +426,7 @@ HRESULT  Cftp::ConnectToServer(LPCSTR szServerName)
 		// Start the connection process....
 		if( connect( m_iCommandSocket, (struct sockaddr *)&m_CommandSockAddr, sizeof( m_CommandSockAddr ) ) == -1 )
 		{
+			#ifdef _WINDOWS
 			error = WSAGetLastError();
 			if( ( error == WSAEWOULDBLOCK ) || ( error == WSAEINVAL ) || ( error == WSAEALREADY ) )
 			{
@@ -412,6 +439,9 @@ HRESULT  Cftp::ConnectToServer(LPCSTR szServerName)
 				closesocket( m_iCommandSocket );
 				return( FTP_FAILED );
 			}
+			#else
+			return( FTP_FAILED );
+			#endif
 		}
 	}
 
@@ -930,12 +960,16 @@ HRESULT  Cftp::RecvReply( LPCSTR pReplyBuffer, int iSize, int * piRetCode )
 
 		// Did the endpoint close?
 		if (readval < 0) {
+			#ifdef _WINDOWS
 			if ((WSAGetLastError() == WSAECONNRESET ) || ((WSAGetLastError() == WSAENOTCONN)))
 				readval=0;
 			else {
 				// nothing to read right now....
 				return(FTP_TRYING);
 			}
+			#else
+			return (FTP_TRYING);
+			#endif
 		}
 
 		if (readval == 0) {
@@ -1002,7 +1036,7 @@ unsigned long MyIPAddress( int sockfd )
 {
 
 	int		 test = 99;
-	int i;
+	socklen_t i;
 	char pBuffer[ 256 ];
 	char * pAddr;
 	struct hostent * pHE;
@@ -1014,7 +1048,7 @@ unsigned long MyIPAddress( int sockfd )
 		i = sizeof( sin );
 		getsockname( sockfd, (struct sockaddr *)&sin, &i );
 
-		ip = sin.sin_addr.S_un.S_addr;
+		ip = sin.sin_addr.s_addr;
 	}
 	else
 	{
@@ -1091,7 +1125,8 @@ int Cftp::SendNewPort( void )
 {
 	unsigned long uTemp;
 	char command[ 256 ];
-	int i, iReply;
+	socklen_t i;
+	int iReply;
 
 	/* Open a socket */
 
@@ -1230,6 +1265,7 @@ int Cftp::OpenDataConnection()
 
 	if( ( iNewSocket = accept( m_iDataSocket, NULL, 0 ) ) < 0 ) 
 	{
+	#ifdef _WINDOWS
 		if( WSAGetLastError() != (WSAEWOULDBLOCK ) )
 		{
 			return( FTP_FAILED );
@@ -1238,6 +1274,9 @@ int Cftp::OpenDataConnection()
 		{
 			return( FTP_TRYING );
 		}
+	#else
+		return( FTP_FAILED );
+	#endif
 	}
 
 	m_iDataSocket = iNewSocket;
@@ -1570,10 +1609,14 @@ HRESULT  Cftp::GetNextFileBlock( LPCSTR szLocalFileName, int * piTotalRead )
 
 		// look for all notices about endpoint closed...
 		if (read < 0) {
+		#ifdef _WINDOWS
 			int wsa_err=WSAGetLastError();
 
 			if ((wsa_err == WSAECONNRESET) || (wsa_err == WSAENOTCONN))
 				read = 0;		// just treat it as a close....
+		#else
+			read = 0;		// just treat it as a close....
+		#endif
 		}
 
 
@@ -1834,10 +1877,13 @@ bool Prepare_Directories(const char *rootdir, const char *filename)
 		memset(tempstr,0,256);
 		strncpy(tempstr,filename,cptr-filename);
 		sprintf(newdir,"%s\\%s",rootdir, tempstr);
+		#ifdef _WINDOWS
 		if (!CreateDirectory(newdir, NULL))
 			return false;
-		//if ((_mkdir(newdir) == -1) && ((errno == ENOENT || errno==EACCES)))
-			//return(false);
+		#else
+		if ((mkdir(newdir, 0755) == -1) && ((errno == ENOENT || errno==EACCES)))
+			return(false);
+		#endif
 		cptr++;
 	}
 	return(true);

@@ -35,6 +35,8 @@
 
 #include "registry.h"
 #include <assert.h>
+
+#ifdef _WINDOWS
 #include <windows.h>
 
 //#include "wwdebug.h"
@@ -290,3 +292,84 @@ void	RegistryClass::Set_String( const WCHAR * name, const WCHAR *value )
 	::RegSetValueExW ( (HKEY)Key, name, 0, REG_SZ, (LPBYTE)value, size );
 	return ;
 }
+#else
+
+RegistryClass::RegistryClass( const char * sub_key ) :
+	IsValid( false )
+{
+}
+
+RegistryClass::~RegistryClass( void )
+{
+}
+
+int	RegistryClass::Get_Int( const char * name, int def_value )
+{
+	return def_value;
+}
+
+void	RegistryClass::Set_Int( const char * name, int value )
+{
+}
+
+bool	RegistryClass::Get_Bool( const char * name, bool def_value )
+{
+	return def_value;
+}
+
+void	RegistryClass::Set_Bool( const char * name, bool value )
+{
+}
+
+float	RegistryClass::Get_Float( const char * name, float def_value )
+{
+	return def_value;
+}
+
+void	RegistryClass::Set_Float( const char * name, float value )
+{
+}
+
+void	RegistryClass::Get_String( const char * name, StringClass &string, const char *default_string )
+{
+	string = (default_string == NULL) ? "" : default_string;
+}
+
+char *RegistryClass::Get_String( const char * name, char *value, int value_size,
+   const char * default_string )
+{
+   if (default_string == NULL) {
+	  *value = 0;
+   } else {
+	  assert(strlen(default_string) < (unsigned int) value_size);
+	  strcpy(value, default_string);
+   }
+	return value;
+}
+
+void	RegistryClass::Set_String( const char * name, const char *value )
+{
+}
+
+void	RegistryClass::Get_Value_List( DynamicVectorClass<StringClass> &list )
+{
+}
+
+void	RegistryClass::Delete_Value( const char * name)
+{
+}
+
+void	RegistryClass::Deleta_All_Values( void )
+{
+}
+
+void	RegistryClass::Get_String( const WCHAR * name, WideStringClass &string, const WCHAR *default_string )
+{
+	string = (default_string == NULL) ? L"" : default_string;
+}
+
+void	RegistryClass::Set_String( const WCHAR * name, const WCHAR *value )
+{
+}
+
+#endif

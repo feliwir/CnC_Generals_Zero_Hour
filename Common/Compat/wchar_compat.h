@@ -4,12 +4,12 @@
 
 typedef wchar_t WCHAR;
 
-int _wtoi(const wchar_t *str)
+inline int _wtoi(const wchar_t *str)
 {
     return wcstol(str, nullptr, 10);
 }
 
-int _vsnwprintf(wchar_t *buffer, size_t count, const wchar_t *format, va_list args)
+inline int _vsnwprintf(wchar_t *buffer, size_t count, const wchar_t *format, va_list args)
 {
     return vswprintf(buffer, count, format, args);
 }

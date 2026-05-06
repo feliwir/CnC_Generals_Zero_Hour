@@ -46,7 +46,7 @@ class CriticalSection
 #ifdef _WIN32
 	CRITICAL_SECTION m_windowsCriticalSection;
 #else
-	std::mutex m_mutex;
+	std::recursive_mutex m_mutex;
 #endif
 	public:
 		CriticalSection()

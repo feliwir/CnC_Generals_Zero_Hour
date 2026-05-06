@@ -3,7 +3,16 @@
   "dependencies": [
     "zlib",
     "glm",
-    "sdl3",
+    {
+      "name": "sdl3",
+      "default-features": false,
+      "features": [ "x11", "wayland", "vulkan" ],
+      "platform": "linux"
+    },
+    {
+      "name": "sdl3",
+      "platform": "!linux"
+    },
     "sdl3-image"
   ]
 }

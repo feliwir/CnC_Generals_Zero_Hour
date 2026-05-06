@@ -52,6 +52,7 @@
 //#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
 #endif
 
+#ifdef _WINDOWS
 /**
 	* OLEInitializer class - Init and shutdown OLE & COM as a global
 	* object.  Scary, nasty stuff, COM.  /me shivers.
@@ -73,8 +74,11 @@ OLEInitializer g_OLEInitializer;
 CComModule _Module;
 
 CComObject<WebBrowser> * TheWebBrowser = NULL;
+#else
+WebBrowser *TheWebBrowser = NULL;
+#endif // _WINDOWS
 
-
+#ifdef _WINDOWS
 /******************************************************************************
 *
 * NAME
@@ -130,7 +134,7 @@ WebBrowser::~WebBrowser()
 		temp = NULL;
 	}
 }
-
+#endif // _WINDOWS
 //-------------------------------------------------------------------------------------------------
 /** The INI data fields for Webpage URL's */
 //-------------------------------------------------------------------------------------------------
@@ -141,7 +145,7 @@ const FieldParse WebBrowserURL::m_URLFieldParseTable[] =
 	{ NULL,											NULL,																NULL, 0 },
 
 };
-
+#ifdef _WINDOWS
 WebBrowserURL::WebBrowserURL() 
 {
 	m_next = NULL;
@@ -313,3 +317,4 @@ STDMETHODIMP WebBrowser::TestMethod(Int num1)
 	DEBUG_LOG(("WebBrowser::TestMethod - num1 = %d\n", num1));
 	return S_OK;
 }
+#endif // _WINDOWS

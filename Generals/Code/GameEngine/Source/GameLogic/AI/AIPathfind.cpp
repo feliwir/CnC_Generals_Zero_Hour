@@ -55,7 +55,9 @@
 
 #define no_INTENSE_DEBUG
 
+#ifdef _WINDOWS
 #define DEBUG_QPF
+#endif
 
 #ifdef INTENSE_DEBUG
 #include "GameLogic/ScriptEngine.h"
@@ -2255,9 +2257,9 @@ void PathfindZoneManager::calculateZones( PathfindCell **map, PathfindLayer laye
 {
 #ifdef DEBUG_QPF
 #if defined(DEBUG_LOGGING) 
-	__int64 startTime64;
+	int64_t startTime64;
 	double timeToUpdate=0.0f;
-	__int64 endTime64,freq64;
+	int64_t endTime64,freq64;
 	QueryPerformanceFrequency((LARGE_INTEGER *)&freq64);
 	QueryPerformanceCounter((LARGE_INTEGER *)&startTime64);
 #endif
@@ -5388,9 +5390,9 @@ void Pathfinder::processPathfindQueue(void)
 #ifdef DEBUG_QPF
 #if defined _DEBUG || defined _INTERNAL
 	Int startTimeMS = ::GetTickCount();
-	__int64 startTime64;
+	int64_t startTime64;
 	double timeToUpdate=0.0f;
-	__int64 endTime64,freq64;
+	int64_t endTime64,freq64;
 	QueryPerformanceFrequency((LARGE_INTEGER *)&freq64);
 	QueryPerformanceCounter((LARGE_INTEGER *)&startTime64);
 #endif
@@ -6305,7 +6307,7 @@ Path *Pathfinder::buildGroundPath(Bool isCrusher, const Coord3D *fromPos, Pathfi
 		}
 
 		// show optimized path
-		for( node = path->getFirstNode(); node; node = node->getNextOptimized() )
+		for( PathNode * node = path->getFirstNode(); node; node = node->getNextOptimized() )
 		{
 			pos = *node->getPosition();
 			addIcon(&pos, PATHFIND_CELL_SIZE_F*.8f, 200, color);
@@ -8393,7 +8395,7 @@ Path *Pathfinder::buildActualPath( const Object *obj, LocomotorSurfaceTypeMask a
 		}
 
 		// show optimized path
-		for( node = path->getFirstNode(); node; node = node->getNextOptimized() )
+		for( PathNode *node = path->getFirstNode(); node; node = node->getNextOptimized() )
 		{
 			pos = *node->getPosition();
 			addIcon(&pos, PATHFIND_CELL_SIZE_F*.8f, 200, color);

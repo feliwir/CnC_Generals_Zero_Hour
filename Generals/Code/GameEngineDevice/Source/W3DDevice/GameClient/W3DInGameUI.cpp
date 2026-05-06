@@ -61,9 +61,9 @@
 
 #ifdef _DEBUG
 #include "W3DDevice/GameClient/HeightMap.h"
-#include "WW3D2/DX8IndexBuffer.h"
-#include "WW3D2/DX8VertexBuffer.h"
-#include "WW3D2/VertMaterial.h"
+#include "WW3D2/dx8indexbuffer.h"
+#include "WW3D2/dx8vertexbuffer.h"
+#include "WW3D2/vertmaterial.h"
 class DebugHintObject : public RenderObjClass
 {	
 
@@ -194,7 +194,7 @@ void DebugHintObject::initData(void)
 	m_vertexMaterialClass = VertexMaterialClass::Get_Preset(VertexMaterialClass::PRELIT_DIFFUSE);
 
 	//use a multi-texture shader: (text1*diffuse)*text2.
-	m_shaderClass = ShaderClass::ShaderClass(SC_ALPHA);
+	m_shaderClass = ShaderClass(SC_ALPHA);
 }
 
 void DebugHintObject::setLocAndColorAndSize(const Coord3D *loc, Int argb, Int size)

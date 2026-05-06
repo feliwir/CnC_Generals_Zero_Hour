@@ -69,6 +69,8 @@
 //#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
 #endif
 
+#ifdef _WINDOWS
+
 //----------------------------------------------------------------------------
 //         Externals                                                     
 //----------------------------------------------------------------------------
@@ -318,6 +320,7 @@ IMEManager::MessageInfo IMEManager::m_setSmodeInfo[] =
 };
 
 #endif
+#endif // _WINDOWS
 
 //----------------------------------------------------------------------------
 //         Public Data                                                      
@@ -325,6 +328,7 @@ IMEManager::MessageInfo IMEManager::m_setSmodeInfo[] =
 
 IMEManagerInterface *TheIMEManager = NULL;
 
+#ifdef _WINDOWS
 
 //----------------------------------------------------------------------------
 //         Private Prototypes                                               
@@ -485,6 +489,7 @@ void IMEManager::printSentenceStatus( void )
 //----------------------------------------------------------------------------
 //         Public Functions                                                
 //----------------------------------------------------------------------------
+
 
 //============================================================================
 // *CreateIMEManagerInterface
@@ -1614,3 +1619,4 @@ void IMEManager::updateStatusWindow( void )
 
 }
 
+#endif // _WINDOWS

@@ -973,7 +973,7 @@ GlobalData::GlobalData()
 	
 	// lets CRC the executable!  Whee!
 	const Int blockSize = 65536;
-	Char buffer[ 512 ];
+	Char buffer[ 512 ] = {0};
 	CRC exeCRC;
 	GetModuleFileName( NULL, buffer, sizeof( buffer ) );
 	File *fp = TheFileSystem->openFile(buffer, File::READ | File::BINARY);

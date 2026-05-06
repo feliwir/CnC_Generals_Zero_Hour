@@ -345,9 +345,9 @@ void GameEngine::init( int argc, char *argv[] )
 		initSubsystem(TheTerrainRoads,"TheTerrainRoads", MSGNEW("GameEngineSubsystem") TerrainRoadCollection(), &xferCRC, "Data\\INI\\Default\\Roads.ini", "Data\\INI\\Roads.ini");
 		initSubsystem(TheGlobalLanguageData,"TheGlobalLanguageData",MSGNEW("GameEngineSubsystem") GlobalLanguage, NULL); // must be before the game text
 		initSubsystem(TheCDManager,"TheCDManager", CreateCDManager(), NULL);
-		initSubsystem(TheAudio,"TheAudio", createAudioManager(), NULL);
-		if (!TheAudio->isMusicAlreadyLoaded())
-			setQuitting(TRUE);
+		// initSubsystem(TheAudio,"TheAudio", createAudioManager(), NULL);
+		// if (!TheAudio->isMusicAlreadyLoaded())
+		// 	setQuitting(TRUE);
 		initSubsystem(TheFunctionLexicon,"TheFunctionLexicon", createFunctionLexicon(), NULL);
 		initSubsystem(TheModuleFactory,"TheModuleFactory", createModuleFactory(), NULL);
 		initSubsystem(TheMessageStream,"TheMessageStream", createMessageStream(), NULL);
@@ -701,11 +701,7 @@ void GameEngine::execute( void )
 					DWORD limit = (1000.0f/m_maxFPS)-1;
 					while (TheGlobalData->m_useFpsLimit && (now - prevTime) < limit) 
 					{
-#ifdef WINDOWS
 						::Sleep(0);
-#else
-						usleep(1);
-#endif
 						now = timeGetTime();
 					}
 					//Int slept = now - prevTime;

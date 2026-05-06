@@ -54,6 +54,7 @@
 #ifdef SAGE_USE_SDL3
 #include "SDL3Device/GameClient/SDL3Keyboard.h"
 #include "SDL3Device/GameClient/SDL3Mouse.h"
+#define Win32Mouse SDL3Mouse
 #elif defined(_WINDOWS)
 #include "Win32Device/GameClient/Win32DIKeyboard.h"
 #include "Win32Device/GameClient/Win32DIMouse.h"
@@ -129,7 +130,7 @@ protected:
 
 };  // end class W3DGameClient
 
-#ifdef SAGE_USE_SDL3
+#if defined(SAGE_USE_SDL3)
 inline Keyboard *W3DGameClient::createKeyboard( void ) { return NEW SDL3Keyboard; }
 inline Mouse *W3DGameClient::createMouse( void )
 {	
@@ -137,7 +138,7 @@ inline Mouse *W3DGameClient::createMouse( void )
 	TheWin32Mouse = mouse;   ///< global cheat for the WndProc()
 	return mouse; 
 }
-#else
+#elif defined(_WINDOWS)
 inline Keyboard *W3DGameClient::createKeyboard( void ) { return NEW DirectInputKeyboard; }
 inline Mouse *W3DGameClient::createMouse( void )
 {

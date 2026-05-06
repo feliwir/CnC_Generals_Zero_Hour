@@ -1,5 +1,6 @@
 add_subdirectory(WWDebug)
 add_subdirectory(WWLib)
+add_subdirectory(WWDownload)
 add_subdirectory(WWSaveLoad)
 add_subdirectory(WWMath)
 add_subdirectory(WW3D2)

@@ -33,10 +33,10 @@ class EXCEPTION_POINTERS;
 #endif
 
 #ifndef IG_DEGBUG_STACKTRACE
-#define IG_DEBUG_STACKTRACE	1
+//#define IG_DEBUG_STACKTRACE1
 #endif
 
-#if defined(_DEBUG) || defined(_INTERNAL) || defined(IG_DEBUG_STACKTRACE)
+#if (defined(_DEBUG) || defined(_INTERNAL) || defined(IG_DEBUG_STACKTRACE)) && defined(_WINDOWS)
 
 // Writes a stackdump (provide a callback : gets called per line)
 // If callback is NULL then will write using OuputDebugString

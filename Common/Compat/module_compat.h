@@ -2,7 +2,7 @@
 
 typedef void* HINSTANCE;
 
-bool GetModuleFileName(HINSTANCE hInstance, char* buffer, int size)
+inline bool GetModuleFileName(HINSTANCE hInstance, char* buffer, int size)
 {
     return false;
 }

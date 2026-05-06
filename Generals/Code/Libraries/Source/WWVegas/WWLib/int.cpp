@@ -46,8 +46,7 @@ bool bignum::Carry = false;
 template<>
 bool bignum::Borrow = false;
 template<>
-bignum bignum::Remainder;
-
+bignum bignum::Remainder = {};
 
 
 //BigInt Gcd(const BigInt & a, const BigInt & n);

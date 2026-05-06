@@ -3003,7 +3003,7 @@ void W3DDisplay::dumpAssetUsage(const char* mapname)
 	while (true)
 	{
 		sprintf(buf, "AssetUsage_%s_%04d.txt",leafname,idx);
-		if (_access(buf, 0) != 0)
+		if (access(buf, 0) != 0)
 			break;	// it exists, we're good
 		++idx;
 	}

@@ -3,8 +3,8 @@
 #include "Common/GameEngine.h"
 #include "GameLogic/GameLogic.h"
 #include "GameNetwork/NetworkInterface.h"
-#include "Win32Device/Common/Win32BIGFileSystem.h"
-#include "Win32Device/Common/Win32LocalFileSystem.h"
+#include "SDL3Device/Common/SDL3BIGFileSystem.h"
+#include "SDL3Device/Common/SDL3LocalFileSystem.h"
 #include "W3DDevice/Common/W3DModuleFactory.h"
 #include "W3DDevice/GameLogic/W3DGameLogic.h"
 #include "W3DDevice/GameClient/W3DGameClient.h"
@@ -17,8 +17,6 @@
 #include "OpenALAudioDevice/OpenALAudioManager.h"
 #elif defined(SAGE_USE_MILES)
 #include "MilesAudioDevice/MilesAudioManager.h"
-#else
-#error "No audio device defined"
 #endif
 
 #include <functional>
@@ -47,6 +45,7 @@ protected:
   virtual ArchiveFileSystem *createArchiveFileSystem(void) override;
   virtual NetworkInterface *createNetwork(void); // <-- Seems to be unused
   virtual Radar *createRadar(void) override;
+  virtual WebBrowser *createWebBrowser( void ) override { return NULL; }
   virtual AudioManager *createAudioManager(void) override;
   virtual ParticleSystemManager *createParticleSystemManager(void) override;
 
@@ -59,8 +58,8 @@ inline GameClient *SDL3GameEngine::createGameClient( void ) { return NEW W3DGame
 inline ModuleFactory *SDL3GameEngine::createModuleFactory( void ) { return NEW W3DModuleFactory; }
 inline ThingFactory *SDL3GameEngine::createThingFactory( void ) { return NEW W3DThingFactory; }
 inline FunctionLexicon *SDL3GameEngine::createFunctionLexicon( void ) { return NEW W3DFunctionLexicon; }
-inline LocalFileSystem *SDL3GameEngine::createLocalFileSystem( void ) { return NEW Win32LocalFileSystem; }
-inline ArchiveFileSystem *SDL3GameEngine::createArchiveFileSystem( void ) { return NEW Win32BIGFileSystem; }
+inline LocalFileSystem *SDL3GameEngine::createLocalFileSystem( void ) { return NEW SDL3LocalFileSystem; }
+inline ArchiveFileSystem *SDL3GameEngine::createArchiveFileSystem( void ) { return NEW SDL3BIGFileSystem; }
 inline ParticleSystemManager* SDL3GameEngine::createParticleSystemManager( void ) { return NEW W3DParticleSystemManager; }
 
 inline NetworkInterface *SDL3GameEngine::createNetwork( void ) { return NetworkInterface::createNetwork(); }
@@ -69,4 +68,6 @@ inline Radar *SDL3GameEngine::createRadar( void ) { return NEW W3DRadar; }
 inline AudioManager *SDL3GameEngine::createAudioManager( void ) { return NEW OpenALAudioManager; }
 #elif defined(SAGE_USE_MILES)
 inline AudioManager* SDL3GameEngine::createAudioManager(void) { return NEW MilesAudioManager; }
+#else
+inline AudioManager* SDL3GameEngine::createAudioManager(void) { return NULL; }
 #endif

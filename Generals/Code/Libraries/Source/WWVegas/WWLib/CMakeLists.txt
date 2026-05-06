@@ -109,6 +109,8 @@ target_sources(
           ref_ptr.h
           refcount.cpp
           refcount.h
+          registry.cpp
+          registry.h
           rgb.cpp
           rgb.h
           rle.cpp
@@ -189,13 +191,12 @@ if(WIN32)
             LaunchWeb.h
             rcfile.cpp
             rcfile.h
-            registry.cpp
-            registry.h
             wwcomutil.cpp
             wwcomutil.h)
 endif()
 
-set_target_properties(g_wwlib PROPERTIES OUTPUT_NAME "WWLib")
+set_target_properties(g_wwlib PROPERTIES OUTPUT_NAME "WWLib"
+                                         POSITION_INDEPENDENT_CODE TRUE)
 
 target_include_directories(g_wwlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(g_wwlib PUBLIC g_library_include g_wwdebug DXVK::D3D8)

@@ -3624,7 +3624,7 @@ GameMessageDisposition CommandTranslator::translateGameMessage(const GameMessage
 		//-----------------------------------------------------------------------------------------
 		case GameMessage::MSG_META_DEMO_TOGGLE_BW_VIEW:
 		{   //We're not testing BW mode anymore, so use this message for toggling wireframe mode.
-			static mode=0;
+			static int mode=0;
 			if (mode == 0)
 			{	//First turn on wireframe
 				TheTacticalView->set3DWireFrameMode(TRUE);
@@ -4565,7 +4565,7 @@ GameMessageDisposition CommandTranslator::translateGameMessage(const GameMessage
 
 		//------------------------------------------------------------------------PLAYTEST DEMO MESSAGES
 		//-----------------------------------------------------------------------------------------
-#if defined(_INTERNAL) || defined(_DEBUG) || defined(_PLAYTEST)
+#if 0 //defined(_INTERNAL) || defined(_DEBUG) || defined(_PLAYTEST)
 		case GameMessage::MSG_META_DEMO_TOGGLE_AUDIODEBUG:
 		{
 			if (TheDisplay->getDebugDisplayCallback() == AudioDebugDisplay)

@@ -16,14 +16,11 @@
 **	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// FILE: buildVersionUpdate.cpp //////////////////////////////////////////////////////
-// Generals version number class updater
-// Author: Matthew D. Campbell, November 2001
+	// FILE: buildVersionUpdate.cpp //////////////////////////////////////////////////////
+	// Generals version number class updater
+	// Author: Matthew D. Campbell, November 2001
 
-// SYSTEM INCLUDES ////////////////////////////////////////////////////////////
-#define WIN32_LEAN_AND_MEAN  // only bare bones windows stuff wanted
-#include <windows.h>
-#include <lmcons.h>
+	// SYSTEM INCLUDES ////////////////////////////////////////////////////////////
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -108,25 +105,8 @@ static char* strtrim(char* buffer)
 	return buffer;
 }
 
-int APIENTRY WinMain(HINSTANCE hInstance,
-                     HINSTANCE hPrevInstance,
-                     LPSTR     lpCmdLine,
-                     int       nCmdShow)
+int main(int argc, char *argv[])
 {
-	/*
-	** Convert WinMain arguments to simple main argc and argv
-	*/
-	int argc = 1;
-	char * argv[20];
-	argv[0] = NULL;
-
-	char * token = strtok(lpCmdLine, " ");
-	while (argc < 20 && token != NULL)
-	{
-		argv[argc++] = strtrim(token);
-		token = strtok(NULL, " ");
-	}
-
 	int major = 1;
 	int minor = 0;
 	int build = 0;

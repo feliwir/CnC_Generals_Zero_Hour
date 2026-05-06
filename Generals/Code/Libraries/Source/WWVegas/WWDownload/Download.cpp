@@ -18,10 +18,16 @@
 
 // Download.cpp : Implementation of CDownload
 #include "DownloadDebug.h"
-#include "download.h"
-#include <mmsystem.h>
+#include "Download.h"
 #include <assert.h>
+#ifdef _WINDOWS
+#include <mmsystem.h>
 #include <direct.h>
+#else
+#include "compat.h"
+#define MulDiv(a,b,c) ((a)*(b)/(c))
+#define _mkdir(path) mkdir(path, 0755)
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <sys/stat.h>
@@ -276,8 +282,8 @@ HRESULT CDownload::PumpMessages()
 			//   never ever change so this is not a concern.
 			//
 			// We identify patches because they are written into the patches folder.
-			struct _stat statdata;
-			if (	(_stat(m_LocalFile, &statdata) == 0) && 
+			struct stat statdata;
+			if (	(stat(m_LocalFile, &statdata) == 0) && 
 					(statdata.st_size == m_FileSize) && 
 					(_strnicmp(m_LocalFile, "patches\\", strlen("patches\\"))==0)) {
 				// OK, no need to download this again....

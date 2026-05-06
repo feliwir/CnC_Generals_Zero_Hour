@@ -171,17 +171,36 @@ endif()
 if(SAGE_USE_SDL3)
   target_sources(
     g_gameenginedevice
-    PRIVATE Include/SDL3Device/GameClient/SDL3Keyboard.h
+    PRIVATE Include/SDL3Device/Common/SDL3CDManager.h
+            Include/SDL3Device/Common/SDL3BIGFile.h
+            Include/SDL3Device/Common/SDL3BIGFileSystem.h
+            Include/SDL3Device/Common/SDL3GameEngine.h
+            Include/SDL3Device/Common/SDL3LocalFile.h
+            Include/SDL3Device/Common/SDL3LocalFileSystem.h
+            Include/SDL3Device/GameClient/SDL3Keyboard.h
             Include/SDL3Device/GameClient/SDL3Mouse.h
+            Source/SDL3Device/Common/SDL3BIGFile.cpp
+            Source/SDL3Device/Common/SDL3BIGFileSystem.cpp
+            Source/SDL3Device/Common/SDL3CDManager.cpp
+            Source/SDL3Device/Common/SDL3GameEngine.cpp
+            Source/SDL3Device/Common/SDL3IMEManager.cpp
+            Source/SDL3Device/Common/SDL3LocalFile.cpp
+            Source/SDL3Device/Common/SDL3LocalFileSystem.cpp
+            Source/SDL3Device/Common/SDL3OSDisplay.cpp
             Source/SDL3Device/GameClient/SDL3Keyboard.cpp
             Source/SDL3Device/GameClient/SDL3Mouse.cpp)
-  target_compile_definitions(g_gameenginedevice PRIVATE SAGE_USE_SDL3)
+
+  find_package(SDL3 CONFIG REQUIRED)
+  find_package(SDL3_image CONFIG REQUIRED)
+  target_link_libraries(g_gameenginedevice PUBLIC SDL3::SDL3
+                                                  SDL3_image::SDL3_image)
+  target_compile_definitions(g_gameenginedevice PUBLIC SAGE_USE_SDL3)
 endif()
 
 if(SAGE_USE_GLM)
   find_package(glm CONFIG REQUIRED)
   target_link_libraries(g_gameenginedevice PRIVATE glm::glm)
-  target_compile_definitions(g_gameenginedevice PRIVATE SAGE_USE_GLM)
+  target_compile_definitions(g_gameenginedevice PUBLIC SAGE_USE_GLM)
 endif()
 
 if(WIN32)

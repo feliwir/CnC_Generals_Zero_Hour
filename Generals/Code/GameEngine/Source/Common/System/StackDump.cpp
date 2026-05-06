@@ -24,7 +24,9 @@
 
 #include "PreRTS.h"	// This must go first in EVERY cpp file int the GameEngine
 
-#if defined(_DEBUG) || defined(_INTERNAL) || defined(IG_DEBUG_STACKTRACE)
+AsciiString g_LastErrorDump;
+
+#if (defined(_DEBUG) || defined(_INTERNAL) || defined(IG_DEBUG_STACKTRACE)) && defined(_WINDOWS)
 
 #pragma pack(push, 8)
 
@@ -450,7 +452,6 @@ void StackDumpFromAddresses(void**addresses, unsigned int count, void (*callback
 }
 
 
-AsciiString g_LastErrorDump;
 //*****************************************************************************
 //*****************************************************************************
 void WriteStackLine(void*address, void (*callback)(const char*))

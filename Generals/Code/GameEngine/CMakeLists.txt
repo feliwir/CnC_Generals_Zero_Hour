@@ -747,7 +747,7 @@ target_sources(
     Source/GameClient/GUI/GameWindowTransitions.cpp
     Source/GameClient/GUI/GameWindowTransitionsStyles.cpp
     Source/GameClient/GUI/HeaderTemplate.cpp
-    # Source/GameClient/GUI/IMEManager.cpp
+    Source/GameClient/GUI/IMEManager.cpp
     Source/GameClient/GUI/LoadScreen.cpp
     Source/GameClient/GUI/ProcessAnimateWindow.cpp
     Source/GameClient/GUI/Shell/Shell.cpp
@@ -1045,7 +1045,7 @@ target_sources(
     Source/GameNetwork/GameSpy/Thread/ThreadUtils.cpp
     # Source/GameNetwork/GameSpyChat.cpp Source/GameNetwork/GameSpyGP.cpp
     # Source/GameNetwork/GameSpyGameInfo.cpp
-    # Source/GameNetwork/GameSpyOverlay.cpp
+    Source/GameNetwork/GameSpyOverlay.cpp
     # Source/GameNetwork/GameSpyPersistentStorage.cpp
     Source/GameNetwork/IPEnumeration.cpp
     Source/GameNetwork/LANAPI.cpp
@@ -1064,22 +1064,18 @@ target_sources(
     Source/GameNetwork/Transport.cpp
     Source/GameNetwork/User.cpp
     Source/GameNetwork/udp.cpp
+    Source/GameNetwork/WOLBrowser/WebBrowser.cpp
     Source/Precompiled/PreRTS.cpp)
 
-if(WIN32)
-  target_sources(
-    g_gameengine PRIVATE Source/GameClient/GUI/IMEManager.cpp
-                         Source/GameNetwork/WOLBrowser/WebBrowser.cpp)
-endif()
-
-set_target_properties(g_gameengine PROPERTIES OUTPUT_NAME "GameEngine")
+set_target_properties(g_gameengine PROPERTIES OUTPUT_NAME "GameEngine"
+                                              POSITION_INDEPENDENT_CODE TRUE)
 
 target_include_directories(
   g_gameengine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Include
                       ${CMAKE_CURRENT_SOURCE_DIR}/Include/Precompiled)
 
-target_link_libraries(g_gameengine PUBLIC g_ww3d2 g_wwmath g_wwlib g_wwsaveloa
-                                          g_compression)
+target_link_libraries(g_gameengine PUBLIC g_ww3d2 g_wwmath g_wwlib g_wwsaveload
+                                          g_compression g_wwdownload)
 
 # GLM
 find_package(glm CONFIG REQUIRED)
@@ -1088,6 +1084,7 @@ target_link_libraries(g_gameengine PRIVATE glm::glm)
 # GameSpy
 include(FetchContent)
 FetchContent_Declare(
-  gamespy GIT_REPOSITORY https://github.com/TheAssemblyArmada/GamespySDK.git)
+  gamespy GIT_REPOSITORY https://github.com/feliwir/GamespySDK.git
+  GIT_TAG macos-fix)
 FetchContent_MakeAvailable(gamespy)
 target_link_libraries(g_gameengine PRIVATE gamespy::gamespy)

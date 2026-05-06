@@ -178,11 +178,8 @@ void SDL3GameEngine::serviceWindowsOS( void )
 			case SDL_EVENT_QUIT:
 				if (TheGameEngine && !TheGameEngine->getQuitting())
 				{
-					//user is exiting without using the menus; code from WinMain
-
-					//This method didn't work in cinematics because we don't process messages.
-					//But it's the cleanest way to exit that's similar to using menus.
-					TheMessageStream->appendMessage(GameMessage::MSG_META_DEMO_INSTANT_QUIT);
+					TheGameEngine->checkAbnormalQuitting();
+					TheGameEngine->setQuitting(TRUE);
 				}
 				break;
 			// default:
