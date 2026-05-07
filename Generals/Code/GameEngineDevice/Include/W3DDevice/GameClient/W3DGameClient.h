@@ -48,8 +48,10 @@
 #include "W3DDevice/GameClient/W3DGameWindowManager.h"
 #include "W3DDevice/GameClient/W3DGameFont.h"
 #include "W3DDevice/GameClient/W3DDisplayStringManager.h"
-#ifdef SAGE_USE_BINK
+#if defined(SAGE_USE_BINK)
 #include "VideoDevice/Bink/BinkVideoPlayer.h"
+#elif defined(SAGE_USE_FFMPEG)
+#include "VideoDevice/FFmpeg/FFmpegVideoPlayer.h"
 #endif
 #ifdef SAGE_USE_SDL3
 #include "SDL3Device/GameClient/SDL3Keyboard.h"
@@ -118,8 +120,10 @@ protected:
   /// Manager for display strings
 	virtual DisplayStringManager *createDisplayStringManager( void ) { return NEW W3DDisplayStringManager; }
 
-#ifdef SAGE_USE_BINK
+#if defined(SAGE_USE_BINK)
 	virtual VideoPlayerInterface *createVideoPlayer( void ) { return NEW BinkVideoPlayer; }
+#elif defined(SAGE_USE_FFMPEG)
+	virtual VideoPlayerInterface *createVideoPlayer( void ) { return NEW FFmpegVideoPlayer; }
 #else
 	virtual VideoPlayerInterface *createVideoPlayer( void ) { return NULL; }
 #endif

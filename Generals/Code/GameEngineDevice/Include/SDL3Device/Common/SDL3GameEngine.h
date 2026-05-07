@@ -14,7 +14,7 @@
 #include "W3DDevice/Common/W3DFunctionLexicon.h"
 #include "W3DDevice/Common/W3DThingFactory.h"
 #if defined(SAGE_USE_OPENAL)
-#include "OpenALAudioDevice/OpenALAudioManager.h"
+#include "OpenALDevice/OpenALAudioManager.h"
 #elif defined(SAGE_USE_MILES)
 #include "MilesAudioDevice/MilesAudioManager.h"
 #endif

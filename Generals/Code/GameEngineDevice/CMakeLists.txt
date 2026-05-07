@@ -203,6 +203,39 @@ if(SAGE_USE_GLM)
   target_compile_definitions(g_gameenginedevice PUBLIC SAGE_USE_GLM)
 endif()
 
+if(SAGE_USE_FFMPEG)
+  target_sources(
+    g_gameenginedevice PRIVATE Include/VideoDevice/FFmpeg/FFmpegFile.h
+                               Include/VideoDevice/FFmpeg/FFmpegVideoPlayer.h
+                               Source/VideoDevice/FFmpeg/FFmpegFile.cpp
+                               Source/VideoDevice/FFmpeg/FFmpegVideoPlayer.cpp)
+  find_package(FFMPEG REQUIRED)
+  target_include_directories(g_gameenginedevice PRIVATE ${FFMPEG_INCLUDE_DIRS})
+  target_link_libraries(g_gameenginedevice PRIVATE ${FFMPEG_LIBRARIES})
+  target_compile_definitions(g_gameenginedevice PRIVATE SAGE_USE_FFMPEG)
+endif()
+
+if(SAGE_USE_OPENAL)
+  if(NOT SAGE_USE_FFMPEG)
+    message(FATAL_ERROR "OpenAL support requires FFmpeg support to be enabled.")
+  endif()
+
+  target_sources(
+    g_gameenginedevice PRIVATE Include/OpenALDevice/OpenALAudioManager.h
+                               Include/OpenALDevice/OpenALAudioStream.h
+                               Include/OpenALDevice/FFmpegOpenALAudioStream.h
+                               Source/OpenALDevice/OpenALAudioFileCache.h
+                               Source/OpenALDevice/OpenALAudioFileCache.cpp
+                               Source/OpenALDevice/OpenALAudioManager.cpp
+                               Source/OpenALDevice/OpenALAudioStream.cpp
+                               Source/OpenALDevice/FFmpegOpenALAudioStream.cpp)
+
+  find_package(OpenAL REQUIRED)
+  find_package(fmt REQUIRED)
+  target_link_libraries(g_gameenginedevice PRIVATE OpenAL::OpenAL fmt::fmt)
+  target_compile_definitions(g_gameenginedevice PRIVATE SAGE_USE_OPENAL)
+endif()
+
 if(WIN32)
   target_sources(
     g_gameenginedevice
