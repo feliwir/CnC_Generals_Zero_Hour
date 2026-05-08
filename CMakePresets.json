@@ -13,10 +13,22 @@
         {
             "name": "debug",
             "generator": "Ninja",
-            "binaryDir": "${sourceDir}/build/${presetName}",
+            "inherits": [
+                "default"
+            ],
             "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
                 "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "sanitize",
+            "generator": "Ninja",
+            "inherits": [
+                "debug"
+            ],
+            "cacheVariables": {
+                "SAGE_WITH_ASAN": "ON",
+                "SAGE_WITH_UBSAN": "ON"
             }
         }
     ]
