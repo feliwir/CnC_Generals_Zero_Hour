@@ -782,7 +782,9 @@ void OpenALAudioManager::playAudioEvent(AudioEventRTS* event)
 					});
 
 				// When we receive a frame from FFmpeg, send it to OpenAL.
-				ffmpegFile->setFrameCallback([stream](AVFrame* frame, int stream_idx, int stream_type, void* user_data) {
+				ffmpegFile->setUserData(stream);
+				ffmpegFile->setFrameCallback([](AVFrame* frame, int stream_idx, int stream_type, void* user_data) {
+					OpenALAudioStream* stream = static_cast<OpenALAudioStream*>(user_data);
 					if (stream_type != AVMEDIA_TYPE_AUDIO) {
 						return;
 					}

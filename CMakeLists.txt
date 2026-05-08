@@ -11,8 +11,8 @@ option(SAGE_WITH_ASAN "Build with AddressSanitizer" OFF)
 option(SAGE_WITH_UBSAN "Build with UndefinedBehaviorSanitizer" OFF)
 
 if(SAGE_WITH_ASAN)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address")
-    set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
+    set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=address -fno-omit-frame-pointer")
 endif()
 
 if(SAGE_WITH_UBSAN)

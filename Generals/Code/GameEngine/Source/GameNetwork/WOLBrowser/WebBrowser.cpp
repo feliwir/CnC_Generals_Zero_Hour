@@ -145,7 +145,7 @@ const FieldParse WebBrowserURL::m_URLFieldParseTable[] =
 	{ NULL,											NULL,																NULL, 0 },
 
 };
-#ifdef _WINDOWS
+
 WebBrowserURL::WebBrowserURL() 
 {
 	m_next = NULL;
@@ -156,6 +156,8 @@ WebBrowserURL::WebBrowserURL()
 WebBrowserURL::~WebBrowserURL() 
 {
 }
+
+#ifdef _WINDOWS
 /******************************************************************************
 *
 * NAME

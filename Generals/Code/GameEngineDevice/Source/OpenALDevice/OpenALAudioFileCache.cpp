@@ -48,14 +48,14 @@ OpenALAudioFileCache::OpenALAudioFileCache() : m_maxSize(0), m_currentlyUsedSize
 Bool OpenALAudioFileCache::decodeFFmpeg(OpenAudioFile* file)
 {
 	std::vector<uint8_t> audioData;
-	auto on_frame = [&audioData](AVFrame* frame, int stream_idx, int stream_type, void* user_data) {
-		OpenAudioFile* file = static_cast<OpenAudioFile*>(user_data);
+	auto on_frame = [](AVFrame* frame, int stream_idx, int stream_type, void* user_data) {
+		auto [file, audioData] = *static_cast<std::tuple<OpenAudioFile*, std::vector<uint8_t>*>*>(user_data);
 		if (stream_type != AVMEDIA_TYPE_AUDIO) {
 			return;
 		}
 
 		const int frame_data_size = file->m_ffmpegFile->getSizeForSamples(frame->nb_samples);
-		audioData.reserve(audioData.size() + frame_data_size);
+		audioData->reserve(audioData->size() + frame_data_size);
 
 		if (av_sample_fmt_is_planar(static_cast<AVSampleFormat>(frame->format))) {
 			// Convert planar audio to interleaved
@@ -64,19 +64,20 @@ Bool OpenALAudioFileCache::decodeFFmpeg(OpenAudioFile* file)
 			for (int sample = 0; sample < frame->nb_samples; ++sample) {
 				for (int channel = 0; channel < num_channels; ++channel) {
 					const uint8_t* src = frame->data[channel] + sample * bytes_per_sample;
-					audioData.insert(audioData.end(), src, src + bytes_per_sample);
+					audioData->insert(audioData->end(), src, src + bytes_per_sample);
 				}
 			}
 		} else {
 			// Directly copy interleaved audio
-			audioData.insert(audioData.end(), frame->data[0], frame->data[0] + frame_data_size);
+			audioData->insert(audioData->end(), frame->data[0], frame->data[0] + frame_data_size);
 		}
 		file->m_fileSize += frame_data_size;
 		file->m_totalSamples += frame->nb_samples;
 		};
 
 	file->m_ffmpegFile->setFrameCallback(on_frame);
-	file->m_ffmpegFile->setUserData(file);
+	auto user_data = std::tuple<OpenAudioFile*, std::vector<uint8_t>*>(file, &audioData);
+	file->m_ffmpegFile->setUserData(&user_data);
 
 	// Read all packets inside the file
 	while (file->m_ffmpegFile->decodePacket()) {

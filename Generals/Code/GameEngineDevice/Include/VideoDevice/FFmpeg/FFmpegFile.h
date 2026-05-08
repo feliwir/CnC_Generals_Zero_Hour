@@ -30,7 +30,8 @@
 
 #include <Lib/BaseType.h>
 
-#include <functional>
+#undef min
+#undef max
 #include <vector>
 
 struct AVFormatContext;
@@ -41,7 +42,7 @@ struct AVFrame;
 struct AVPacket;
 struct File;
 
-using FFmpegFrameCallback = std::function<void(AVFrame *, int, int, void *)>;
+using FFmpegFrameCallback = void(*)(AVFrame *, int, int, void *);
 
 class FFmpegFile
 {

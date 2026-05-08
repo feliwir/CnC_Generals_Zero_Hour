@@ -3382,6 +3382,30 @@ void operator delete[](void * p, const char *, int)
 }
 
 //-----------------------------------------------------------------------------
+/**
+	overload for global operator delete; send requests to TheDynamicMemoryAllocator.
+*/
+void operator delete(void * p, size_t sz)
+{
+	++theLinkTester;
+	preMainInitMemoryManager();
+	DEBUG_ASSERTCRASH(TheDynamicMemoryAllocator != NULL, ("must init memory manager before calling global operator delete"));
+	TheDynamicMemoryAllocator->freeBytes(p);
+}
+
+//-----------------------------------------------------------------------------
+/**
+	overload for global operator delete[]; send requests to TheDynamicMemoryAllocator.
+*/
+void operator delete[](void * p, size_t sz)
+{
+	++theLinkTester;
+	preMainInitMemoryManager();
+	DEBUG_ASSERTCRASH(TheDynamicMemoryAllocator != NULL, ("must init memory manager before calling global operator delete"));
+	TheDynamicMemoryAllocator->freeBytes(p);
+}
+
+//-----------------------------------------------------------------------------
 #ifdef MEMORYPOOL_OVERRIDE_MALLOC
 void *calloc(size_t a, size_t b)
 {

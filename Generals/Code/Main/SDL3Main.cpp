@@ -280,6 +280,9 @@ int main(int argc, char **argv)
 		_set_se_translator( DumpExceptionInfo ); // Hook that allows stack trace.
 	#endif
 
+		// Set DXVK_WSI_DRIVER env variable to SDL3
+		setenv("DXVK_WSI_DRIVER", "SDL3", 1);
+
 		TheAsciiStringCriticalSection = &critSec1;
 		TheUnicodeStringCriticalSection = &critSec2;
 		TheDmaCriticalSection = &critSec3;
