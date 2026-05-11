@@ -5,30 +5,39 @@
             "name": "default",
             "generator": "Ninja",
             "binaryDir": "${sourceDir}/build/${presetName}",
+            "hidden": true,
             "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake",
-                "VCPKG_TARGET_TRIPLET": "x64-linux-dynamic"
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
             }
         },
         {
             "name": "debug",
-            "generator": "Ninja",
             "inherits": [
                 "default"
             ],
+            "hidden": true,
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
             "name": "sanitize",
-            "generator": "Ninja",
+            "inherits": [
+                "debug"
+            ],
+            "hidden": true,
+            "cacheVariables": {
+                "SAGE_WITH_ASAN": "ON",
+                "SAGE_WITH_UBSAN": "ON"
+            }
+        },
+        {
+            "name": "macos-arm64-debug",
             "inherits": [
                 "debug"
             ],
             "cacheVariables": {
-                "SAGE_WITH_ASAN": "ON",
-                "SAGE_WITH_UBSAN": "ON"
+                "VCPKG_TARGET_TRIPLET": "arm64-osx-dynamic"
             }
         }
     ]

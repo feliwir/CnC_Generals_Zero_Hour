@@ -135,7 +135,7 @@ struct LegacyDDSURFACEDESC2 {
 	};
 	unsigned AlphaBitDepth;
 	unsigned Reserved;
-	void* Surface;
+	uint32_t Surface;
 	union
 	{
 		LegacyDDCOLORKEY CKDestOverlay;

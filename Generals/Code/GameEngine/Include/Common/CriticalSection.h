@@ -38,7 +38,7 @@ extern PerfGather TheCritSecPerfGather;
 #endif
 
 #ifndef _WIN32
-#include <mutex>
+#include <pthread.h>
 #endif
 
 class CriticalSection
@@ -46,7 +46,7 @@ class CriticalSection
 #ifdef _WIN32
 	CRITICAL_SECTION m_windowsCriticalSection;
 #else
-	std::recursive_mutex m_mutex;
+	pthread_mutex_t m_mutex;
 #endif
 	public:
 		CriticalSection()
@@ -56,6 +56,11 @@ class CriticalSection
 			#endif
 			#ifdef _WIN32
 			InitializeCriticalSection( &m_windowsCriticalSection );
+			#else
+			pthread_mutexattr_t attr;
+			pthread_mutexattr_init(&attr);
+			pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
+			pthread_mutex_init(&m_mutex, &attr);
 			#endif
 		}
 
@@ -66,6 +71,8 @@ class CriticalSection
 			#endif
 			#ifdef _WIN32
 			DeleteCriticalSection( &m_windowsCriticalSection );
+			#else
+			pthread_mutex_destroy(&m_mutex);
 			#endif
 		}
 
@@ -78,7 +85,7 @@ class CriticalSection
 			#ifdef _WIN32
 			EnterCriticalSection( &m_windowsCriticalSection );
 			#else
-			m_mutex.lock();
+			pthread_mutex_lock(&m_mutex);
 			#endif
 		}
 		
@@ -90,7 +97,7 @@ class CriticalSection
 			#ifdef _WIN32
 			LeaveCriticalSection( &m_windowsCriticalSection );
 			#else
-			m_mutex.unlock();
+			pthread_mutex_unlock(&m_mutex);
 			#endif
 		}
 };

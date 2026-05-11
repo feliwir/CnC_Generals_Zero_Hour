@@ -170,6 +170,7 @@ static void renderLoadingScreen(void)
 	surface = SDL_LoadBMP("Install_Final.bmp");
 	if (surface == NULL)
 	{
+		DEBUG_LOG(("Failed to load loading screen bitmap: %s\n", SDL_GetError()));
 		shutdownLoadingScreen();
 		return;
 	}
@@ -178,6 +179,7 @@ static void renderLoadingScreen(void)
 	SDL_DestroySurface(surface);
 	if (gLoadScreenTexture == NULL)
 	{
+		DEBUG_LOG(("Failed to create loading screen texture: %s\n", SDL_GetError()));
 		shutdownLoadingScreen();
 		return;
 	}
@@ -189,7 +191,7 @@ static void renderLoadingScreen(void)
 
 static Bool initializeAppWindow(Bool runWindowed)
 {
-	SDL_WindowFlags windowFlags = SDL_WINDOW_HIGH_PIXEL_DENSITY;
+	SDL_WindowFlags windowFlags = SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_VULKAN;
 
 	if (!runWindowed)
 	{
@@ -202,6 +204,7 @@ static Bool initializeAppWindow(Bool runWindowed)
 		windowFlags);
 	if (TheSDL3Window == NULL)
 	{
+		DEBUG_LOG(("Failed to create SDL window: %s\n", SDL_GetError()));
 		return false;
 	}
 
@@ -336,6 +339,7 @@ int main(int argc, char **argv)
 
 		if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) == 0)
 		{
+			DEBUG_LOG(("SDL failed to initialize: %s\n", SDL_GetError()));
 			return 1;
 		}
 

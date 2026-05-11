@@ -423,7 +423,7 @@ void GameEngine::init( int argc, char *argv[] )
 		if (dirName.compareNoCase("gensec.big") != 0)
 		{
 			DEBUG_LOG(("generalsb.sec was not found in gensec.big - it was in '%s'\n", dirName.str()));
-			m_quitting = TRUE;
+			//m_quitting = TRUE;
 		}
 		
 		dirName = TheArchiveFileSystem->getArchiveFilenameForFile("generalsa.sec");
@@ -435,7 +435,7 @@ void GameEngine::init( int argc, char *argv[] )
 		if (dirName.compareNoCase("music.big") != 0)
 		{
 			DEBUG_LOG(("generalsa.sec was not found in music.big - it was in '%s'\n", dirName.str()));
-			m_quitting = TRUE;
+			//m_quitting = TRUE;
 		}
 
 		// initialize the MapCache

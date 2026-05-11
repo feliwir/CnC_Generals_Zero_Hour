@@ -18,6 +18,8 @@
 
 #ifndef _TARGA_H_
 #define _TARGA_H_
+#include <stdint.h>
+
 /****************************************************************************
 *
 *         C O N F I D E N T I A L --- W E S T W O O D   S T U D I O S
@@ -133,8 +135,8 @@ typedef struct _TGAHeader
  */
 typedef struct _TGA2Footer
 	{
-	long Extension;
-	long Developer;
+	int32_t Extension;
+	int32_t Developer;
 	char Signature[16];
 	char RsvdChar;
 	char BZST;
@@ -224,12 +226,12 @@ typedef struct _TGA2Extension
 	TGA2TimeStamp JobTime;
 	char          SoftID[41];
 	TGA2SoftVer   SoftVer;
-	long          KeyColor;
+	int32_t       KeyColor;
 	TGA2Ratio     Aspect;
 	TGA2Ratio     Gamma;
-	long          ColorCor;
-	long          PostStamp;
-	long          ScanLine;
+	int32_t       ColorCor;
+	int32_t       PostStamp;
+	int32_t       ScanLine;
 	char          Attributes;
 	} TGA2Extension;
 
@@ -317,4 +319,3 @@ class Targa
 	};
 
 #endif /* _TARGA_H_ */
-

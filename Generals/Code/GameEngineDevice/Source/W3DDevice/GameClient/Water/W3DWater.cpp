@@ -351,8 +351,10 @@ WaterRenderObjClass::WaterRenderObjClass(void)
 	m_gridHeight = m_gridCellsY * m_gridCellSize;
 	
 	Int i=NUM_BUMP_FRAMES;
-	while (i--)
+	while (i--) {
 		m_pBumpTexture[i]=NULL;
+		m_pBumpTexture2[i]=NULL;
+	}
 
 	m_riverVOrigin=0;
 	m_riverTexture=NULL;

@@ -17,10 +17,14 @@
     },
     {
       "name": "sdl3",
+      "features": [
+        "vulkan"
+      ],
       "platform": "!linux"
     },
     "sdl3-image",
     "zlib",
+    "hwdata",
     {
       "name": "dxvk-native",
       "default-features": false,
