@@ -271,9 +271,9 @@ UnicodeString ProductionPrerequisite::getRequiresList(const Player *player) cons
 			{
 				unit = m_prereqUnits[i-1].unit;
 				unitName = unit->getDisplayName();
-				unitName.concat( L" " );
+				unitName.concat( u" " );
 				unitName.concat(TheGameText->fetch("CONTROLBAR:OrRequirement", NULL));
-				unitName.concat( L" " );
+				unitName.concat( u" " );
 				requiresList.concat(unitName);
 			}
 
@@ -290,7 +290,7 @@ UnicodeString ProductionPrerequisite::getRequiresList(const Player *player) cons
 			if (firstRequirement)
 				firstRequirement = false;
 			else
-				unitName.concat(L"\n");
+				unitName.concat(u"\n");
 
 			// add it to the list
 			requiresList.concat(unitName);
@@ -309,7 +309,7 @@ UnicodeString ProductionPrerequisite::getRequiresList(const Player *player) cons
 		if (firstRequirement) {
 			firstRequirement = false;
 		} else {
-			unitName.concat(L"\n");
+			unitName.concat(u"\n");
 		}
 		requiresList.concat(TheGameText->fetch("CONTROLBAR:GeneralsPromotion", NULL));
 	}

@@ -40,9 +40,7 @@
 #include	<stddef.h>
 #include	<string.h>
 
-#ifdef _UNIX
-#include	<wctype.h>
-#endif // _UNIX
+#include <unicode/ustring.h>
 
 /*********************************************************************************************** 
  * strtrim -- Trim leading and trailing white space off of string.                             * 
@@ -88,26 +86,26 @@ char * strtrim(char * buffer)
 	return(buffer);
 }
 
-wchar_t * wcstrim(wchar_t * buffer)
+UChar * wcstrim(UChar * buffer)
 {
 	if (buffer != NULL) {
 
 		/*
 		**	Strip leading white space from the string.
 		*/
-		wchar_t * source = buffer;
-		while (iswspace(*source)) {
+		UChar * source = buffer;
+		while (u_isUWhiteSpace(*source)) {
 			source++;
 		}
 		if (source != buffer) {
-			wcscpy(buffer, source);
+			u_strcpy(buffer, source);
 		}
 
 		/*
 		**	Clip trailing white space from the string.
 		*/
-		for (int index = wcslen(buffer)-1; index >= 0; index--) {
-			if (iswspace(buffer[index])) {
+		for (int index = u_strlen(buffer)-1; index >= 0; index--) {
+			if (u_isUWhiteSpace(buffer[index])) {
 				buffer[index] = L'\0';
 			} else {
 				break;

@@ -41,6 +41,8 @@
 #include "wwmemlog.h"
 #include "dx8wrapper.h"
 
+#include <unicode/ustring.h>
+
 #ifdef SAGE_USE_FREETYPE
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -286,14 +288,14 @@ Render2DSentenceClass::Set_Location (const Vector2 &loc)
 //
 ////////////////////////////////////////////////////////////////////////////////////
 Vector2
-Render2DSentenceClass::Get_Text_Extents (const WCHAR *text)
+Render2DSentenceClass::Get_Text_Extents (const UChar *text)
 {
 	Vector2 extent (0, Font->Get_Char_Height());
 
 	while (*text) {
-		WCHAR ch = *text++;
+		UChar ch = *text++;
 
-		if ( ch != (WCHAR)'\n' ) {
+		if ( ch != (UChar)'\n' ) {
 			extent.X += Font->Get_Char_Spacing( ch );
 		}
 	}
@@ -308,7 +310,7 @@ Render2DSentenceClass::Get_Text_Extents (const WCHAR *text)
 //
 ////////////////////////////////////////////////////////////////////////////////////
 Vector2
-Render2DSentenceClass::Get_Formatted_Text_Extents (const WCHAR *text)
+Render2DSentenceClass::Get_Formatted_Text_Extents (const UChar *text)
 {
 	return Build_Sentence_Not_Centered(text, NULL, NULL, true);
 }
@@ -648,7 +650,7 @@ Render2DSentenceClass::Record_Sentence_Chunk (void)
 //
 ////////////////////////////////////////////////////////////////////////////////////
 void
-Render2DSentenceClass::Allocate_New_Surface (const WCHAR *text, bool justCalcExtents)
+Render2DSentenceClass::Allocate_New_Surface (const UChar *text, bool justCalcExtents)
 {
 	if (!justCalcExtents)
 	{
@@ -740,7 +742,7 @@ Render2DSentenceClass::Allocate_New_Surface (const WCHAR *text, bool justCalcExt
 	return ;
 }
 
-float FindStartingXPos( const WCHAR *text )
+float FindStartingXPos( const UChar *text )
 {
 
 	return 1;
@@ -750,7 +752,7 @@ float FindStartingXPos( const WCHAR *text )
 //	Build_Sentence_Centered
 //
 ////////////////////////////////////////////////////////////////////////////////////
-void	Render2DSentenceClass::Build_Sentence_Centered (const WCHAR *text, int *hkX, int *hkY)
+void	Render2DSentenceClass::Build_Sentence_Centered (const UChar *text, int *hkX, int *hkY)
 {
 	float char_height = Font->Get_Char_Height ();
 	int		wordWidth = 0;
@@ -777,7 +779,7 @@ void	Render2DSentenceClass::Build_Sentence_Centered (const WCHAR *text, int *hkX
 	//	Loop over all the characters in the string
 	//
 	bool end = false;
-	const WCHAR *word;
+	const UChar *word;
 	int word_width	= 0;
 	int line_width	= 0;
 	int charCount = 0;
@@ -812,7 +814,7 @@ void	Render2DSentenceClass::Build_Sentence_Centered (const WCHAR *text, int *hkX
 					//Added By Saad
 					if (word_width != 0 )
 					{
-						const WCHAR *word_back = word;
+						const UChar *word_back = word;
 						*word_back--;
 						if (*word_back == L' ')
 						{
@@ -893,7 +895,7 @@ void	Render2DSentenceClass::Build_Sentence_Centered (const WCHAR *text, int *hkX
 		}
 		
 		for(int i = 0; i <= charCount; i++) {
-			WCHAR ch = *text++;
+			UChar ch = *text++;
 			dontBlit = false;
 			//
 			//	Determine how much horizontal space this character requires
@@ -1000,7 +1002,7 @@ void	Render2DSentenceClass::Build_Sentence_Centered (const WCHAR *text, int *hkX
 //	Build_Sentence_NotCentered
 //
 ////////////////////////////////////////////////////////////////////////////////////
-Vector2	Render2DSentenceClass::Build_Sentence_Not_Centered (const WCHAR *text, int *hkX, int *hkY, bool justCalcExtents)
+Vector2	Render2DSentenceClass::Build_Sentence_Not_Centered (const UChar *text, int *hkX, int *hkY, bool justCalcExtents)
 {
 	Vector2 cursor = Cursor;
 	int textureStartX = TextureStartX;
@@ -1038,7 +1040,7 @@ Vector2	Render2DSentenceClass::Build_Sentence_Not_Centered (const WCHAR *text, i
 	//	Loop over all the characters in the string
 	//
 	while (text != NULL) {
-		WCHAR ch = *text++;
+		UChar ch = *text++;
 		dontBlit = false;
 		//
 		//	Determine how much horizontal space this character requires
@@ -1090,7 +1092,7 @@ Vector2	Render2DSentenceClass::Build_Sentence_Not_Centered (const WCHAR *text, i
 					//
 					//	Find the length of the next word
 					//
-					const WCHAR *word	= text;
+					const UChar *word	= text;
 					float word_width	= char_spacing;
 					while ((*word != 0) && (*word > L' ')) {
 						if(ParseHotKey && (*word == L'&') && (*word+1 != 0) && (*word+1 > L' ') && (*word+1 != L'\n'))
@@ -1188,14 +1190,14 @@ Vector2	Render2DSentenceClass::Build_Sentence_Not_Centered (const WCHAR *text, i
 //
 ////////////////////////////////////////////////////////////////////////////////////
 void
-Render2DSentenceClass::Build_Sentence (const WCHAR *text, int *hkX, int *hkY)
+Render2DSentenceClass::Build_Sentence (const UChar *text, int *hkX, int *hkY)
 {
 	if (text == NULL) {
 		return ;
 	}
 
 
-	if(Centered && (WrapWidth > 0 || wcschr(text,L'\n')))
+	if(Centered && (WrapWidth > 0 || u_strchr(text,L'\n')))
 		Build_Sentence_Centered(text, hkX, hkY);
 	else
 		Build_Sentence_Not_Centered(text, hkX, hkY);
@@ -1288,19 +1290,9 @@ FontCharsClass::~FontCharsClass (void)
 //
 ////////////////////////////////////////////////////////////////////////////////////
 const FontCharsClassCharDataStruct *
-FontCharsClass::Get_Char_Data (WCHAR ch)
+FontCharsClass::Get_Char_Data (UChar ch)
 {
 	const FontCharsClassCharDataStruct *retval = NULL;
-
-	// Ensure that the range can properly be checked
-	static_assert(!(((wchar_t)-1 == -1) && (sizeof(wchar_t) == 2)), "wchar_t is signed and 2 bytes");
-
-	// Ensure is a valid character
-	if (ch < 0 || ch > 0xFFFF) 
-	{
-		DEBUG_LOG(("Invalid character %d", ch));
-		return NULL;
-	}
 
 	if ( ch < 256 ) 
 	{
@@ -1340,7 +1332,7 @@ FontCharsClass::Get_Char_Data (WCHAR ch)
 //
 ////////////////////////////////////////////////////////////////////////////////////
 int
-FontCharsClass::Get_Char_Width (WCHAR ch)
+FontCharsClass::Get_Char_Width (UChar ch)
 {
 	const FontCharsClassCharDataStruct	* data = Get_Char_Data( ch );
 	if ( data != NULL ) {
@@ -1357,7 +1349,7 @@ FontCharsClass::Get_Char_Width (WCHAR ch)
 //
 ////////////////////////////////////////////////////////////////////////////////////
 int
-FontCharsClass::Get_Char_Spacing (WCHAR ch)
+FontCharsClass::Get_Char_Spacing (UChar ch)
 {
 	const FontCharsClassCharDataStruct	* data = Get_Char_Data( ch );
 	if ( data != NULL ) {
@@ -1376,7 +1368,7 @@ FontCharsClass::Get_Char_Spacing (WCHAR ch)
 //
 ////////////////////////////////////////////////////////////////////////////////////
 void
-FontCharsClass::Blit_Char (WCHAR ch, uint16 *dest_ptr, int dest_stride, int x, int y)
+FontCharsClass::Blit_Char (UChar ch, uint16 *dest_ptr, int dest_stride, int x, int y)
 {
 	const FontCharsClassCharDataStruct	* data = Get_Char_Data( ch );
 	if ( data != NULL && data->Width != 0 ) {
@@ -1408,7 +1400,7 @@ FontCharsClass::Blit_Char (WCHAR ch, uint16 *dest_ptr, int dest_stride, int x, i
 }
 
 #ifdef SAGE_USE_FREETYPE
-const FontCharsClassCharDataStruct *FontCharsClass::Store_Freetype_Char(WCHAR ch)
+const FontCharsClassCharDataStruct *FontCharsClass::Store_Freetype_Char(UChar ch)
 {
     DEBUG_ASSERTCRASH(FtFace != nullptr, ("FreetypeFace not initialized"));
     FT_UInt glyph_index = FT_Get_Char_Index(FtFace, ch);
@@ -1448,11 +1440,11 @@ const FontCharsClassCharDataStruct *FontCharsClass::Store_Freetype_Char(WCHAR ch
     int descent = CharHeight - CharAscent;
     int y_offset = (CharHeight - FtFace->glyph->bitmap_top) - descent;
 
-		// These checks are necessary to prevent invalid buffer access
-		if(x_offset < 0)
-			x_offset = 0;
-		if(y_offset < 0)
-			y_offset = 0;
+	// These checks are necessary to prevent invalid buffer access
+	if(x_offset < 0)
+		x_offset = 0;
+	if(y_offset < 0)
+		y_offset = 0;
 
     // Render the bitmap
     for (unsigned int row = 0; row < FtFace->glyph->bitmap.rows; row++) {
@@ -1493,7 +1485,7 @@ const FontCharsClassCharDataStruct *FontCharsClass::Store_Freetype_Char(WCHAR ch
 //
 ////////////////////////////////////////////////////////////////////////////////////
 const FontCharsClassCharDataStruct *
-FontCharsClass::Store_GDI_Char (WCHAR ch)
+FontCharsClass::Store_GDI_Char (UChar ch)
 {
 	int width	= PointSize * 2;
 	int height	= PointSize * 2;
@@ -1975,7 +1967,7 @@ FontCharsClass::Is_Font (const char *font_name, int point_size, bool is_bold)
 //
 ////////////////////////////////////////////////////////////////////////////////////
 void
-FontCharsClass::Grow_Unicode_Array (WCHAR ch)
+FontCharsClass::Grow_Unicode_Array (UChar ch)
 {
 	//
 	//	Don't do anything if character is in the ASCII range

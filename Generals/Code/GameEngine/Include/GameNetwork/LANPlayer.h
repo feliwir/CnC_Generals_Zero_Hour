@@ -39,7 +39,7 @@
 class LANPlayer
 {
 public:
-	LANPlayer() { m_name = m_login = m_host = L""; m_lastHeard = 0; m_next = NULL; m_IP = 0; }
+	LANPlayer() { m_name = m_login = m_host = u""; m_lastHeard = 0; m_next = NULL; m_IP = 0; }
 
 	// Access functions
 	inline UnicodeString getName( void ) { return m_name; }

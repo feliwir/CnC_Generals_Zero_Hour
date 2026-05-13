@@ -72,6 +72,8 @@
 #include "Common/CustomMatchPreferences.h"
 #include "Common/LadderPreferences.h"
 
+#include <unicode/ustring.h>
+
 //-----------------------------------------------------------------------------
 // DEFINES ////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
@@ -549,6 +551,8 @@ void createGame( void )
 	PeerRequest req;
 	UnicodeString gameName = GadgetTextEntryGetText(textEntryGameName);
 	req.peerRequestType = PeerRequest::PEERREQUEST_CREATESTAGINGROOM;
+	// wchar_t wgameName[256];
+	// u_strToWCS(wgameName, 256, NULL, gameName.str(), gameName.getLength(), NULL);
 	req.text = gameName.str();
 	TheGameSpyGame->setGameName(gameName);
 	AsciiString passwd;

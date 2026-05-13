@@ -62,6 +62,8 @@
 
 #include "Common/STLTypedefs.h"
 
+#include <unicode/ustring.h>
+
 #ifdef _INTERNAL
 // for occasional debugging...
 //#pragma optimize("", off)
@@ -222,7 +224,7 @@ static void gameTooltip(GameWindow *window,
 	{
 #ifdef DEBUG_LOGGING
 		UnicodeString s;
-		s.format(L"Ping is %d ms (cutoffs are %d ms and %d ms\n%hs local pings\n%hs remote pings",
+		s.format(u"Ping is %d ms (cutoffs are %d ms and %d ms\n%hs local pings\n%hs remote pings",
 			room->getPingAsInt(), TheGameSpyConfig->getPingCutoffGood(), TheGameSpyConfig->getPingCutoffBad(),
 			TheGameSpyInfo->getPingString().str(), room->getPingString().str()
 		);
@@ -242,8 +244,8 @@ static void gameTooltip(GameWindow *window,
 		if (room->getHasPassword())
 		{
 			UnicodeString checkTooltip =TheGameText->fetch("TOOTIP:Password");
-			if(!checkTooltip.compare(L"Password required to joing game"))
-				checkTooltip.set(L"Password required to join game");
+			if(!checkTooltip.compare(u"Password required to joing game"))
+				checkTooltip.set(u"Password required to join game");
 			TheMouse->setCursorTooltip( checkTooltip, 10, NULL, 2.0f ); // the text and width are the only params used.  the others are the default values.
 		}
 		else
@@ -495,13 +497,15 @@ struct GameSortStruct
 			}
 		}
 
+		UnicodeString g1Name = g1->getGameName();
+		UnicodeString g2Name = g2->getGameName();
 		switch(theGameSortType)
 		{
 		case GAMESORT_ALPHA_ASCENDING:
-			return wcsicmp(g1->getGameName().str(), g2->getGameName().str()) < 0;
+			return u_strcasecmp(g1Name.str(), g2Name.str(), U_FOLD_CASE_DEFAULT) < 0;
 			break;
 		case GAMESORT_ALPHA_DESCENDING:
-			return wcsicmp(g1->getGameName().str(),g2->getGameName().str()) > 0;
+			return u_strcasecmp(g1Name.str(), g2Name.str(), U_FOLD_CASE_DEFAULT) > 0;
 			break;
 		case GAMESORT_PING_ASCENDING:
 			return g1->getPingAsInt() < g2->getPingAsInt();
@@ -601,11 +605,11 @@ static Int insertGame( GameWindow *win, GameSpyStagingRoom *game, Bool showMap )
 	}
 	else
 	{
-		GadgetListBoxAddEntryText(win, UnicodeString(L" "), gameColor, index, COLUMN_MAP);
-		GadgetListBoxAddEntryText(win, UnicodeString(L" "), gameColor, index, COLUMN_LADDER);
+		GadgetListBoxAddEntryText(win, UnicodeString(u" "), gameColor, index, COLUMN_MAP);
+		GadgetListBoxAddEntryText(win, UnicodeString(u" "), gameColor, index, COLUMN_LADDER);
 	}
 
-	s.format(L"%d/%d", game->getReportedNumPlayers(), game->getReportedMaxPlayers());
+	s.format(u"%d/%d", game->getReportedNumPlayers(), game->getReportedMaxPlayers());
 	GadgetListBoxAddEntryText(win, s, gameColor, index, COLUMN_NUMPLAYERS);
 
 	if (game->getHasPassword())
@@ -621,7 +625,7 @@ static Int insertGame( GameWindow *win, GameSpyStagingRoom *game, Bool showMap )
 	}
 	else
 	{
-		GadgetListBoxAddEntryText(win, UnicodeString(L" "), gameColor, index, COLUMN_PASSWORD);
+		GadgetListBoxAddEntryText(win, UnicodeString(u" "), gameColor, index, COLUMN_PASSWORD);
 	}
 
 	if (game->getAllowObservers())
@@ -631,10 +635,10 @@ static Int insertGame( GameWindow *win, GameSpyStagingRoom *game, Bool showMap )
 	}
 	else
 	{
-		GadgetListBoxAddEntryText(win, UnicodeString(L" "), gameColor, index, COLUMN_OBSERVER);
+		GadgetListBoxAddEntryText(win, UnicodeString(u" "), gameColor, index, COLUMN_OBSERVER);
 	}
 
-	s.format(L"%d", game->getPingAsInt());
+	s.format(u"%d", game->getPingAsInt());
 	GadgetListBoxAddEntryText(win, s, gameColor, index, COLUMN_PING);
 	Int ping = game->getPingAsInt();
 	Int width = 10, height = 10;
@@ -799,7 +803,7 @@ void RefreshGameInfoListBox( GameWindow *mainWin, GameWindow *win )
 //				UnicodeString theName, theRating, thePlayerTemplate;
 //				Int colorIdx = slot->getColor();
 //				theName = slot->getName();
-//				theRating.format(L" (%d-%d)", slot->getWins(), slot->getLosses());
+//				theRating.format(u" (%d-%d)", slot->getWins(), slot->getLosses());
 //				const PlayerTemplate * pt = ThePlayerTemplateStore->getNthPlayerTemplate(slot->getPlayerTemplate());
 //				if (pt)
 //				{
@@ -811,7 +815,7 @@ void RefreshGameInfoListBox( GameWindow *mainWin, GameWindow *win )
 //				}
 //
 //				UnicodeString theText;
-//				theText.format(L"%ls - %ls - %ls", theName.str(), thePlayerTemplate.str(), theRating.str());
+//				theText.format(u"%ls - %ls - %ls", theName.str(), thePlayerTemplate.str(), theRating.str());
 //
 //				Int theColor = GameSpyColor[GSCOLOR_DEFAULT];
 //				const MultiplayerColorDefinition *mcd = TheMultiplayerSettings->getColor(colorIdx);

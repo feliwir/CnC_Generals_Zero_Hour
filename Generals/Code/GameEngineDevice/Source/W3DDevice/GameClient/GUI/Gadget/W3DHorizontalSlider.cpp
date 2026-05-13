@@ -241,12 +241,12 @@ void W3DGadgetHorizontalSliderImageDrawB( GameWindow *window,
 	yOffset = instData->m_imageOffset.y;
 
 	UnicodeString tooltip, tmp;
-	tooltip.format(L"mult:%g/%g, img offset:%d,%d", xMulti, yMulti, xOffset, yOffset);
+	tooltip.format(u"mult:%g/%g, img offset:%d,%d", xMulti, yMulti, xOffset, yOffset);
 
-	tmp.format(L"\norigin: %d,%d size:%d,%d", origin.x, origin.y, size.x, size.y);
+	tmp.format(u"\norigin: %d,%d size:%d,%d", origin.x, origin.y, size.x, size.y);
 	tooltip.concat(tmp);
 
-	tmp.format(L"\ns= %d <--> %d, numTicks=%g, pos = %d", s->minVal, s->maxVal, s->numTicks, s->position);
+	tmp.format(u"\ns= %d <--> %d, numTicks=%g, pos = %d", s->minVal, s->maxVal, s->numTicks, s->position);
 	tooltip.concat(tmp);
 
 	if( BitTest( instData->getState(), WIN_STATE_HILITED ) )
@@ -258,7 +258,7 @@ void W3DGadgetHorizontalSliderImageDrawB( GameWindow *window,
 		backgroundEnd.y = backgroundStart.y + highlightSquare->getImageHeight()* yMulti;
 		backgroundEnd.x = backgroundStart.x + highlightSquare->getImageWidth() * xMulti;
 
-		tmp.format(L"\nHighlighted: (%d,%d) -> (%d,%d), step %d/%g, full %d/%d", backgroundStart.x, backgroundStart.y,
+		tmp.format(u"\nHighlighted: (%d,%d) -> (%d,%d), step %d/%g, full %d/%d", backgroundStart.x, backgroundStart.y,
 			backgroundEnd.x, backgroundEnd.y, highlightSquare->getImageWidth(), highlightSquare->getImageWidth() * xMulti,
 			origin.x, size.x);
 		tooltip.concat(tmp);
@@ -271,7 +271,7 @@ void W3DGadgetHorizontalSliderImageDrawB( GameWindow *window,
 			backgroundStart.x = backgroundEnd.x;
 			backgroundEnd.x = backgroundStart.x + highlightSquare->getImageWidth() * xMulti;
 		}		
-		tmp.format(L"\n  bsX = %d, beX = %d (%d < %d+%d or %d?)", backgroundStart.x, backgroundEnd.x,
+		tmp.format(u"\n  bsX = %d, beX = %d (%d < %d+%d or %d?)", backgroundStart.x, backgroundEnd.x,
 			backgroundStart.x, origin.x, size.x, origin.x + size.x);
 		tooltip.concat(tmp);
 	}
@@ -282,7 +282,7 @@ void W3DGadgetHorizontalSliderImageDrawB( GameWindow *window,
 	end.y = start.y + fillSquare->getImageHeight() * yMulti;
 	end.x	= start.x + fillSquare->getImageWidth()* xMulti;
 
-	tmp.format(L"\ntop: start=%d,%d, end=%d,%d", start.x, start.y, end.x, end.y);
+	tmp.format(u"\ntop: start=%d,%d, end=%d,%d", start.x, start.y, end.x, end.y);
 	tooltip.concat(tmp);
 
 	while(start.x <= origin.x + (s->numTicks * (s->position - s->minVal)) && end.x < origin.x + size.x && s->position != s->minVal)

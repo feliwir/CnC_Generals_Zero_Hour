@@ -86,6 +86,8 @@
 #include "GameLogic/Module/SupplyWarehouseDockUpdate.h"
 #include "GameLogic/Module/MobMemberSlavedUpdate.h"//ML
 
+#include <unicode/ustdio.h>
+
 #ifdef _INTERNAL
 // for occasional debugging...
 //#pragma optimize("", off)
@@ -1927,7 +1929,7 @@ void InGameUI::message( AsciiString stringManagerLabel, ... )
 	va_list args;
   va_start( args, stringManagerLabel );
 	WideChar buf[ UnicodeString::MAX_FORMAT_BUF_LEN ];
-  if( _vsnwprintf(buf, sizeof( buf )/sizeof( WideChar ) - 1, stringManagerString.str(), args ) < 0 )
+  if(u_vsnprintf_u(buf, sizeof( buf )/sizeof( WideChar ) - 1, stringManagerString.str(), args ) < 0 )
 			throw ERROR_OUT_OF_MEMORY;
 	formattedMessage.set( buf );
   va_end(args);
@@ -1949,7 +1951,7 @@ void InGameUI::message( UnicodeString format, ... )
 	va_list args;
   va_start( args, format );
 	WideChar buf[ UnicodeString::MAX_FORMAT_BUF_LEN ];
-  if( _vsnwprintf(buf, sizeof( buf )/sizeof( WideChar ) - 1, format.str(), args ) < 0 )
+  if( u_vsnprintf_u(buf, sizeof( buf )/sizeof( WideChar ) - 1, format.str(), args ) < 0 )
 			throw ERROR_OUT_OF_MEMORY;
 	formattedMessage.set( buf );
   va_end(args);
@@ -1971,7 +1973,7 @@ void InGameUI::messageColor( const RGBColor *rgbColor, UnicodeString format, ...
 	va_list args;
   va_start( args, format );
 	WideChar buf[ UnicodeString::MAX_FORMAT_BUF_LEN ];
-  if( _vsnwprintf(buf, sizeof( buf )/sizeof( WideChar ) - 1, format.str(), args ) < 0 )
+  if( u_vsnprintf_u(buf, sizeof( buf )/sizeof( WideChar ) - 1, format.str(), args ) < 0 )
 			throw ERROR_OUT_OF_MEMORY;
 	formattedMessage.set( buf );
   va_end(args);
@@ -2258,7 +2260,7 @@ void InGameUI::createMouseoverHint( const GameMessage *msg )
 				AsciiString txtTemp;
 				txtTemp.format("ThingTemplate:%s", obj->getTemplate()->getName().str());
 				str = TheGameText->fetch(txtTemp);
-				//str.format(L"ThingTemplate:'%hs'", obj->getTemplate()->getName().str());
+				//str.format(u"ThingTemplate:'%hs'", obj->getTemplate()->getName().str());
 			}
 
 #ifdef AI_DEBUG_TOOLTIPS
@@ -2289,21 +2291,21 @@ void InGameUI::createMouseoverHint( const GameMessage *msg )
 				{
 					if (!teamName.isEmpty())
 					{
-						str.format(L"%hs(%hs): %s", teamName.str(), objName.str(), str.str());
+						str.format(u"%hs(%hs): %s", teamName.str(), objName.str(), str.str());
 					}
 					else
 					{
-						str.format(L"%hs: %s", objName.str(), str.str());
+						str.format(u"%hs: %s", objName.str(), str.str());
 					}
 				}
 				else
 				{
 					if (!teamName.isEmpty())
 					{
-						str.format(L"%hs: %s", teamName.str(), str.str());
+						str.format(u"%hs: %s", teamName.str(), str.str());
 					}
 				}
-				str.format(L"%s - %hs", str.str(), stateName.str());
+				str.format(u"%s - %hs", str.str(), stateName.str());
 
 			}
 #endif
@@ -2324,7 +2326,7 @@ void InGameUI::createMouseoverHint( const GameMessage *msg )
 				UnicodeString tooltip;
 				//if (TheRecorder->isMultiplayer() && player->getPlayerType() == PLAYER_HUMAN)
 				if (TheRecorder->isMultiplayer() && player->isPlayableSide())
-					tooltip.format(L"%s\n%s", str.str(), ((Player *)player)->getPlayerDisplayName().str());
+					tooltip.format(u"%s\n%s", str.str(), ((Player *)player)->getPlayerDisplayName().str());
 				else
 					tooltip = str;
 
@@ -3410,7 +3412,7 @@ void InGameUI::postDraw( void )
 						if ( startY >= bottomMargin)
 						{
 							UnicodeString ellipsis;
-							ellipsis.format(L"...");
+							ellipsis.format(u"...");
 							info->setText( ellipsis, ellipsis );
 							info->setFont( m_superweaponReadyFont, m_superweaponNormalPointSize, m_superweaponNormalBold );
 							info->drawTime( startX,	startY, m_superweaponFlashColor, bgColor );
@@ -3471,8 +3473,8 @@ void InGameUI::postDraw( void )
 									AsciiString strIndex;
 									strIndex.format("GUI:%s", templateName.str());
 									UnicodeString name, time;
-									name.format(L"%ls: ", TheGameText->fetch(strIndex.str()).str());
-									time.format(L"%d:%2.2d", min, sec);
+									name.format(u"%ls: ", TheGameText->fetch(strIndex.str()).str());
+									time.format(u"%d:%2.2d", min, sec);
 									info->setText(name, time);
 								}
 
@@ -3570,13 +3572,13 @@ void InGameUI::postDraw( void )
 					Int sec = readySecs - min*60;
 					
 					if (!info->isCountdown)
-						line.format(L"%s %d", info->timerText.str(), framesLeft);
+						line.format(u"%s %d", info->timerText.str(), framesLeft);
 					else
 					{
 						if (sec >= 10)
-							line.format(L"%s %d:%d", info->timerText.str(), min, sec);
+							line.format(u"%s %d:%d", info->timerText.str(), min, sec);
 						else
-							line.format(L"%s %d:0%d", info->timerText.str(), min, sec);
+							line.format(u"%s %d:0%d", info->timerText.str(), min, sec);
 					}
 					info->displayString->setText(line);
 				}
@@ -5384,7 +5386,7 @@ void InGameUI::showIdleWorkerLayout( void )
 //	else
 //	{
 //		UnicodeString number;
-//		number.format(L"%d",m_currentIdleWorkerDisplay);
+//		number.format(u"%d",m_currentIdleWorkerDisplay);
 //		GadgetButtonSetText(m_idleWorkerWin, number);
 //	}
 }

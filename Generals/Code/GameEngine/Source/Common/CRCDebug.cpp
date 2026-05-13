@@ -83,7 +83,7 @@ CRCVerification::~CRCVerification()
 	{
 		if (TheInGameUI)
 		{
-			TheInGameUI->message(UnicodeString(L"GameLogic changed outside of GameLogic::update() - call Matt (x36804)!"));
+			TheInGameUI->message(UnicodeString(u"GameLogic changed outside of GameLogic::update() - call Matt (x36804)!"));
 		}
 		CRCDEBUG_LOG(("GameLogic changed outside of GameLogic::update()!!!\n"));
 	}

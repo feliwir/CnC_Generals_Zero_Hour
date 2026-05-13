@@ -30,8 +30,9 @@
 
 #ifndef __GAMESPY_THREADUTILS_H__
 #define __GAMESPY_THREADUTILS_H__
+#include <string>
 
-std::wstring MultiByteToWideCharSingleLine( const char *orig );
+std::u16string MultiByteToWideCharSingleLine( const char *orig );
 std::string WideCharStringToMultiByte( const WideChar *orig );
 
 #endif // __GAMESPY_THREADUTILS_H__

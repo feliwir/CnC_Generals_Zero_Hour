@@ -48,6 +48,8 @@
 #include "GameClient/GameText.h"
 #include "GameClient/GameWindowTransitions.h"
 
+#include <unicode/ustdio.h>
+
 #ifdef _INTERNAL
 // for occasional debugging...
 //#pragma optimize("", off)
@@ -172,7 +174,7 @@ void PopulateReplayFileListbox(GameWindow *listbox)
 
 				UnicodeString displayTimeBuffer = getUnicodeTimeBuffer(header.timeVal);
 
-				//displayTimeBuffer.format( L"%ls", timeBuffer);
+				//displayTimeBuffer.format( u"%ls", timeBuffer);
 
 				// version (no-op)
 
@@ -197,7 +199,7 @@ void PopulateReplayFileListbox(GameWindow *listbox)
 //					Int mins = totalSeconds/60;
 //					Int secs = totalSeconds%60;
 //					Real fps = header.frameDuration/totalSeconds;
-//					extraStr.format(L"%d:%d (%g fps) %hs", mins, secs, fps, header.desyncGame?"OOS ":"");
+//					extraStr.format(u"%d:%d (%g fps) %hs", mins, secs, fps, header.desyncGame?"OOS ":"");
 //
 //					for (Int i=0; i<MAX_SLOTS; ++i)
 //					{
@@ -205,7 +207,7 @@ void PopulateReplayFileListbox(GameWindow *listbox)
 //						if (slot && slot->isHuman())
 //						{
 //							if (i)
-//								extraStr.concat(L", ");
+//								extraStr.concat(u", ");
 //							if (header.playerDiscons[i])
 //								extraStr.concat(L'*');
 //							extraStr.concat(info.getConstSlot(i)->getName());
@@ -219,7 +221,7 @@ void PopulateReplayFileListbox(GameWindow *listbox)
 //					Int mins = totalSeconds/60;
 //					Int secs = totalSeconds%60;
 //					Real fps = header.frameDuration/totalSeconds;
-//					extraStr.format(L"%d:%d (%g fps)", mins, secs, fps);
+//					extraStr.format(u"%d:%d (%g fps)", mins, secs, fps);
 //				}
 
 				// pick a color
@@ -296,7 +298,7 @@ void ReplayMenuInit( WindowLayout *layout, void *userData )
 	instData.init();
 	BitSet( instData.m_style, GWS_PUSH_BUTTON | GWS_MOUSE_TRACK );
 	instData.m_textLabelString = "Debug: Analyze Replay";
-	instData.setTooltipText(UnicodeString(L"Only Used in Debug and Internal!"));
+	instData.setTooltipText(UnicodeString(u"Only Used in Debug and Internal!"));
 	buttonAnalyzeReplay = TheWindowManager->gogoGadgetPushButton( parentReplayMenu, 
 																									 WIN_STATUS_ENABLED | WIN_STATUS_IMAGE, 
 																									 4, 4, 
@@ -521,7 +523,7 @@ WindowMsgHandledType ReplayMenuSystem( GameWindow *window, UnsignedInt msg,
 					GadgetListBoxGetSelected( listboxReplayFiles,  &selected );
 					if(selected < 0)
 					{
-						MessageBoxOk(UnicodeString(L"Blah Blah"),UnicodeString(L"Please select something munkee boy"), NULL);
+						MessageBoxOk(UnicodeString(u"Blah Blah"),UnicodeString(u"Please select something munkee boy"), NULL);
 						break;
 					}
 
@@ -641,8 +643,8 @@ void deleteReplay( void )
 #else
 	if(remove(filename.str()) != 0)
 	{
-		wchar_t buffer[1024];
-		wprintf(buffer, 1024, L"Unable to delete file %ls", filename.str());
+		UChar buffer[1024];
+		u_printf_u(buffer, 1024, u"Unable to delete file %ls", filename.str());
 		UnicodeString errorStr;
 		errorStr.set(buffer);
 		MessageBoxOk(TheGameText->fetch("GUI:Error"),errorStr, NULL);

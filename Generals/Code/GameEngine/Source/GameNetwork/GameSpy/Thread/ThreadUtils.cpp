@@ -27,39 +27,52 @@
 // Author: Matthew D. Campbell, July 2002
 
 #include "PreRTS.h"	// This must go first in EVERY cpp file int the GameEngine
+#include <unicode/ustring.h>
 
 //-------------------------------------------------------------------------
 
-std::wstring MultiByteToWideCharSingleLine( const char *orig )
+std::u16string MultiByteToWideCharSingleLine( const char *orig )
 {
-	Int len = strlen(orig);
+	Int len;
+	UErrorCode err = U_ZERO_ERROR;
+	u_strFromUTF8(NULL, 0, &len, orig, -1, &err); // get length
+	if (err != U_ZERO_ERROR)
+	{
+		return std::u16string();
+	}
+
 	WideChar *dest = NEW WideChar[len+1];
 
 	// MultiByteToWideChar(CP_UTF8, 0, orig, -1, dest, len);
-	mbstowcs(dest, orig, len);
+	u_strFromUTF8(dest, len, NULL, orig, -1, &err);
+	if (err != U_ZERO_ERROR)
+	{
+		delete[] dest;
+		return std::u16string();
+	}
 	WideChar *c = NULL;
 	do
 	{
-		c = wcschr(dest, L'\n');
+		c = u_strchr(dest, u'\n');
 		if (c)
 		{
-			*c = L' ';
+			*c = u' ';
 		}
 	}
 	while ( c != NULL );
 	do
 	{
-		c = wcschr(dest, L'\r');
+		c = u_strchr(dest, u'\r');
 		if (c)
 		{
-			*c = L' ';
+			*c = u' ';
 		}
 	}
 	while ( c != NULL );
 
 	dest[len] = 0;
-	std::wstring ret = dest;
-	delete dest;
+	std::u16string ret = dest;
+	delete[] dest;
 	return ret;
 }
 
@@ -67,12 +80,19 @@ std::string WideCharStringToMultiByte( const WideChar *orig )
 {
 	std::string ret;
 	// Int len = WideCharToMultiByte( CP_UTF8, 0, orig, wcslen(orig), NULL, 0, NULL, NULL ) + 1;
-	Int len = wcstombs(NULL, orig, 0) + 1;
-	if (len > 0)
+	Int len;
+	UErrorCode err = U_ZERO_ERROR;
+	u_strToUTF8(NULL, 0, &len, orig, -1, &err) + 1;
+	if (len > 0 && err == U_ZERO_ERROR)
 	{
 		char *dest = NEW char[len];
 		// WideCharToMultiByte( CP_UTF8, 0, orig, -1, dest, len, NULL, NULL );
-		wcstombs(dest, orig, len);
+		u_strToUTF8(dest, len, NULL, orig, -1, &err);
+		if (err != U_ZERO_ERROR)
+		{
+			delete[] dest;
+			return std::string();
+		}
 		dest[len-1] = 0;
 		ret = dest;
 		delete dest;

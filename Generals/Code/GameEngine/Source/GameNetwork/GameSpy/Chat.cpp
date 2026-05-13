@@ -289,11 +289,11 @@ void GameSpyInfo::addChat( PlayerInfo p, UnicodeString msg, Bool isPublic, Bool 
 	UnicodeString fullMsg;
 	if (isAction)
 	{
-		fullMsg.format( L"%ls %ls", name.str(), msg.str() );
+		fullMsg.format( u"%ls %ls", name.str(), msg.str() );
 	}
 	else
 	{
-		fullMsg.format( L"[%ls] %ls", name.str(), msg.str() );
+		fullMsg.format( u"[%ls] %ls", name.str(), msg.str() );
 	}
 
 	Int index = addText(fullMsg, GameSpyColor[style], win);

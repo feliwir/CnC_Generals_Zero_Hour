@@ -98,11 +98,11 @@ UnicodeString Version::getUnicodeVersion( void )
 #endif // defined _DEBUG || defined _INTERNAL
 
 #ifdef _DEBUG
-	version.concat(UnicodeString(L" Debug"));
+	version.concat(UnicodeString(u" Debug"));
 #endif
 
 #ifdef _INTERNAL
-	version.concat(UnicodeString(L" Internal"));
+	version.concat(UnicodeString(u" Internal"));
 #endif
 
 	return version;
@@ -119,11 +119,11 @@ UnicodeString Version::getFullUnicodeVersion( void )
 			m_buildUser.getCharAt(0), m_buildUser.getCharAt(1));
 
 #ifdef _DEBUG
-	version.concat(UnicodeString(L" Debug"));
+	version.concat(UnicodeString(u" Debug"));
 #endif
 
 #ifdef _INTERNAL
-	version.concat(UnicodeString(L" Internal"));
+	version.concat(UnicodeString(u" Internal"));
 #endif
 
 	return version;

@@ -258,7 +258,7 @@ GameTextManager::GameTextManager()
 #endif
 	m_mapStringInfo(NULL),
 	m_mapStringLUT(NULL),
-	m_failed(L"***FATAL*** String Manager failed to initilaize properly")
+	m_failed(u"***FATAL*** String Manager failed to initilaize properly")
 {
 	// Added By Sadullah Nader
 	// Initializations missing and needed
@@ -751,7 +751,7 @@ void GameTextManager::translateCopy( WideChar *outbuf, Char *inbuf )
 	}
 	else if( m_munkee )
 	{
-		wcscpy(outbuf, L"Munkee");
+		u_strcpy(outbuf, u"Munkee");
 		return;
 	}
 #endif
@@ -962,16 +962,7 @@ Bool GameTextManager::parseCSF( const Char *filename )
 
 			if ( len )
 			{
-#ifdef _WIN32
 				file->read ( m_tbuffer, len*sizeof(WideChar) );
-#else
-				UnsignedShort convert_buffer[MAX_UITEXT_LENGTH*2];
-				file->read ( convert_buffer, len*sizeof(UnsignedShort) );
-				for (int i = 0; i < len; i++)
-				{
-					m_tbuffer[i] = convert_buffer[i];
-				}
-#endif
 			}
 
 			if ( num == 0 )
@@ -986,12 +977,7 @@ Bool GameTextManager::parseCSF( const Char *filename )
 				
 					while ( *ptr )
 					{
-						#ifdef _WIN32
 						*ptr = ~*ptr;
-						#else 
-						// only negate the lower 16 bits (32-bit widechar)
-						*ptr = ~*ptr & 0x0000FFFF;
-						#endif
 						ptr++;
 					}
 				}
@@ -1308,7 +1294,7 @@ UnicodeString GameTextManager::fetch( const Char *label, Bool *exists )
 
 		// See if we already have the missing string
 		UnicodeString missingString;
-		missingString.format(L"MISSING: '%hs'", label);
+		missingString.format(u"MISSING: '%hs'", label);
 
 		NoString *noString = m_noStringList;
 

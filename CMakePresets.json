@@ -70,10 +70,24 @@
                 "VCPKG_TARGET_TRIPLET": "x64-linux-dynamic"
             }
         },
-         {
+        {
             "name": "linux-x64-release",
             "inherits": [
                 "release"
+            ],
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Linux"
+            },
+            "cacheVariables": {
+                "VCPKG_TARGET_TRIPLET": "x64-linux-dynamic"
+            }
+        },
+        {
+            "name": "linux-x64-sanitize",
+            "inherits": [
+                "sanitize"
             ],
             "condition": {
                 "type": "equals",

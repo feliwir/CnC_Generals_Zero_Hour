@@ -193,7 +193,7 @@ void IMECandidateTextAreaDraw( GameWindow *window, WinInstanceData *instData )
 
 	// calulate the widest number text
 	Int width;
-	Dstring->setText(UnicodeString(L"00:"));
+	Dstring->setText(UnicodeString(u"00:"));
 	width = Dstring->getWidth();
 
 	// calc y start pos
@@ -217,7 +217,7 @@ void IMECandidateTextAreaDraw( GameWindow *window, WinInstanceData *instData )
 		}
 		
 		// draw number tab first	
-		number.format( L"%d:", i + ime->getIndexBase());
+		number.format( u"%d:", i + ime->getIndexBase());
 		Dstring->setText( number );
 		width = Dstring->getWidth();
 		Dstring->draw( leftEdge - width, y,	tcolor, black);

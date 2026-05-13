@@ -55,6 +55,8 @@
 #include "Common/Debug.h"
 #include "Common/Errors.h"
 
+#include <unicode/ustring.h>
+#include <unicode/ustring.h>
 class AsciiString;
 
 // -----------------------------------------------------
@@ -236,6 +238,11 @@ public:
 	void removeLastChar();
 
 	/**
+		Create a new UTF-8 compliant AsciiString from this UnicodeString. 
+	 */
+	AsciiString toUTF8String() const;
+
+	/**
 		Analogous to sprintf() -- this formats a string according to the
 		given sprintf-style format string (and the variable argument list)
 		and stores the result in self.
@@ -316,7 +323,7 @@ inline UnicodeString::~UnicodeString()
 inline int UnicodeString::getLength() const
 {
 	validate();
-	return m_data ? wcslen(peek()) : 0;
+	return m_data ? u_strlen(peek()) : 0;
 }
 
 // -----------------------------------------------------
@@ -390,64 +397,64 @@ inline void UnicodeString::concat(const WideChar c)
 inline int UnicodeString::compare(const UnicodeString& stringSrc) const
 {
 	validate();
-	return wcscmp(this->str(), stringSrc.str());
+	return u_strcmp(this->str(), stringSrc.str());
 }
 
 // -----------------------------------------------------
 inline int UnicodeString::compare(const WideChar* s) const
 {
 	validate();
-	return wcscmp(this->str(), s);
+	return u_strcmp(this->str(), s);
 }
 
 // -----------------------------------------------------
 inline int UnicodeString::compareNoCase(const UnicodeString& stringSrc) const
 {
 	validate();
-	return _wcsicmp(this->str(), stringSrc.str());
+	return u_strcasecmp(this->str(), stringSrc.str(), U_FOLD_CASE_DEFAULT);
 }
 
 // -----------------------------------------------------
 inline int UnicodeString::compareNoCase(const WideChar* s) const
 {
 	validate();
-	return _wcsicmp(this->str(), s);
+	return u_strcasecmp(this->str(), s, U_FOLD_CASE_DEFAULT);
 }
 
 // -----------------------------------------------------
 inline Bool operator==(const UnicodeString& s1, const UnicodeString& s2)
 {
-	return wcscmp(s1.str(), s2.str()) == 0;
+	return u_strcmp(s1.str(), s2.str()) == 0;
 }
 
 // -----------------------------------------------------
 inline Bool operator!=(const UnicodeString& s1, const UnicodeString& s2)
 {
-	return wcscmp(s1.str(), s2.str()) != 0;
+	return u_strcmp(s1.str(), s2.str()) != 0;
 }
 
 // -----------------------------------------------------
 inline Bool operator<(const UnicodeString& s1, const UnicodeString& s2)
 {
-	return wcscmp(s1.str(), s2.str()) < 0;
+	return u_strcmp(s1.str(), s2.str()) < 0;
 }
 
 // -----------------------------------------------------
 inline Bool operator<=(const UnicodeString& s1, const UnicodeString& s2)
 {
-	return wcscmp(s1.str(), s2.str()) <= 0;
+	return u_strcmp(s1.str(), s2.str()) <= 0;
 }
 
 // -----------------------------------------------------
 inline Bool operator>(const UnicodeString& s1, const UnicodeString& s2)
 {
-	return wcscmp(s1.str(), s2.str()) > 0;
+	return u_strcmp(s1.str(), s2.str()) > 0;
 }
 
 // -----------------------------------------------------
 inline Bool operator>=(const UnicodeString& s1, const UnicodeString& s2)
 {
-	return wcscmp(s1.str(), s2.str()) >= 0;
+	return u_strcmp(s1.str(), s2.str()) >= 0;
 }
 
 #endif // UNICODESTRING_H

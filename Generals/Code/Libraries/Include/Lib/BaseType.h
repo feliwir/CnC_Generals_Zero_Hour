@@ -133,8 +133,11 @@ typedef uint64_t						UnsignedInt64;	  				// 8 bytes
 
 #include "Lib/Trig.h"
 
+// ICU usage for Unicode character handling. UChar is always 16-bit, unlike wchar_t, 
+// which is 16-bit on Windows but 32-bit on Linux. So we use UChar for all character handling, and typedef it to WideChar for our purposes.
+#include <unicode/uchar.h>
 //-----------------------------------------------------------------------------
-typedef wchar_t WideChar;  ///< multi-byte character representations
+typedef UChar WideChar;  ///< multi-byte character representations
 
 //-----------------------------------------------------------------------------
 template <typename NUM>

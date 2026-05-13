@@ -515,7 +515,7 @@ void ControlBar::populateBuildQueue( Object *producer )
 		m_queueData[ i ].control->winClearStatus( WIN_STATUS_USE_OVERLAY_STATES );
 
 		// set the text of the window to nothing by default
-		GadgetButtonSetText( m_queueData[ i ].control, UnicodeString( L"" ) );
+		GadgetButtonSetText( m_queueData[ i ].control, UnicodeString( u"" ) );
 
 		//Clear any potential veterancy rank, or else we'll see it when it's empty!
 		GadgetButtonDrawOverlayImage( m_queueData[ i ].control, NULL );
@@ -715,7 +715,7 @@ void ControlBar::updateContextCommand( void )
 				DEBUG_ASSERTCRASH( win, ("updateContextCommand: Unable to find first build queue button\n") );
 				//				UnicodeString text;
 				//
-				//				text.format( L"%.0f%%", produce->getPercentComplete() );
+				//				text.format( u"%.0f%%", produce->getPercentComplete() );
 				//				GadgetButtonSetText( win, text );
 				
 				GadgetButtonDrawInverseClock(win,produce->getPercentComplete(), m_buildUpClockColor);

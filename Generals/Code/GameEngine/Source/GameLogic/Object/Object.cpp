@@ -152,14 +152,14 @@ AsciiString DescribeObject(const Object *obj)
 
 	if (obj->getName().isNotEmpty())
 	{
-		ret.format("Object %d (%s) [%s, owned by player %d (%ls)]",
+		ret.format("Object %d (%s) [%s, owned by player %d (%s)]",
 			obj->getID(), obj->getName().str(), obj->getTemplate()->getName().str(),
 			obj->getControllingPlayer()->getPlayerIndex(),
-			obj->getControllingPlayer()->getPlayerDisplayName().str());
+			obj->getControllingPlayer()->getPlayerDisplayName().toUTF8String().str());
 	}
 	else
 	{
-		ret.format("Object %d [%s, owned by player %d (%ls)]",
+		ret.format("Object %d [%s, owned by player %d (%s)]",
 			obj->getID(), obj->getTemplate()->getName().str(),
 			obj->getControllingPlayer()->getPlayerIndex(),
 			obj->getControllingPlayer()->getPlayerDisplayName().str());

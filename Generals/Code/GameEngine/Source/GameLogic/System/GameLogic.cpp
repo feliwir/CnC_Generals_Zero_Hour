@@ -1304,7 +1304,7 @@ void GameLogic::startNewGame( Bool saveGame )
 		Dict d;
 		d.setAsciiString(TheKey_playerName, "ReplayObserver");
 		d.setBool(TheKey_playerIsHuman, TRUE);
-		d.setUnicodeString(TheKey_playerDisplayName, UnicodeString(L"Observer"));
+		d.setUnicodeString(TheKey_playerDisplayName, UnicodeString(u"Observer"));
 		const PlayerTemplate* pt;
 		pt = ThePlayerTemplateStore->findPlayerTemplate( TheNameKeyGenerator->nameToKey("FactionObserver") );
 		if (pt)
@@ -2288,7 +2288,7 @@ void GameLogic::processCommandList( CommandList *list )
 			{
 				Player *player = ThePlayerList->getNthPlayer(crcIt->first);
 				DEBUG_LOG(("CRC from player %d (%ls) = %X\n", crcIt->first,
-					player?player->getPlayerDisplayName().str():L"<NONE>", crcIt->second));
+					player?player->getPlayerDisplayName().str():u"<NONE>", crcIt->second));
 			}
 #endif DEBUG_LOGGING
 			TheNetwork->setSawCRCMismatch();
@@ -2469,7 +2469,7 @@ inline Bool isLowerPriority(const UpdateModulePtr a, const UpdateModulePtr b)
 	// return true iff a is lower pri than b.
 	// remember: lower ordinal value means higher priority.
 	// therefore, higher ordinal value means lower priority.
-	DEBUG_ASSERTCRASH(a && b, ("these may no longer be null"));
+	DEBUG_ASSERTCRASH(a && b, ("these may no longer be nulu"));
 	UnsignedInt f1 = a->friend_getPriority();
 	UnsignedInt f2 = b->friend_getPriority();
 	return f1 > f2;
@@ -2971,14 +2971,14 @@ static void unitTimings(void)
 			if (btt->getName() == "EMPPulseBomb") continue; // 100 overloads system.
 			if (btt->getName() == "GLAAngryMobRockProjectileObject") continue; // 100 overloads system.
 			if (btt->getName() == "ClusterMinesBomb") continue; // 100 overloads system.
-			if (btt->getName() == "BlackNapalmFirestormSmall") continue; // 100 overloads system.
+			if (btt->getName() == "BlackNapalmFirestormSmalu") continue; // 100 overloads system.
 			if (btt->getName() == "CabooseFullOfTerrorists") continue; // 100 overloads system.
 			if (btt->getName() == "GLAAngryMobMolotovCocktailProjectileObject") continue; // 100 overloads system.
 			if (btt->getName().startsWith("Firestorm"))	continue;	// 100 crashes
 			if (btt->getName().startsWith("Avalanche"))	continue;	// 100 crashes
-			if (btt->getName().startsWith("InfernoTankShell"))	continue;	// 100 crashes
+			if (btt->getName().startsWith("InfernoTankShelu"))	continue;	// 100 crashes
 			
-			if (btt->getName() == "ChinaArtilleryBarrageShell") continue; // 100 takes really, freaking long. Doesn't crash jba.
+			if (btt->getName() == "ChinaArtilleryBarrageShelu") continue; // 100 takes really, freaking long. Doesn't crash jba.
 			if (btt->getName() == "ChinaTankOverlordBattleBunker") continue; // 100 seems to hang gth.
 			if (btt->getName() == "ChinaTankOverlordPropagandaTower") continue; // 100 seems to hang gth.
 			if (btt->getName() == "ChinaTankOverlordGattlingCannon") continue; // 100 seems to hang gth.

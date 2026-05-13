@@ -46,6 +46,8 @@
 
 #include "Common/CriticalSection.h"
 
+#include <unicode/ustdio.h>
+
 #ifdef _INTERNAL
 // for occasional debugging...
 //#pragma optimize("", off)
@@ -63,7 +65,7 @@ void UnicodeString::validate() const
 	if (!m_data) return;
 	DEBUG_ASSERTCRASH(m_data->m_refCount > 0, ("m_refCount is zero"));
 	DEBUG_ASSERTCRASH(m_data->m_numCharsAllocated > 0, ("m_numCharsAllocated is zero"));
-	DEBUG_ASSERTCRASH(wcslen(m_data->peek())+1 <= m_data->m_numCharsAllocated,("str is too long for storage"));
+	DEBUG_ASSERTCRASH(u_strlen(m_data->peek())+1 <= m_data->m_numCharsAllocated,("str is too long for storage"));
 }
 #endif
 
@@ -87,9 +89,9 @@ void UnicodeString::ensureUniqueBufferOfSize(int numCharsNeeded, Bool preserveDa
 	{
 		// no buffer manhandling is needed (it's already large enough, and unique to us)
 		if (strToCopy)
-			wcscpy(m_data->peek(), strToCopy);
+			u_strcpy(m_data->peek(), strToCopy);
 		if (strToCat)
-			wcscat(m_data->peek(), strToCat);
+			u_strcat(m_data->peek(), strToCat);
 		return;
 	}
 
@@ -106,16 +108,16 @@ void UnicodeString::ensureUniqueBufferOfSize(int numCharsNeeded, Bool preserveDa
 #endif
 
 	if (m_data && preserveData)
-		wcscpy(newData->peek(), m_data->peek());
+		u_strcpy(newData->peek(), m_data->peek());
 	else
 		newData->peek()[0] = 0;
 
 	// do these BEFORE releasing the old buffer, so that self-copies
 	// or self-cats will work correctly.
 	if (strToCopy)
-		wcscpy(newData->peek(), strToCopy);
+		u_strcpy(newData->peek(), strToCopy);
 	if (strToCat)
-		wcscat(newData->peek(), strToCat);
+		u_strcat(newData->peek(), strToCat);
 
 	releaseBuffer();
 	m_data = newData;
@@ -143,7 +145,7 @@ void UnicodeString::releaseBuffer()
 // -----------------------------------------------------
 UnicodeString::UnicodeString(const WideChar* s) : m_data(0)
 {
-	int len = wcslen(s);
+	int len = u_strlen(s);
 	if (len)
 	{
 		ensureUniqueBufferOfSize(len + 1, false, s, NULL);
@@ -173,7 +175,7 @@ void UnicodeString::set(const WideChar* s)
 	validate();
 	if (!m_data || s != peek())
 	{
-		int len = s ? wcslen(s) : 0;
+		int len = s ? u_strlen(s) : 0;
 		if (len)
 		{
 			ensureUniqueBufferOfSize(len + 1, false, s, NULL);
@@ -212,7 +214,7 @@ void UnicodeString::translate(const AsciiString& stringSrc)
 void UnicodeString::concat(const WideChar* s)
 {
 	validate();
-	int addlen = wcslen(s);
+	int addlen = u_strlen(s);
 	if (addlen == 0)
 		return;	// my, that was easy
 
@@ -249,7 +251,7 @@ void UnicodeString::trim()
 		if (m_data) // another check, because the previous set() could erase m_data
 		{
 			//	Clip trailing white space from the string.
-			int len = wcslen(peek());
+			int len = u_strlen(peek());
 			for (int index = len-1; index >= 0; index--)
 			{
 				if (iswspace(getCharAt(index)))
@@ -272,7 +274,7 @@ void UnicodeString::removeLastChar()
 	validate();
 	if (m_data)
 	{
-		int len = wcslen(peek());
+		int len = u_strlen(peek());
 		if (len > 0)
 		{
 			ensureUniqueBufferOfSize(len+1, true, NULL, NULL);
@@ -280,6 +282,28 @@ void UnicodeString::removeLastChar()
 		}
 	}
 	validate();
+}
+
+// -----------------------------------------------------
+AsciiString UnicodeString::toUTF8String() const
+{
+	validate();
+	AsciiString ret;
+	if (m_data)
+	{
+		Int len;
+		UErrorCode err = U_ZERO_ERROR;
+		u_strToUTF8(NULL, 0, &len, peek(), getLength(), &err);
+		if (err != U_BUFFER_OVERFLOW_ERROR && err != U_ZERO_ERROR)
+			throw ERROR_OUT_OF_MEMORY;
+		char* buf = ret.getBufferForRead(len + 1);
+		u_strToUTF8(buf, len + 1, NULL, peek(), getLength(), &err);
+		if (err != U_BUFFER_OVERFLOW_ERROR && err != U_ZERO_ERROR)
+			throw ERROR_OUT_OF_MEMORY;
+		buf[len] = 0;
+		ret.set(buf);
+	}
+	return ret;
 }
 
 // -----------------------------------------------------
@@ -309,7 +333,7 @@ void UnicodeString::format_va(const UnicodeString& format, va_list args)
 {
 	validate();
 	WideChar buf[MAX_FORMAT_BUF_LEN];
-  if (_vsnwprintf(buf, sizeof(buf)/sizeof(WideChar)-1, format.str(), args) < 0)
+  if (u_vsnprintf_u(buf, sizeof(buf)/sizeof(WideChar)-1, format.str(), args) < 0)
 			throw ERROR_OUT_OF_MEMORY;
 	set(buf);
 	validate();
@@ -320,7 +344,7 @@ void UnicodeString::format_va(const WideChar* format, va_list args)
 {
 	validate();
 	WideChar buf[MAX_FORMAT_BUF_LEN];
-  if (_vsnwprintf(buf, sizeof(buf)/sizeof(WideChar)-1, format, args) < 0)
+  if (u_vsnprintf_u(buf, sizeof(buf)/sizeof(WideChar)-1, format, args) < 0)
 			throw ERROR_OUT_OF_MEMORY;
 	set(buf);
 	validate();
@@ -333,14 +357,14 @@ Bool UnicodeString::nextToken(UnicodeString* tok, UnicodeString delimiters)
 		return false;
 
 	if (delimiters.isEmpty())
-		delimiters = UnicodeString(L" \t\n\r");
+		delimiters = UnicodeString(u" \t\n\r");
 
 	Int offset;
 
-	offset = wcsspn(peek(), delimiters.str());
+	offset = u_strspn(peek(), delimiters.str());
 	WideChar* start = peek() + offset;
 
-	offset = wcscspn(start, delimiters.str());
+	offset = u_strcspn(start, delimiters.str());
 	WideChar* end = start + offset;
 
 	if (end > start)

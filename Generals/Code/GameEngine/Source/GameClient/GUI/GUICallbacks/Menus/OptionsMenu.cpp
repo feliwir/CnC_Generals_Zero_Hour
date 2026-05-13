@@ -73,7 +73,7 @@
 #include "GameClient/MessageBox.h"
 
 // This is for non-RC builds only!!!
-#define VERBOSE_VERSION L"Release"
+#define VERBOSE_VERSION u"Release"
 
 #ifdef _INTERNAL
 // for occasional debugging...
@@ -1407,7 +1407,7 @@ void OptionsMenuInit( WindowLayout *layout, void *userData )
 		if (TheVersion)
 		{
 			UnicodeString version;
-			version.format(L"(%s) %s -- %s", versionString.str(), TheVersion->getFullUnicodeVersion().str(), TheVersion->getUnicodeBuildTime().str());
+			version.format(u"(%s) %s -- %s", versionString.str(), TheVersion->getFullUnicodeVersion().str(), TheVersion->getUnicodeBuildTime().str());
 			GadgetStaticTextSetText( labelVersion, version );
 		}
 		else
@@ -1552,7 +1552,7 @@ void OptionsMenuInit( WindowLayout *layout, void *userData )
 	for( Int i = 0; i < numResolutions; ++i )
 	{	Int xres,yres,bitDepth;
 		TheDisplay->getDisplayModeDescription(i,&xres,&yres,&bitDepth);
-		str.format(L"%d x %d",xres,yres);
+		str.format(u"%d x %d",xres,yres);
 		GadgetComboBoxAddEntry( comboBoxResolution, str, color);
 		if (xres == 800 && yres == 600)	//keep track of default mode in case we need it.
 			defaultResIndex=i;

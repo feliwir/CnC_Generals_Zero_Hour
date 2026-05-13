@@ -40,9 +40,6 @@
 
 #include <SDL3/SDL.h>
 
-#include <locale>
-#include <codecvt>
-
 // DEFINES ////////////////////////////////////////////////////////////////////////////////////////
 enum { KEYBOARD_BUFFER_SIZE = 256 };
 
@@ -157,13 +154,17 @@ void SDL3Keyboard::getKey( KeyboardIO *key )
 		if (TheIMEManager && TheIMEManager->getWindow() && event.type == SDL_EVENT_TEXT_INPUT)
 		{
 			// Note that special characters may need additional keycode translation above.
+			Int len;
+			UErrorCode err = U_ZERO_ERROR;
+			u_strFromUTF8(NULL, 0, &len, event.text.text, 1, &err); // get length
+			WideChar *dest = NEW WideChar[len+1];
 
-			std::string utf8Str(event.text.text);
-			std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-			std::wstring wideStr = converter.from_bytes(utf8Str);
-			UnicodeString uStr(wideStr.c_str());
+			// MultiByteToWideChar(CP_UTF8, 0, orig, -1, dest, len);
+			u_strFromUTF8(dest, len + 1, NULL, event.text.text, -1, &err);
+			dest[len] = 0;
+			UnicodeString uStr(dest);
+			delete[] dest;
 
-			int len = uStr.getLength();
 			for (int i = 0; i < len; i++)
 			{
 				WideChar wc = uStr.getCharAt(i);

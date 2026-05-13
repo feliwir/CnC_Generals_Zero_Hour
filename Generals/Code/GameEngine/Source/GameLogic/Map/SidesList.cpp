@@ -668,7 +668,7 @@ void SidesList::addPlayerByTemplate(AsciiString playerTemplateName)
 	if (playerTemplateName.isEmpty())
 	{
 		playerName.set("");	// magic code for "neutral"
-		playerDisplayName = L"Neutral";
+		playerDisplayName = u"Neutral";
 		isHuman = false;
 	}
 	else

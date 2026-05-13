@@ -339,7 +339,7 @@ void GameSpyInfo::addGroupRoom( GameSpyGroupRoom room )
 				GameSpyGroupRoom room = iter->second;
 				if (room.m_groupID != TheGameSpyConfig->getQMChannel())
 				{
-					room.m_translatedName.format(L"%ls %d", names[nameIndex].str(), timesThrough);
+					room.m_translatedName.format(u"%ls %d", names[nameIndex].str(), timesThrough);
 					nameIndex = (nameIndex+1)%names.size();
 					m_groupRooms[room.m_groupID] = room;
 					if (!nameIndex)

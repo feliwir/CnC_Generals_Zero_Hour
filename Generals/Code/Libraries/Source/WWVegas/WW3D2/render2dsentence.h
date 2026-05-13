@@ -48,6 +48,8 @@
 #include "wwstring.h"
 #include "win.h"
 
+#include <unicode/uchar.h>
+
 /*
 ** FontCharsClass
 */
@@ -73,7 +75,7 @@ class FontCharsClassCharDataStruct : public W3DMPO
 {
 	W3DMPO_GLUE(FontCharsClassCharDataStruct)
 public:
-	WCHAR				Value;
+	UChar				Value;
 	short				Width;
 	uint16 *		Buffer;
 };
@@ -105,12 +107,12 @@ public:
 	const char * Get_Name( void )			{ return Name; }	
 
 	int	Get_Char_Height( void )			{ return CharHeight; }
-	int	Get_Char_Width( WCHAR ch );
-	int	Get_Char_Spacing( WCHAR ch );
+	int	Get_Char_Width( UChar ch );
+	int	Get_Char_Spacing( UChar ch );
 	
 	int Get_Extra_Overlap(void) {return PixelOverlap;}
 
-	void	Blit_Char( WCHAR ch, uint16 *dest_ptr, int dest_stride, int x, int y );
+	void	Blit_Char( UChar ch, uint16 *dest_ptr, int dest_stride, int x, int y );
 
 private:
 
@@ -124,17 +126,17 @@ private:
 #ifdef _WIN32
 	void							Create_GDI_Font( const char *font_name );
 	void							Free_GDI_Font( void );
-	const FontCharsClassCharDataStruct *	Store_GDI_Char( WCHAR ch );
+	const FontCharsClassCharDataStruct *	Store_GDI_Char( UChar ch );
 #endif
 #ifdef SAGE_USE_FREETYPE
 	void 							Create_Freetype_Font(const char *font_name);
 	void 							Free_Freetype_Font();
-	const FontCharsClassCharDataStruct *Store_Freetype_Char( WCHAR ch);
+	const FontCharsClassCharDataStruct *Store_Freetype_Char( UChar ch);
 #endif
 	void							Update_Current_Buffer( int char_width );
-	const FontCharsClassCharDataStruct	*	Get_Char_Data( WCHAR ch );
+	const FontCharsClassCharDataStruct	*	Get_Char_Data( UChar ch );
 
-	void							Grow_Unicode_Array( WCHAR ch );
+	void							Grow_Unicode_Array( UChar ch );
 	void							Free_Character_Arrays( void );
 
 	//
@@ -219,13 +221,13 @@ public:
 //	const RectClass & Get_Total_Extents( void )			{ return TotalExtents; }
 //	const Vector2 & Get_Cursor( void )						{ return Cursor; }
 
-	Vector2	Get_Text_Extents( const WCHAR * text );
-	Vector2	Get_Formatted_Text_Extents( const WCHAR * text );
+	Vector2	Get_Text_Extents( const UChar * text );
+	Vector2	Get_Formatted_Text_Extents( const UChar * text );
 
 	//
 	//	Sentence control
 	//
-	void	Build_Sentence (const WCHAR *text, int *hkX, int *hkY);
+	void	Build_Sentence (const UChar *text, int *hkX, int *hkY);
 	void	Draw_Sentence (uint32 color = 0xFFFFFFFF);
 
 	//
@@ -272,10 +274,10 @@ private:
 	void	Reset_Sentence_Data (void);
 	void	Build_Textures (void);
 	void	Record_Sentence_Chunk (void);
-	void	Allocate_New_Surface (const WCHAR *text, bool justCalcExtents = false);
+	void	Allocate_New_Surface (const UChar *text, bool justCalcExtents = false);
 	void	Release_Pending_Surfaces (void);
-	void	Build_Sentence_Centered (const WCHAR *text, int *hkX, int *hkY);
-	Vector2	Build_Sentence_Not_Centered (const WCHAR *text, int *hkX, int *hkY,bool justCalcExtents = false );		
+	void	Build_Sentence_Centered (const UChar *text, int *hkX, int *hkY);
+	Vector2	Build_Sentence_Not_Centered (const UChar *text, int *hkX, int *hkY,bool justCalcExtents = false );		
 	//
 	//	Private member data
 	//

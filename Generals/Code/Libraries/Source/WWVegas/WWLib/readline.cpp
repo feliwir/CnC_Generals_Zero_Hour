@@ -44,6 +44,7 @@
 #include	"xstraw.h"
 //#include	<ctype.h>
 #include	<string.h>
+#include 	<unicode/ustring.h>
 
 
 #if !defined(__BORLANDC__) && !defined(_MSC_VER)
@@ -125,13 +126,13 @@ int Read_Line(Straw & file, char * buffer, int len, bool & eof)
 	return(strlen(buffer));
 }
 
-int Read_Line(Straw & file, wchar_t * buffer, int len, bool & eof)
+int Read_Line(Straw & file, UChar * buffer, int len, bool & eof)
 {
 	if (len == 0 || buffer == NULL) return(0);
 
 	int count = 0;
 	for (;;) {
-		wchar_t c;
+		UChar c;
 		if (file.Get(&c, sizeof(c)) != sizeof(c)) {
 			eof = true;
 			buffer[count] = L'\0';
@@ -146,5 +147,5 @@ int Read_Line(Straw & file, wchar_t * buffer, int len, bool & eof)
 	buffer[count] = '\0';
 
 	wcstrim(buffer);
-	return(wcslen(buffer));
+	return(u_strlen(buffer));
 }

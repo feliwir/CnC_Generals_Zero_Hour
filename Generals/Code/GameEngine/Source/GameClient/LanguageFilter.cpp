@@ -29,6 +29,8 @@
 #include "Common/FileSystem.h"
 #include "Common/File.h"
 
+#include <unicode/ustring.h>
+
 #ifdef _INTERNAL
 // for occasional debugging...
 //#pragma optimize("", off)
@@ -58,9 +60,9 @@ void LanguageFilter::init() {
 		return;
 	}
 
-	wchar_t word[128];
+	WideChar word[128];
 	while (readWord(file1, (UnsignedShort*)word)) {
-		Int wordLen = wcslen(word);
+		Int wordLen = u_strlen(word);
 		if (wordLen == 0) {
 			continue;
 		}
@@ -84,18 +86,18 @@ void LanguageFilter::reset() {
 void LanguageFilter::update() {
 }
 
-wchar_t ignoredChars[] = L"-_*'\"";
+WideChar ignoredChars[] = u"-_*'\"";
 
 void LanguageFilter::filterLine(UnicodeString &line) 
 {
 	WideChar *buf = NEW WideChar[line.getLength()+1];
-	wcscpy(buf, line.str());
+	u_strcpy(buf, line.str());
 
 	UnicodeString newLine(line);
-	UnicodeString token(L"");
+	UnicodeString token(u"");
 
-	while (newLine.nextToken(&token, UnicodeString(L" ;,.!?:=\\/><`~()&^%#\n\t"))) {
-		wchar_t *pos = wcsstr(buf, token.str());
+	while (newLine.nextToken(&token, UnicodeString(u" ;,.!?:=\\/><`~()&^%#\n\t"))) {
+		WideChar *pos = u_strstr(buf, token.str());
 		if (pos == NULL) {
 			DEBUG_CRASH(("Couldn't find the token in its own string."));
 			continue;
@@ -120,7 +122,7 @@ void LanguageFilter::filterLine(UnicodeString &line)
 
 void LanguageFilter::unHaxor(UnicodeString &word) {
 	Int len = word.getLength();
-	UnicodeString newWord(L"");
+	UnicodeString newWord(u"");
 	for (Int i = 0; i < len; ++i) {
 		wchar_t c = word.getCharAt(i);
 		if ((c == L'p') || (c == L'P')) {
@@ -151,7 +153,7 @@ void LanguageFilter::unHaxor(UnicodeString &word) {
 			newWord.concat(L's');
 		} else if (c == L'+') {
 			newWord.concat(L't');
-		} else if (wcsrchr(ignoredChars, c) == NULL) {
+		} else if (u_strchr(ignoredChars, c) == NULL) {
 			newWord.concat(c);
 		}
 	}

@@ -245,7 +245,7 @@ public:
 	UnsignedInt exeCRC( void ) { return m_exeCRC; }
 	UnsignedInt iniCRC( void ) { return m_iniCRC; }
 	UnsignedInt gameVersion( void ) { return m_gameVersion; }
-	std::wstring getLocalStagingServerName( void ) { return m_localStagingServerName; }
+	std::u16string getLocalStagingServerName( void ) { return m_localStagingServerName; }
 	Int getLocalRoomID( void ) { return m_localRoomID; }
 	std::string ladderIP( void ) { return m_ladderIP; }
 	UnsignedShort ladderPort( void ) { return m_ladderPort; }
@@ -326,7 +326,7 @@ private:
 
 	Int m_nextStagingServer;
 	std::map<Int, SBServer> m_stagingServers;
-	std::wstring m_localStagingServerName;
+	std::u16string m_localStagingServerName;
 	Int m_localRoomID;
 
 	void doQuickMatch( PEER peer );
@@ -1258,7 +1258,7 @@ void PeerThreadClass::Thread_Function()
 	peerSetRoomWatchKeys(peer, GroupRoom, 1, &key, PEERTrue);
 
 	m_localRoomID = 0;
-	m_localStagingServerName = L"";
+	m_localStagingServerName = u"";
 
 	m_qmStatus = QM_IDLE;
 
@@ -1621,7 +1621,7 @@ void PeerThreadClass::Thread_Function()
 							peerJoinGroupRoom( peer, oldGroupID, joinRoomCallback, (void *)this, PEERTrue );
 						}
 						m_isHosting = FALSE;
-						m_localStagingServerName = L"";
+						m_localStagingServerName = u"";
 						m_playerNames[0] = "";
 					}
 					else

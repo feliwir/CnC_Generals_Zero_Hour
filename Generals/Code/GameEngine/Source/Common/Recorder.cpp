@@ -45,6 +45,8 @@
 #include "Common/CRCDebug.h"
 #include "Common/Version.h"
 
+#include <unicode/ustdio.h>
+
 #ifdef _INTERNAL
 // for occasional debugging...
 //#pragma optimize("", off)
@@ -570,11 +572,13 @@ void RecorderClass::startRecording(GameDifficulty diff, Int originalGameMode, In
 		fwrite(&b, sizeof(Bool), 1, m_file);	// reserve space for flag (true if player i disconnects)
 	}
 
+	UFILE* uFile = u_finit(m_file, NULL, NULL);
+
 	// Print out the name of the replay.
 	UnicodeString replayName;
 	replayName = TheGameText->fetch("GUI:LastReplay");
-	fwprintf(m_file, L"%ws", replayName.str());
-	fputwc(0, m_file);
+	u_fprintf_u(uFile, u"%ws", replayName.str());
+	u_fputc(0, uFile);
 
 	// Date and Time
 	SYSTEMTIME systemTime;
@@ -585,10 +589,10 @@ void RecorderClass::startRecording(GameDifficulty diff, Int originalGameMode, In
 	UnicodeString versionString = TheVersion->getUnicodeVersion();
 	UnicodeString versionTimeString = TheVersion->getUnicodeBuildTime();
 	UnsignedInt versionNumber = TheVersion->getVersionNumber();
-	fwprintf(m_file, L"%ws", versionString.str());
-	fputwc(0, m_file);
-	fwprintf(m_file, L"%ws", versionTimeString.str());
-	fputwc(0, m_file);
+	u_fprintf_u(uFile, u"%ws", versionString.str());
+	u_fputc(0, uFile);
+	u_fprintf_u(uFile, u"%ws", versionTimeString.str());
+	u_fputc(0, uFile);
 	fwrite(&versionNumber, sizeof(UnsignedInt), 1, m_file);
 	fwrite(&(TheGlobalData->m_exeCRC), sizeof(UnsignedInt), 1, m_file);
 	fwrite(&(TheGlobalData->m_iniCRC), sizeof(UnsignedInt), 1, m_file);
@@ -657,10 +661,10 @@ void RecorderClass::startRecording(GameDifficulty diff, Int originalGameMode, In
 			continue;
 		}
 		UnicodeString name = player->getPlayerDisplayName();
-		fwprintf(m_file, L"%s", name.str());
+		u_snprintf_u(m_file, u"%s", name.str());
 		fputwc(0, m_file);
 		UnicodeString faction = player->getFaction()->getFactionDisplayName();
-		fwprintf(m_file, L"%s", faction.str());
+		u_snprintf_u(m_file, u"%s", faction.str());
 		fputwc(0, m_file);
 		Int color = player->getColor()->getAsInt();
 		fwrite(&color, sizeof(color), 1, m_file);
@@ -1162,7 +1166,7 @@ Bool RecorderClass::playbackFile(AsciiString filename)
  * Read a unicode string from the current file position. The string is assumed to be 0-terminated.
  */
 UnicodeString RecorderClass::readUnicodeString() {
-	wchar_t str[1024] = L"";
+	UChar str[1024] = u"";
 	Int index = 0;
 
 	Int c = fgetwc(m_file);

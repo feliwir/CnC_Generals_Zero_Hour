@@ -968,26 +968,26 @@ void W3DDisplay::gatherDebugStats( void )
 		double skinPolysPerFrame = Debug_Statistics::Get_DX8_Skin_Polygons();
 
 		//Int LOD = TheGlobalData->m_terrainLOD;
-		//unibuffer.format( L"FPS: %.2f, %.2fms mapLOD=%d [cumu FPS=%.2f] draws: %.2f sort: %.2f", fps, ms, LOD, cumuFPS, drawsPerFrame,sortPolysPerFrame);
+		//unibuffer.format( u"FPS: %.2f, %.2fms mapLOD=%d [cumu FPS=%.2f] draws: %.2f sort: %.2f", fps, ms, LOD, cumuFPS, drawsPerFrame,sortPolysPerFrame);
 		if (TheGlobalData->m_useFpsLimit) 
-				unibuffer.format( L"%.2f/%d FPS, ", fps, TheGameEngine->getFramesPerSecondLimit());
+				unibuffer.format( u"%.2f/%d FPS, ", fps, TheGameEngine->getFramesPerSecondLimit());
 		else
-				unibuffer.format( L"%.2f FPS, ", fps);
+				unibuffer.format( u"%.2f FPS, ", fps);
 
-				unibuffer2.format( L"%.2fms [cumuFPS=%.2f] draws: %d skins: %d sortP: %d skinP: %d", ms, cumuFPS, (Int)drawsPerFrame,(Int)skinDrawsPerFrame,(Int)sortPolysPerFrame, (Int)skinPolysPerFrame);
+				unibuffer2.format( u"%.2fms [cumuFPS=%.2f] draws: %d skins: %d sortP: %d skinP: %d", ms, cumuFPS, (Int)drawsPerFrame,(Int)skinDrawsPerFrame,(Int)sortPolysPerFrame, (Int)skinPolysPerFrame);
 				unibuffer.concat(unibuffer2);
 #else
 		//Int LOD = TheGlobalData->m_terrainLOD;
-		//unibuffer.format( L"FPS: %.2f, %.2fms mapLOD=%d draws: %.2f sort %.2f", fps, ms, LOD, drawsPerFrame,sortPolysPerFrame);
-		unibuffer.format( L"FPS: %.2f, %.2fms draws: %.2f skins: %.2f sort %.2f", fps, ms, drawsPerFrame,skinDrawsPerFrame,sortPolysPerFrame);
+		//unibuffer.format( u"FPS: %.2f, %.2fms mapLOD=%d draws: %.2f sort %.2f", fps, ms, LOD, drawsPerFrame,sortPolysPerFrame);
+		unibuffer.format( u"FPS: %.2f, %.2fms draws: %.2f skins: %.2f sort %.2f", fps, ms, drawsPerFrame,skinDrawsPerFrame,sortPolysPerFrame);
 		if (TheGlobalData->m_useFpsLimit) 
 		{
-			unibuffer2.format(L", FPSLock %d",TheGlobalData->m_framesPerSecondLimit);
+			unibuffer2.format(u", FPSLock %d",TheGlobalData->m_framesPerSecondLimit);
 			unibuffer.concat(unibuffer2);
 		}
 #endif
 
-		fpsString.format( L"FPS: %.2f", fps);
+		fpsString.format( u"FPS: %.2f", fps);
 		m_benchmarkDisplayString->setText( fpsString );
 
 		Int polyPerFrame = Debug_Statistics::Get_DX8_Polygons();
@@ -1086,10 +1086,10 @@ void W3DDisplay::gatherDebugStats( void )
 			objectMS = 0.0f;
 		}
 		if (statMode != disabled) {
-			unibuffer.format(L"FPS: %.2f, %.2fms - Collecting extended stats.", fps, ms);
+			unibuffer.format(u"FPS: %.2f, %.2fms - Collecting extended stats.", fps, ms);
 		} else if (extendedStats>0) {
 			extendedStats--;
-			unibuffer.format( L"FPS: %.2f, %.2fms - OH %.2fms, Console %.2fms, 3D OH %.2fms, Terrain %.2fms, Obs %.2fms, CPU %.2fms", 
+			unibuffer.format( u"FPS: %.2f, %.2fms - OH %.2fms, Console %.2fms, 3D OH %.2fms, Terrain %.2fms, Obs %.2fms, CPU %.2fms", 
 				fps, ms, gameOverheadMS, consoleMS, threeDOverheadMS, terrainMS, objectMS, overlapMS);
 			if (extendedStats==SHOW_STATS_TIME-2) {
 				char bufferA[ 256 ];
@@ -1129,32 +1129,32 @@ void W3DDisplay::gatherDebugStats( void )
 			}
 		}
 		if (debugD3D) {
-			unibuffer.concat(L", DEBUG D3D");
+			unibuffer.concat(u", DEBUG D3D");
 		}
 #ifdef _DEBUG
-		unibuffer.concat(L", DEBUG app");
+		unibuffer.concat(u", DEBUG app");
 #endif
 
 		m_displayStrings[FPS]->setText( unibuffer );
 
 		// Actual GameLogic frame number
-		unibuffer.format(L"Frame: %d", TheGameLogic->getFrame());
+		unibuffer.format(u"Frame: %d", TheGameLogic->getFrame());
 		m_displayStrings[Frame]->setText( unibuffer );
 
 		// polygons this frame	
-		unibuffer.format( L"Polygons: per frame %d, per second %d", polyPerFrame,
+		unibuffer.format( u"Polygons: per frame %d, per second %d", polyPerFrame,
 				(Int)(polyPerFrame*fps));
 		m_displayStrings[Polygons]->setText( unibuffer );
 
 		// vertices this frame
-		unibuffer.format( L"Vertices: %d", Debug_Statistics::Get_DX8_Vertices() );
+		unibuffer.format( u"Vertices: %d", Debug_Statistics::Get_DX8_Vertices() );
 		m_displayStrings[Vertices]->setText( unibuffer );		
 
 		//
 		// I'm adjusting the texture memory usage counter by subtracting 
 		// out the terrain alpha texture (since it's really == terrain texture).
 		//
-		unibuffer.format( L"Video RAM: %d", Debug_Statistics::Get_Record_Texture_Size() - 1376256 );
+		unibuffer.format( u"Video RAM: %d", Debug_Statistics::Get_Record_Texture_Size() - 1376256 );
 		m_displayStrings[VideoRam]->setText( unibuffer );
 
 		s_lastUpdateTime64 = time64;
@@ -1164,7 +1164,7 @@ void W3DDisplay::gatherDebugStats( void )
 		s_sortedPolysSinceLastUpdate = 0;
 
 		// terrain stats
-		unibuffer.format( L"3-Way Blends: %d, Shoreline Blends: %d", TheTerrainRenderObject->getNumExtraBlendTiles(),
+		unibuffer.format( u"3-Way Blends: %d, Shoreline Blends: %d", TheTerrainRenderObject->getNumExtraBlendTiles(),
 			TheTerrainRenderObject->getNumShoreLineTiles());
 		m_displayStrings[TerrainStats]->setText( unibuffer );		
 
@@ -1180,7 +1180,7 @@ void W3DDisplay::gatherDebugStats( void )
 		Real terrainHeight = TheTacticalView->getTerrainHeightUnderCamera();
 		Real actualHeightAboveGround = TheTacticalView->getCurrentHeightAboveGround();
 
-		unibuffer.format( L"Camera zoom: %g, pitch: %g/%g, yaw: %g, pos: %g, %g, %g, FOV: %g\n       Height above ground: %g Terrain height: %g",
+		unibuffer.format( u"Camera zoom: %g, pitch: %g/%g, yaw: %g, pos: %g, %g, %g, FOV: %g\n       Height above ground: %g Terrain height: %g",
 												zoom,
 												pitch,
 												FXPitch,
@@ -1199,60 +1199,60 @@ void W3DDisplay::gatherDebugStats( void )
 		m_displayStrings[DebugInfo]->setText( unibuffer );
 
 		// display the keyboard modifier and mouse states.
-		unibuffer.format( L"States: " );
+		unibuffer.format( u"States: " );
 		if( TheKeyboard->isShift() )
 		{
-			unibuffer.concat( L"Shift(" );
+			unibuffer.concat( u"Shift(" );
 			if( TheKeyboard->getModifierFlags() & KEY_STATE_LSHIFT )
 			{
-				unibuffer.concat( L"L" );
+				unibuffer.concat( u"L" );
 			}
 			if( TheKeyboard->getModifierFlags() & KEY_STATE_RSHIFT )
 			{
-				unibuffer.concat( L"R" );
+				unibuffer.concat( u"R" );
 			}
-			unibuffer.concat( L") " );
+			unibuffer.concat( u") " );
 		}
 		if( TheKeyboard->isCtrl() )
 		{
-			unibuffer.concat( L"Ctrl(" );
+			unibuffer.concat( u"Ctrl(" );
 			if( TheKeyboard->getModifierFlags() & KEY_STATE_LCONTROL )
 			{
-				unibuffer.concat( L"L" );
+				unibuffer.concat( u"u" );
 			}
 			if( TheKeyboard->getModifierFlags() & KEY_STATE_RCONTROL )
 			{
-				unibuffer.concat( L"R" );
+				unibuffer.concat( u"R" );
 			}
-			unibuffer.concat( L") " );
+			unibuffer.concat( u") " );
 		}
 		if( TheKeyboard->isAlt() )
 		{
-			unibuffer.concat( L"Alt(" );
+			unibuffer.concat( u"Alt(" );
 			if( TheKeyboard->getModifierFlags() & KEY_STATE_LALT )
 			{
-				unibuffer.concat( L"L" );
+				unibuffer.concat( u"u" );
 			}
 			if( TheKeyboard->getModifierFlags() & KEY_STATE_RALT )
 			{
-				unibuffer.concat( L"R" );
+				unibuffer.concat( u"R" );
 			}
-			unibuffer.concat( L") " );
+			unibuffer.concat( u") " );
 		}
 
 		const MouseIO *mouseStatus = TheMouse->getMouseStatus();
 
 		if( mouseStatus->leftState )
 		{
-			unibuffer.concat( L"LMB " );
+			unibuffer.concat( u"LMB " );
 		}
 		if( mouseStatus->middleState )
 		{
-			unibuffer.concat( L"MMB " );
+			unibuffer.concat( u"MMB " );
 		}
 		if( mouseStatus->rightState )
 		{
-			unibuffer.concat( L"RMB " );
+			unibuffer.concat( u"RMB " );
 		}
 
 		Object *object = NULL;
@@ -1265,12 +1265,12 @@ void W3DDisplay::gatherDebugStats( void )
 			object = draw->getObject();
 		if( object )
 		{
-			unibuffer2.format( L"Moused over object: %S (%d) ", object->getTemplate()->getName().str(), object->getID() );
+			unibuffer2.format( u"Moused over object: %S (%d) ", object->getTemplate()->getName().str(), object->getID() );
 			unibuffer.concat( unibuffer2 );
 		}
 		else
 		{
-			unibuffer.concat( L"Moused over object: TERRAIN " );
+			unibuffer.concat( u"Moused over object: TERRAIN " );
 		}
 		
 		m_displayStrings[ KEY_MOUSE_STATES ]->setText( unibuffer );
@@ -1279,36 +1279,36 @@ void W3DDisplay::gatherDebugStats( void )
 		const MouseIO *mouseIO = TheMouse->getMouseStatus();
 		Coord3D worldPos;
 		TheTacticalView->screenToTerrain(&mouseIO->pos, &worldPos);
-		unibuffer.format( L"Mouse position: screen: (%d, %d), world: (%g, %g, %g)", mouseIO->pos.x, mouseIO->pos.y,
+		unibuffer.format( u"Mouse position: screen: (%d, %d), world: (%g, %g, %g)", mouseIO->pos.x, mouseIO->pos.y,
 			worldPos.x, worldPos.y, worldPos.z);
 		m_displayStrings[MousePosition]->setText( unibuffer );
 		
 		//display the number of particles in the world and being displayed on screen
 		Int totalParticles = TheParticleSystemManager->getParticleCount();
 		Int onScreenParticleCount = TheParticleSystemManager->getOnScreenParticleCount();
-		unibuffer.format( L"Particles: %d in world, %d being displayed", totalParticles, onScreenParticleCount );
+		unibuffer.format( u"Particles: %d in world, %d being displayed", totalParticles, onScreenParticleCount );
 		m_displayStrings[Particles]->setText( unibuffer );
 
 		//display the number of objects in the world
 		UnsignedInt objCount = TheGameLogic->getObjectCount();
 		UnsignedInt objScreenCount = TheGameClient->getRenderedObjectCount();
 
-		unibuffer.format(L"Objects: %d in world, %d being displayed", objCount, objScreenCount );
+		unibuffer.format(u"Objects: %d in world, %d being displayed", objCount, objScreenCount );
 		m_displayStrings[Objects]->setText( unibuffer );
 
 		// Network incoming bandwidth stats
 		if (TheNetwork != NULL) {
-			unibuffer.format(L"IN: %.2f bytes/sec, %.2f packets/sec",
+			unibuffer.format(u"IN: %.2f bytes/sec, %.2f packets/sec",
 				TheNetwork->getIncomingBytesPerSecond(), TheNetwork->getIncomingPacketsPerSecond());
 			m_displayStrings[NetIncoming]->setText( unibuffer );
 
 			// Network outgoing bandwidth stats
-			unibuffer.format(L"OUT: %.2f bytes/sec, %.2f packets/sec",
+			unibuffer.format(u"OUT: %.2f bytes/sec, %.2f packets/sec",
 				TheNetwork->getOutgoingBytesPerSecond(), TheNetwork->getOutgoingPacketsPerSecond());
 			m_displayStrings[NetOutgoing]->setText( unibuffer );
 
 			// Network performance stats
-			unibuffer.format(L"Run Ahead: %d, Net FPS: %d, Packet arrival cushion: %d",
+			unibuffer.format(u"Run Ahead: %d, Net FPS: %d, Packet arrival cushion: %d",
 				TheNetwork->getRunAhead(), TheNetwork->getFrameRate(), TheNetwork->getPacketArrivalCushion());
 			m_displayStrings[NetStats]->setText( unibuffer );
 
@@ -1317,19 +1317,19 @@ void W3DDisplay::gatherDebugStats( void )
 			Int numPlayers = TheNetwork->getNumPlayers();
 			for (Int i = 0; i < numPlayers; ++i) {
 				UnicodeString tempstr;
-				tempstr.format(L"%s: %d ", TheNetwork->getPlayerName(i).str(), TheNetwork->getSlotAverageFPS(i));
+				tempstr.format(u"%s: %d ", TheNetwork->getPlayerName(i).str(), TheNetwork->getSlotAverageFPS(i));
 				unibuffer.concat(tempstr);
 			}
 			m_displayStrings[NetFPSAverages]->setText( unibuffer );
 		} else {
-//			unibuffer.format(L"IN: 0.0 bytes/sec, 0.0 packets/sec");
+//			unibuffer.format(u"IN: 0.0 bytes/sec, 0.0 packets/sec");
 //			m_displayStrings[NetIncoming]->setText( unibuffer );
 
 			// Network outgoing bandwidth stats
-//			unibuffer.format(L"OUT: 0.0 bytes/sec, 0.0 packets/sec");
+//			unibuffer.format(u"OUT: 0.0 bytes/sec, 0.0 packets/sec");
 //			m_displayStrings[NetOutgoing]->setText( unibuffer );
-      unibuffer.format(L"");
-//			unibuffer.format(L"Network not present");
+      unibuffer.format(u"");
+//			unibuffer.format(u"Network not present");
 			m_displayStrings[NetOutgoing]->setText(unibuffer);
 			m_displayStrings[NetIncoming]->setText(unibuffer);
 			m_displayStrings[NetStats]->setText(unibuffer);
@@ -1337,7 +1337,7 @@ void W3DDisplay::gatherDebugStats( void )
 		}
 
 		// selected object info stats
-		unibuffer.format( L"Select Info: '%d' drawables selected", TheInGameUI->getSelectCount() );
+		unibuffer.format( u"Select Info: '%d' drawables selected", TheInGameUI->getSelectCount() );
 		
 
 
@@ -1357,7 +1357,7 @@ void W3DDisplay::gatherDebugStats( void )
 			if( obj && obj->getName().isEmpty() == FALSE )
 				objectName = obj->getName();
 
-			unibuffer.format( L"Select Info: '%S'(%S) at (%.3f,%.3f,%.3f)",
+			unibuffer.format( u"Select Info: '%S'(%S) at (%.3f,%.3f,%.3f)",
 												draw->getTemplate()->getName().str(),
 												objectName.str(),
 												draw->getPosition()->x,
@@ -1373,12 +1373,12 @@ void W3DDisplay::gatherDebugStats( void )
 			}
 			if (rcost.getDrawCallCount() > 0) 
 			{
-				unibuffer2.format( L"\ndraw calls: %d(+%d) sort meshes: %d skins: %d  bones: %d",rcost.getDrawCallCount(),rcost.getShadowDrawCount(),rcost.getSortedMeshCount(),rcost.getSkinMeshCount(),rcost.getBoneCount());
+				unibuffer2.format( u"\ndraw calls: %d(+%d) sort meshes: %d skins: %d  bones: %d",rcost.getDrawCallCount(),rcost.getShadowDrawCount(),rcost.getSortedMeshCount(),rcost.getSkinMeshCount(),rcost.getBoneCount());
 				unibuffer.concat( unibuffer2 );
 			}
 #endif
 
-			unibuffer.concat( L"\nModelStates: " );
+			unibuffer.concat( u"\nModelStates: " );
 			ModelConditionFlags mcFlags = draw->getModelConditionFlags();
 			const int numEntriesPerLine = 4;
 			int lineCount = 0;
@@ -1387,13 +1387,13 @@ void W3DDisplay::gatherDebugStats( void )
 			{
 				if( mcFlags.test( i ) )
 				{
-					unibuffer2.format( L"%S ", ModelConditionFlags::getBitNames()[ i ] );
+					unibuffer2.format( u"%S ", ModelConditionFlags::getBitNames()[ i ] );
 					unibuffer.concat( unibuffer2 );
 					lineCount++;
 					if( lineCount == numEntriesPerLine )
 					{
 						lineCount = 0;
-						unibuffer.concat( L"\n" );
+						unibuffer.concat( u"\n" );
 					}
 				}
 			}

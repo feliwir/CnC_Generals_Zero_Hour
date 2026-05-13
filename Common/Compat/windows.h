@@ -4,6 +4,8 @@
 #include "windows_base.h"
 #include "unknwn.h"
 
+#include <unicode/uchar.h>
+
 typedef enum eSetWindowPosFlags
 {
     SWP_NOSIZE = 0x0001,
@@ -79,7 +81,7 @@ inline int MessageBoxA(void *, const char *text, const char *caption, unsigned i
     return 0;
 }
 
-inline int MessageBoxW(void *, const wchar_t *text, const wchar_t *caption, unsigned int type)
+inline int MessageBoxW(void *, const UChar *text, const UChar *caption, unsigned int type)
 {
     fprintf(stderr, "%ls: %ls\n", caption, text);
     return 0;
@@ -98,7 +100,7 @@ inline void ShowWindow(HWND hWnd, int nCmdShow)
 #define O_BINARY 0
 #endif
 
-inline void SetWindowTextW(HWND hWnd, const wchar_t *text)
+inline void SetWindowTextW(HWND hWnd, const UChar *text)
 {
     fprintf(stderr, "%ls\n", text);
 }

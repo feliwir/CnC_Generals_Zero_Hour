@@ -477,7 +477,7 @@ static Bool parseTooltip( char *token, WinInstanceData *instData,
 													char *buffer, void *data )
 {
 	UnicodeString tooltip;
-	tooltip.set(L"Need tooltip translation");
+	tooltip.set(u"Need tooltip translation");
 	/// @todo need to parse the tooltip in multibyte here
 
 	instData->setTooltipText( tooltip );
