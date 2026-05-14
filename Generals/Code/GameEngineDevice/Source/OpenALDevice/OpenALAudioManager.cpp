@@ -561,7 +561,7 @@ void OpenALAudioManager::stopAudio(AudioAffect which)
 	if (BitTest(which, AudioAffect_Speech | AudioAffect_Music)) {
 		for (it = m_playingStreams.begin(); it != m_playingStreams.end(); ++it) {
 			playing = *it;
-			if (playing) {
+			if (playing && playing->m_stream) {
 				if (playing->m_audioEventRTS->getAudioEventInfo()->m_soundType == AT_Music) {
 					if (!BitTest(which, AudioAffect_Music)) {
 						continue;
@@ -571,7 +571,7 @@ void OpenALAudioManager::stopAudio(AudioAffect which)
 						continue;
 					}
 				}
-				alSourceStop(playing->m_source);
+				playing->m_stream->stop();
 			}
 		}
 	}
@@ -604,7 +604,7 @@ void OpenALAudioManager::pauseAudio(AudioAffect which)
 	if (BitTest(which, AudioAffect_Speech | AudioAffect_Music)) {
 		for (it = m_playingStreams.begin(); it != m_playingStreams.end(); ++it) {
 			playing = *it;
-			if (playing) {
+			if (playing && playing->m_stream) {
 				if (playing->m_audioEventRTS->getAudioEventInfo()->m_soundType == AT_Music) {
 					if (!BitTest(which, AudioAffect_Music)) {
 						continue;
@@ -615,7 +615,7 @@ void OpenALAudioManager::pauseAudio(AudioAffect which)
 					}
 				}
 
-				alSourcePause(playing->m_source);
+				playing->m_stream->pause();
 			}
 		}
 	}
@@ -665,7 +665,7 @@ void OpenALAudioManager::resumeAudio(AudioAffect which)
 	if (BitTest(which, AudioAffect_Speech | AudioAffect_Music)) {
 		for (it = m_playingStreams.begin(); it != m_playingStreams.end(); ++it) {
 			playing = *it;
-			if (playing) {
+			if (playing && playing->m_stream) {
 				if (playing->m_audioEventRTS->getAudioEventInfo()->m_soundType == AT_Music) {
 					if (!BitTest(which, AudioAffect_Music)) {
 						continue;
@@ -675,8 +675,7 @@ void OpenALAudioManager::resumeAudio(AudioAffect which)
 						continue;
 					}
 				}
-                alSourcePause(playing->m_source);
-				//alSourcePlay(playing->m_stream->getSource());
+				playing->m_stream->play();
 			}
 		}
 	}
@@ -1028,7 +1027,9 @@ void OpenALAudioManager::stopAudioEvent(AudioHandle handle)
 		if (audio->m_audioEventRTS->getPlayingHandle() == handle) {
 			// found it
 			audio->m_requestStop = true;
-			notifyOfAudioCompletion((UnsignedInt)(audio->m_source), PAT_Stream);
+			if (audio->m_stream) {
+				notifyOfAudioCompletion((UnsignedInt)(audio->m_stream->getSource()), PAT_Stream);
+			}
 			break;
 		}
 	}
@@ -1304,10 +1305,14 @@ void OpenALAudioManager::adjustPlayingVolume(PlayingAudio *audio)
 	}
 	else if (audio->m_type == PAT_Stream) {
 		if (audio->m_audioEventRTS->getAudioEventInfo()->m_soundType == AT_Music) {
-			//alSourcef(audio->m_stream->getSource(), AL_GAIN, m_musicVolume * desiredVolume);
+			if (audio->m_stream) {
+				audio->m_stream->setVolume(m_musicVolume * desiredVolume);
+			}
 		}
 		else {
-			//alSourcef(audio->m_stream->getSource(), AL_GAIN, m_speechVolume * desiredVolume);
+			if (audio->m_stream) {
+				audio->m_stream->setVolume(m_speechVolume * desiredVolume);
+			}
 		}
 	}
 }
@@ -2192,7 +2197,9 @@ void OpenALAudioManager::adjustVolumeOfPlayingAudio(AsciiString eventName, Real 
 			// Adjust it
 			playing->m_audioEventRTS->setVolume(newVolume);
 			Real desiredVolume = playing->m_audioEventRTS->getVolume() * playing->m_audioEventRTS->getVolumeShift();
-			alSourcef(playing->m_source, AL_GAIN, desiredVolume);
+			if (playing->m_stream) {
+				playing->m_stream->setVolume(desiredVolume);
+			}
 		}
 	}
 }
@@ -2426,7 +2433,11 @@ void OpenALAudioManager::processPlayingList(void)
 			continue;
 		}
 
-		if (playing->m_stream->isPlaying() == false)
+		if (playing->m_stream) {
+			playing->m_stream->update();
+		}
+
+		if (!playing->m_stream || !playing->m_stream->isPlaying())
 		{
 			//m_stoppedAudio.push_back(playing);			
 			releasePlayingAudio( playing );
@@ -2438,8 +2449,6 @@ void OpenALAudioManager::processPlayingList(void)
 			{
 				adjustPlayingVolume(playing);
 			}
-
-			//playing->m_stream->update();
 			++it;
 		}
 	}
@@ -2527,7 +2536,9 @@ void OpenALAudioManager::processFadingList(void)
 
 			case PAT_Stream:
 			{
-				//alSourcef(playing->m_stream->getSource(), AL_GAIN, volume);
+				if (playing->m_stream) {
+					playing->m_stream->setVolume(volume);
+				}
 				break;
 			}
 
@@ -2799,12 +2810,18 @@ Bool OpenALAudioManager::startNextLoop(PlayingAudio *looping)
 //-------------------------------------------------------------------------------------------------
 void OpenALAudioManager::playStream(AudioEventRTS* event, OpenALAudioStream* stream)
 {
+	if (!stream) {
+		return;
+	}
+
+	stream->setVolume(getEffectiveVolume(event));
+
 	// Force it to the beginning
 	if (event->getAudioEventInfo()->m_soundType == AT_Music) {
 		//alSourcei(stream->getSource(), AL_LOOPING, AL_TRUE);
 	}
 
-	//stream->play();
+	stream->play();
 	if (event->getAudioEventInfo()->m_soundType == AT_Music) {
 		// Need to stop/fade out the old music here.
 	}

@@ -46,9 +46,9 @@ extern "C" {
 	#include <libswscale/swscale.h>
 }
 
-#ifdef RTS_HAS_OPENAL
-#include "OpenALAudioDevice/OpenALAudioManager.h"
-#include "OpenALAudioDevice/OpenALAudioStream.h"
+#ifdef SAGE_USE_OPENAL
+#include "OpenALDevice/OpenALAudioManager.h"
+#include "OpenALDevice/OpenALAudioStream.h"
 #endif
 
 #include <chrono>
@@ -311,7 +311,7 @@ FFmpegVideoStream::FFmpegVideoStream(FFmpegFile* file)
 	m_ffmpegFile->setFrameCallback(onFrame);
 	m_ffmpegFile->setUserData(this);
 
-#ifdef RTS_USE_OPENAL
+#ifdef SAGE_USE_OPENAL
 	// Release the audio handle if it's already in use
 	OpenALAudioStream* audioStream = (OpenALAudioStream*)TheAudio->getHandleForBink();
 	audioStream->reset();
@@ -321,7 +321,7 @@ FFmpegVideoStream::FFmpegVideoStream(FFmpegFile* file)
 	while (m_good && m_gotFrame == false)
 		m_good = m_ffmpegFile->decodePacket();
 
- #ifdef RTS_USE_OPENAL
+ #ifdef SAGE_USE_OPENAL
 	// Start audio playback
 	audioStream->play();
 #endif
@@ -335,6 +335,11 @@ FFmpegVideoStream::FFmpegVideoStream(FFmpegFile* file)
 
 FFmpegVideoStream::~FFmpegVideoStream()
 {
+#ifdef SAGE_USE_OPENAL
+	// Release the audio handle after the stream is done
+	OpenALAudioStream* audioStream = (OpenALAudioStream*)TheAudio->getHandleForBink();
+	audioStream->reset();
+#endif
 	av_freep(&m_audioBuffer);
 	av_frame_free(&m_frame);
 	sws_freeContext(m_swsContext);
@@ -349,7 +354,7 @@ void FFmpegVideoStream::onFrame(AVFrame *frame, int stream_idx, int stream_type,
 		videoStream->m_frame = av_frame_clone(frame);
 		videoStream->m_gotFrame = true;
 	}
-#ifdef RTS_USE_OPENAL
+#ifdef SAGE_USE_OPENAL
 	else if (stream_type == AVMEDIA_TYPE_AUDIO) {
 		OpenALAudioStream* audioStream = (OpenALAudioStream*)TheAudio->getHandleForBink();
 		audioStream->update();
