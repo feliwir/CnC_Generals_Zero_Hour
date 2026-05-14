@@ -1,5 +1,5 @@
 {
-    "version": 3,
+    "version": 6,
     "configurePresets": [
         {
             "name": "default",
@@ -17,7 +17,8 @@
             ],
             "hidden": true,
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "VCPKG_BUILD_TYPE": "debug"
             }
         },
         {
@@ -28,6 +29,7 @@
             "hidden": true,
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release",
+                "VCPKG_BUILD_TYPE": "release",
                 "CMAKE_INTERPROCEDURAL_OPTIMIZATION": "ON"
             }
         },
@@ -43,10 +45,7 @@
             }
         },
         {
-            "name": "macos-arm64-debug",
-            "inherits": [
-                "debug"
-            ],
+            "name": "macos-arm64",
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
@@ -57,10 +56,7 @@
             }
         },
         {
-            "name": "linux-x64-debug",
-            "inherits": [
-                "debug"
-            ],
+            "name": "linux-x64",
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
@@ -69,34 +65,52 @@
             "cacheVariables": {
                 "VCPKG_TARGET_TRIPLET": "x64-linux-dynamic"
             }
+        },
+        {
+            "name": "macos-arm64-debug",
+            "inherits": [
+                "macos-arm64",
+                "debug"
+            ]
+        },
+        {
+            "name": "linux-x64-debug",
+            "inherits": [
+                "linux-x64",
+                "debug"
+            ]
         },
         {
             "name": "linux-x64-release",
             "inherits": [
+                "linux-x64",
                 "release"
-            ],
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            },
-            "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "x64-linux-dynamic"
-            }
+            ]
         },
         {
             "name": "linux-x64-sanitize",
             "inherits": [
+                "linux-x64",
                 "sanitize"
-            ],
-            "condition": {
-                "type": "equals",
-                "lhs": "${hostSystemName}",
-                "rhs": "Linux"
-            },
-            "cacheVariables": {
-                "VCPKG_TARGET_TRIPLET": "x64-linux-dynamic"
-            }
+            ]
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "macos-arm64-debug",
+            "configurePreset": "macos-arm64-debug"
+        },
+        {
+            "name": "linux-x64-debug",
+            "configurePreset": "linux-x64-debug"
+        },
+        {
+            "name": "linux-x64-release",
+            "configurePreset": "linux-x64-release"
+        },
+        {
+            "name": "linux-x64-sanitize",
+            "configurePreset": "linux-x64-sanitize"
         }
     ]
 }

@@ -3305,7 +3305,7 @@ void *operator new[](size_t size)
 /**
 	overload for global operator delete; send requests to TheDynamicMemoryAllocator.
 */
-void operator delete(void *p)
+void operator delete(void *p) noexcept
 {
 	++theLinkTester;
 	preMainInitMemoryManager();
@@ -3317,7 +3317,7 @@ void operator delete(void *p)
 /**
 	overload for global operator delete[]; send requests to TheDynamicMemoryAllocator.
 */
-void operator delete[](void *p)
+void operator delete[](void *p) noexcept
 {
 	++theLinkTester;
 	preMainInitMemoryManager();
@@ -3345,7 +3345,7 @@ void* operator new(size_t size, const char * fname, int)
 /**
 	overload for global operator delete (MFC debug version); send requests to TheDynamicMemoryAllocator.
 */
-void operator delete(void * p, const char *, int)
+void operator delete(void * p, const char *, int) noexcept
 {
 	++theLinkTester;
 	preMainInitMemoryManager();
@@ -3373,7 +3373,7 @@ void* operator new[](size_t size, const char * fname, int)
 /**
 	overload for global operator delete (MFC debug version); send requests to TheDynamicMemoryAllocator.
 */
-void operator delete[](void * p, const char *, int)
+void operator delete[](void * p, const char *, int) noexcept
 {
 	++theLinkTester;
 	preMainInitMemoryManager();
@@ -3385,7 +3385,7 @@ void operator delete[](void * p, const char *, int)
 /**
 	overload for global operator delete; send requests to TheDynamicMemoryAllocator.
 */
-void operator delete(void * p, size_t sz)
+void operator delete(void * p, size_t sz) noexcept
 {
 	++theLinkTester;
 	preMainInitMemoryManager();
@@ -3397,7 +3397,7 @@ void operator delete(void * p, size_t sz)
 /**
 	overload for global operator delete[]; send requests to TheDynamicMemoryAllocator.
 */
-void operator delete[](void * p, size_t sz)
+void operator delete[](void * p, size_t sz) noexcept
 {
 	++theLinkTester;
 	preMainInitMemoryManager();
