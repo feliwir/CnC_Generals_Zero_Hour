@@ -107,46 +107,6 @@ inline void SetWindowTextW(HWND hWnd, const UChar *text)
 
 #endif
 
-#ifndef MAX_COMPUTERNAME_LENGTH
-#define MAX_COMPUTERNAME_LENGTH 15
-#endif
-
-inline int GetComputerName(char *buffer, unsigned long *size)
-{
-    const char *name = "unknown";
-    size_t nameLen = strlen(name);
-    if (*size > nameLen)
-    {
-        strcpy(buffer, name);
-        *size = nameLen;
-    }
-    else
-    {
-        *size = 0;
-    }
-    return 1;
-}
-
-#ifndef UNLEN
-#define UNLEN 256
-#endif
-
-inline int GetUserName(char *buffer, unsigned long *size)
-{
-    const char *name = "unknown";
-    size_t nameLen = strlen(name);
-    if (*size > nameLen)
-    {
-        strcpy(buffer, name);
-        *size = nameLen;
-    }
-    else
-    {
-        *size = 0;
-    }
-    return 1;
-}
-
 inline bool IsIconic(HWND hWnd)
 {
     return false;

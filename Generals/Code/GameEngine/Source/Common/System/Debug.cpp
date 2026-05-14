@@ -60,9 +60,11 @@
 #include "GameClient/Mouse.h"
 #include "Common/StackDump.h"
 
+#include <SDL3/SDL.h>
+
 // Horrible reference, but we really, really need to know if we are windowed.
 extern bool DX8Wrapper_IsWindowed;
-extern HWND ApplicationHWnd;
+extern SDL_Window* ApplicationWindow;
 
 extern char *gAppPrefix; /// So WB can have a different log file name.
 
@@ -434,29 +436,29 @@ void DebugCrash(const char *format, ...)
 	if (theDebugFlags == 0)
 	{
 		if (!DX8Wrapper_IsWindowed) {
-			if (ApplicationHWnd) {
-				ShowWindow(ApplicationHWnd, SW_HIDE);
+			if (ApplicationWindow) {
+				SDL_HideWindow(ApplicationWindow);
 			}
 		}
-		MessageBoxWrapper("DebugCrash - Debug not inited properly", "", MB_OK|MB_TASKMODAL);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "", "DebugCrash - Debug not inited properly", ApplicationWindow);
 	}
 
 	format = prepBuffer(format, theCrashBuffer);
 	strcat(theCrashBuffer, "ASSERTION FAILURE: ");
 
 	va_list arg;
-  va_start(arg, format);
-  vsprintf(theCrashBuffer + strlen(theCrashBuffer), format, arg);
-  va_end(arg);
+	va_start(arg, format);
+	vsprintf(theCrashBuffer + strlen(theCrashBuffer), format, arg);
+	va_end(arg);
 
 	if (strlen(theCrashBuffer) >= sizeof(theCrashBuffer))
 	{
 		if (!DX8Wrapper_IsWindowed) {
-			if (ApplicationHWnd) {
-				ShowWindow(ApplicationHWnd, SW_HIDE);
+			if (ApplicationWindow) {
+				SDL_HideWindow(ApplicationWindow);
 			}
 		}
-		MessageBoxWrapper("String too long for debug buffers", "", MB_OK|MB_TASKMODAL);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "", "String too long for debug buffers", ApplicationWindow);
 	}
 
 #ifdef DEBUG_LOGGING
@@ -694,8 +696,8 @@ void ReleaseCrash(const char *reason)
 	}
 
 	if (!DX8Wrapper_IsWindowed) {
-		if (ApplicationHWnd) {
-			ShowWindow(ApplicationHWnd, SW_HIDE);
+		if (ApplicationWindow) {
+			SDL_HideWindow(ApplicationWindow);
 		}
 	}
 
@@ -737,16 +739,16 @@ void ReleaseCrashLocalized(const AsciiString& p, const AsciiString& m)
 	/// do additional reporting on the crash, if possible
 
 	if (!DX8Wrapper_IsWindowed) {
-		if (ApplicationHWnd) {
-			ShowWindow(ApplicationHWnd, SW_HIDE);
+		if (ApplicationWindow) {
+			SDL_HideWindow(ApplicationWindow);
 		}
 	}
 
-	if (TheSystemIsUnicode) 
-	{
-		::MessageBoxW(NULL, mesg.str(), prompt.str(), MB_OK|MB_SYSTEMMODAL|MB_ICONERROR);
-	} 
-	else 
+	// if (TheSystemIsUnicode) 
+	// {
+	// 	::MessageBoxW(NULL, mesg.str(), prompt.str(), MB_OK|MB_SYSTEMMODAL|MB_ICONERROR);
+	// } 
+	// else 
 	{
 		// However, if we're using the default version of the message box, we need to 
 		// translate the string into an AsciiString
@@ -754,8 +756,10 @@ void ReleaseCrashLocalized(const AsciiString& p, const AsciiString& m)
 		promptA.translate(prompt);
 		mesgA.translate(mesg);
 		//Make sure main window is not TOP_MOST
-		::SetWindowPos(ApplicationHWnd, HWND_NOTOPMOST, 0, 0, 0, 0,SWP_NOSIZE |SWP_NOMOVE);
-		::MessageBoxA(NULL, mesgA.str(), promptA.str(), MB_OK|MB_TASKMODAL|MB_ICONERROR);
+		SDL_HideWindow(ApplicationWindow);
+		// ::SetWindowPos(ApplicationHWnd, HWND_NOTOPMOST, 0, 0, 0, 0,SWP_NOSIZE |SWP_NOMOVE);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, promptA.str(), mesgA.str(), ApplicationWindow);
+		// ::MessageBoxA(NULL, mesgA.str(), promptA.str(), MB_OK|MB_TASKMODAL|MB_ICONERROR);
 	}
 
 	char prevbuf[ _MAX_PATH ];

@@ -28,7 +28,6 @@
 
 #define INSTANTIATE_WELL_KNOWN_KEYS
 
-#include "windows.h"
 #include "stdlib.h"
 #include <string.h>
 #include "Common/STLTypedefs.h"

@@ -175,6 +175,8 @@ struct RenderStateStruct
 	RenderStateStruct& operator= (const RenderStateStruct& src);
 };
 
+struct SDL_Window;
+
 /** 
 ** DX8Wrapper
 **
@@ -228,7 +230,7 @@ public:
 	static DX8_Stats stats;
 #endif
 	
-	static bool Init(void * hwnd);
+	static bool Init(void * window);
 	static void Shutdown(void);
 
 	static void SetCleanupHook(DX8_CleanupHook *pCleanupHook) {m_pCleanupHook = pCleanupHook;};
@@ -409,7 +411,7 @@ public:
 	**	DX8Wrapper::Set_Render_Target ((IDirect3DSurface8 *)NULL);
 	**
 	*/
-	static IDirect3DSwapChain8 *	Create_Additional_Swap_Chain (HWND render_window);
+	static IDirect3DSwapChain8 *	Create_Additional_Swap_Chain (SDL_Window* render_window);
 
 	/*
 	** Render target interface
@@ -490,7 +492,7 @@ protected:
 	static unsigned						render_state_changed;
 
 	static bool								IsInitted;
-	static void *							Hwnd;
+	static void *							Window;
 	static unsigned						_MainThreadID;
 
 	static bool								_EnableTriangleDraw;

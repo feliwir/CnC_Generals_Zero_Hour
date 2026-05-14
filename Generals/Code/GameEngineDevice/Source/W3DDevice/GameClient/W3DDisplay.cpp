@@ -35,7 +35,6 @@ static void drawFramerateBar(void);
 
 // SYSTEM INCLUDES ////////////////////////////////////////////////////////////
 #include <stdlib.h>
-#include <windows.h>
 #include <time.h>
 
 // USER INCLUDES //////////////////////////////////////////////////////////////
@@ -105,8 +104,8 @@ static void drawFramerateBar(void);
 #include "GameLogic/PartitionManager.h"
 #endif
 
-// #include "WinMain.h"
-extern HWND ApplicationHWnd;
+#include <SDL3/SDL.h>
+extern SDL_Window* ApplicationWindow;
 
 #ifdef _INTERNAL
 // for occasional debugging...
@@ -670,7 +669,7 @@ void W3DDisplay::init( void )
 	{
 		SortingRendererClass::SetMinVertexBufferSize(1);
 	}
-	if (WW3D::Init( ApplicationHWnd ) != WW3D_ERROR_OK)
+	if (WW3D::Init( ApplicationWindow ) != WW3D_ERROR_OK)
 		throw ERROR_INVALID_D3D;	//failed to initialize.  User probably doesn't have DX 8.1
 
 	WW3D::Set_Prelit_Mode( WW3D::PRELIT_MODE_LIGHTMAP_MULTI_PASS );
@@ -1585,11 +1584,9 @@ void W3DDisplay::draw( void )
 	//USE_PERF_TIMER(W3DDisplay_draw)
 	static UnsignedInt syncTime = 0;
 
-	extern HWND ApplicationHWnd;
-	if (ApplicationHWnd && ::IsIconic(ApplicationHWnd)) {
+	if (ApplicationWindow && SDL_GetWindowFlags(ApplicationWindow) & SDL_WINDOW_MINIMIZED) {
 		return;
 	}
-
 
 	updateAverageFPS();
 	if (TheGlobalData->m_enableDynamicLOD && TheGameLogic->getShowDynamicLOD())

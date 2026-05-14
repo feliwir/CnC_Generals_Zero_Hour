@@ -56,7 +56,7 @@
 #include "Common/File.h"
 #include "Common/FileSystem.h"
 
-#include <windows.h>
+#include <SDL3/SDL.h>
 
 #ifdef _INTERNAL
 // for occasional debugging...
@@ -371,9 +371,11 @@ void GameTextManager::init( void )
 	qsort( m_stringLUT, m_textCount, sizeof(StringLookUp), compareLUT  );
 
 	UnicodeString ourName = fetch("GUI:Command&ConquerGenerals");
-	extern HWND ApplicationHWnd;  ///< our application window handle
-	if (ApplicationHWnd) {
-		::SetWindowTextW(ApplicationHWnd, ourName.str());
+	extern SDL_Window* ApplicationWindow;  ///< our application window handle
+	if (ApplicationWindow) {
+		AsciiString ourNameA;
+		ourNameA.translate(ourName);
+		SDL_SetWindowTitle(ApplicationWindow, ourNameA.str());
 	}
 
 }

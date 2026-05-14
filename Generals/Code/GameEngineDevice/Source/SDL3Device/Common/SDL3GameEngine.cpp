@@ -103,12 +103,12 @@ void SDL3GameEngine::update( void )
 	// call the engine normal update
 	GameEngine::update();
 
-	extern SDL_Window* TheSDL3Window;
-	if (TheSDL3Window && SDL_GetWindowFlags(TheSDL3Window) & SDL_WINDOW_MINIMIZED) {
-		while (TheSDL3Window && SDL_GetWindowFlags(TheSDL3Window) & SDL_WINDOW_MINIMIZED) {
+	extern SDL_Window* ApplicationWindow;
+	if (ApplicationWindow && SDL_GetWindowFlags(ApplicationWindow) & SDL_WINDOW_MINIMIZED) {
+		while (ApplicationWindow && SDL_GetWindowFlags(ApplicationWindow) & SDL_WINDOW_MINIMIZED) {
 			// We are alt-tabbed out here.  Sleep a bit, & process windows
 			// so that we can become un-alt-tabbed out.
-      SDL_Delay(5);
+      		SDL_Delay(5);
 			serviceWindowsOS();
 
 			if (TheLAN != NULL) {

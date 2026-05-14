@@ -1081,8 +1081,14 @@ target_link_libraries(g_gameengine PUBLIC g_ww3d2 g_wwmath g_wwlib g_wwsaveload
 find_package(glm CONFIG REQUIRED)
 target_link_libraries(g_gameengine PRIVATE glm::glm)
 
+# SDL
+find_package(SDL3 CONFIG REQUIRED)
+target_link_libraries(g_gameengine PUBLIC SDL3::SDL3)
+
 # GameSpy
 include(FetchContent)
+set(GS_OPENSSL FALSE)
+
 FetchContent_Declare(
   gamespy GIT_REPOSITORY https://github.com/feliwir/GamespySDK.git
   GIT_TAG macos-fix)

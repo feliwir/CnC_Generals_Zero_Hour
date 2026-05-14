@@ -29,7 +29,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h>
 
 #include "Common/GameState.h"
 #include "Common/GlobalData.h"

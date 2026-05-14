@@ -64,6 +64,48 @@ inline int GetDoubleClickTime()
 #define TRUE 1
 #define FALSE 0
 
+#include <cstring>
+
+#ifndef MAX_COMPUTERNAME_LENGTH
+#define MAX_COMPUTERNAME_LENGTH 15
+#endif
+
+inline int GetComputerName(char *buffer, unsigned long *size)
+{
+    const char *name = "unknown";
+    size_t nameLen = strlen(name);
+    if (*size > nameLen)
+    {
+        strcpy(buffer, name);
+        *size = nameLen;
+    }
+    else
+    {
+        *size = 0;
+    }
+    return 1;
+}
+
+#ifndef UNLEN
+#define UNLEN 256
+#endif
+
+inline int GetUserName(char *buffer, unsigned long *size)
+{
+    const char *name = "unknown";
+    size_t nameLen = strlen(name);
+    if (*size > nameLen)
+    {
+        strcpy(buffer, name);
+        *size = nameLen;
+    }
+    else
+    {
+        *size = 0;
+    }
+    return 1;
+}
+
 #include "string_compat.h"
 #include "time_compat.h"
 #include "wchar_compat.h"

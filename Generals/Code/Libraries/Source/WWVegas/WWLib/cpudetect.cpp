@@ -22,6 +22,8 @@
 #include "thread.h"
 #include "mpu.h"
 #pragma warning (disable : 4201)	// Nonstandard extension - nameless struct
+#include <SDL3/SDL_platform.h>
+#include <SDL3/SDL_cpuinfo.h>
 #ifdef _WINDOWS
 #include <windows.h>
 #elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
@@ -29,9 +31,7 @@
 #endif
 #include "systimer.h"
 
-#ifdef _UNIX
-# include <time.h>  // for time(), localtime() and timezone variable.
-#endif
+#include <SDL3/SDL.h>
 
 struct OSInfoStruct {
 	const char* Code;
@@ -876,7 +876,9 @@ void CPUDetectClass::Init_Memory()
    AvailablePageMemory     = mem.dwAvailPageFile;
    TotalVirtualMemory      = mem.dwTotalVirtual;
    AvailableVirtualMemory  = mem.dwAvailVirtual;
-#elif defined(_UNIX)
+#else
+	TotalPhysicalMemory = SDL_GetSystemRAM() * 1024 * 1024;	// SDL returns memory in Mb, convert to bytes
+	AvailablePhysicalMemory = TotalPhysicalMemory; // SDL does not provide available memory
 #warning FIX Init_Memory()
 #endif
 }
@@ -962,11 +964,8 @@ void CPUDetectClass::Init_Processor_Log()
 		(OSVersionBuildNumber&0xff000000)>>24,
 		(OSVersionBuildNumber&0xff0000)>>16,
 		(OSVersionBuildNumber&0xffff)));
-#ifdef WIN32
-   SYSLOG(("OS-Info: %s\r\n", OSVersionExtraInfo));
-#elif defined(_UNIX)
+
    SYSLOG(("OS-Info: %s\r\n", OSVersionExtraInfo.Peek_Buffer()));
-#endif
 
 	SYSLOG(("Processor: %s\r\n",CPUDetectClass::Get_Processor_String()));
 	SYSLOG(("Clock speed: ~%dMHz\r\n",CPUDetectClass::Get_Processor_Speed()));
@@ -977,11 +976,8 @@ void CPUDetectClass::Init_Processor_Log()
 	case 2: cpu_type="Dual"; break;
 	case 3: cpu_type="*Intel Reserved*"; break;
 	}
-#ifdef WIN32
-   SYSLOG(("Processor type: %s\r\n", cpu_type));
-#elif defined(_UNIX)
-   SYSLOG(("Processor type: %s\r\n", cpu_type.Peek_Buffer()));
-#endif
+
+   	SYSLOG(("Processor type: %s\r\n", cpu_type.Peek_Buffer()));
 
 	SYSLOG(("\r\n"));
 

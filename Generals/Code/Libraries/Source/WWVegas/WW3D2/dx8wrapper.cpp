@@ -73,6 +73,7 @@
 #include "dx8texman.h"
 #include "bound.h"
 #include "dx8webbrowser.h"
+#include <SDL3/SDL.h>
 
 #define WW3D_DEVTYPE D3DDEVTYPE_HAL
 
@@ -92,7 +93,7 @@ int DX8Wrapper_PreserveFPU = 0;
 **
 ***********************************************************************************/
 
-static HWND						_Hwnd															= NULL;
+static SDL_Window *						_Window															= NULL;
 bool								DX8Wrapper::IsInitted									= false;	
 bool								DX8Wrapper::_EnableTriangleDraw						= true;
 
@@ -207,14 +208,14 @@ void Non_Fatal_Log_DX8_ErrorCode(unsigned res,const char * file,int line)
 }
 
 
-bool DX8Wrapper::Init(void * hwnd)
+bool DX8Wrapper::Init(void * window)
 {
 	WWASSERT(!IsInitted);
 
 	/*
 	** Initialize all variables!
 	*/
-	_Hwnd = (HWND)hwnd;
+	_Window = (SDL_Window *)window;
 	_MainThreadID=ThreadClass::_Get_Current_Thread_ID();
 	CurRenderDevice = -1;
 	ResolutionWidth = DEFAULT_RESOLUTION_WIDTH;
@@ -447,7 +448,7 @@ bool DX8Wrapper::Create_Device(void)
 	if (FAILED( D3DInterface->CreateDevice(
 		CurRenderDevice,
 		WW3D_DEVTYPE,
-		_Hwnd,
+		_Window,
 		vertex_processing_type,
 		&_PresentParameters,
 		&D3DDevice ) ) )
@@ -731,7 +732,6 @@ bool DX8Wrapper::Set_Render_Device(int dev, int width, int height, int bits, int
 		_RenderDeviceNameTable[CurRenderDevice].Peek_Buffer(),_RenderDeviceDescriptionTable[CurRenderDevice].Get_Driver_Name(),
 		_RenderDeviceDescriptionTable[CurRenderDevice].Get_Driver_Version(),ResolutionWidth,ResolutionHeight,(IsWindowed ? 1 : 0)));
 
-#ifdef _WINDOWS
 	// PWG 4/13/2000 - changed so that if you say to resize the window it resizes
 	// regardless of whether its windowed or not as OpenGL resizes its self around
 	// the caption and edges of the window type you provide, so its important to 
@@ -740,36 +740,17 @@ bool DX8Wrapper::Set_Render_Device(int dev, int width, int height, int bits, int
 	if (resize_window) {
 
 		// Get the current dimensions of the 'render area' of the window
-		RECT rect = { 0 };
-		::GetClientRect (_Hwnd, &rect);
+		int width, height;
+		SDL_GetWindowSizeInPixels(_Window, &width, &height);
 
 		// Is the window the correct size for this resolution?
-		if ((rect.right-rect.left) != ResolutionWidth ||
-			 (rect.bottom-rect.top) != ResolutionHeight) {			
-			
-			// Calculate what the main window's bounding rectangle should be to
-			// accomodate this resolution
-			rect.left = 0;
-			rect.top = 0;
-			rect.right = ResolutionWidth;
-			rect.bottom = ResolutionHeight;
-			DWORD dwstyle = ::GetWindowLong (_Hwnd, GWL_STYLE);
-			AdjustWindowRect (&rect, dwstyle, FALSE);
-
+		if (width != ResolutionWidth || height != ResolutionHeight) {			
 			// Resize the window to fit this resolution
-			if (!windowed)
-				::SetWindowPos(_Hwnd, HWND_TOPMOST, 0, 0, rect.right-rect.left, rect.bottom-rect.top,SWP_NOSIZE |SWP_NOMOVE);
-			else
-				::SetWindowPos (_Hwnd,
-								 NULL,
-								 0,
-								 0,
-								 rect.right-rect.left,
-								 rect.bottom-rect.top,
-								 SWP_NOZORDER | SWP_NOMOVE);
+			SDL_SetWindowSize(_Window, ResolutionWidth, ResolutionHeight);
+			SDL_SetWindowFullscreen(_Window, !windowed);
 		}
 	}
-#endif
+
 	//must be either resetting existing device or creating a new one.
 	WWASSERT(reset_device || D3DDevice == NULL);
 	
@@ -784,7 +765,7 @@ bool DX8Wrapper::Set_Render_Device(int dev, int width, int height, int bits, int
 	
 	_PresentParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
 	_PresentParameters.SwapEffect = IsWindowed ? D3DSWAPEFFECT_DISCARD : D3DSWAPEFFECT_FLIP;		// Shouldn't this be D3DSWAPEFFECT_FLIP?
-	_PresentParameters.hDeviceWindow = _Hwnd;
+	_PresentParameters.hDeviceWindow = (HWND)_Window; // This is required for DXVK
 	_PresentParameters.Windowed = IsWindowed;
 
 	_PresentParameters.EnableAutoDepthStencil = TRUE;				// Driver will attempt to match Z-buffer depth
@@ -1020,34 +1001,15 @@ bool DX8Wrapper::Set_Device_Resolution(int width,int height,int bits,int windowe
 		{
 
 			// Get the current dimensions of the 'render area' of the window
-			RECT rect = { 0 };
-			::GetClientRect (_Hwnd, &rect);
+			int width, height;
+			SDL_GetWindowSizeInPixels(_Window, &width, &height);
 
 			// Is the window the correct size for this resolution?
-			if ((rect.right-rect.left) != ResolutionWidth ||
-				 (rect.bottom-rect.top) != ResolutionHeight)
+			if (width != ResolutionWidth || height != ResolutionHeight)
 			{			
-				
-				// Calculate what the main window's bounding rectangle should be to
-				// accomodate this resolution
-				rect.left = 0;
-				rect.top = 0;
-				rect.right = ResolutionWidth;
-				rect.bottom = ResolutionHeight;
-				DWORD dwstyle = ::GetWindowLong (_Hwnd, GWL_STYLE);
-				AdjustWindowRect (&rect, dwstyle, FALSE);
-
 				// Resize the window to fit this resolution
-				if (!windowed)
-					::SetWindowPos(_Hwnd, HWND_TOPMOST, 0, 0, rect.right-rect.left, rect.bottom-rect.top,SWP_NOSIZE |SWP_NOMOVE);
-				else
-					::SetWindowPos (_Hwnd,
-									 NULL,
-									 0,
-									 0,
-									 rect.right-rect.left,
-									 rect.bottom-rect.top,
-									 SWP_NOZORDER | SWP_NOMOVE);
+				SDL_SetWindowSize(_Window, ResolutionWidth, ResolutionHeight);
+				SDL_SetWindowFullscreen(_Window, !windowed);
 			}
 		}
 
@@ -2555,7 +2517,7 @@ DX8Wrapper::Set_Render_Target(IDirect3DSurface8 *render_target)
 
 
 IDirect3DSwapChain8 *
-DX8Wrapper::Create_Additional_Swap_Chain (HWND render_window)
+DX8Wrapper::Create_Additional_Swap_Chain (SDL_Window* render_window)
 {
 	DX8_Assert();
 

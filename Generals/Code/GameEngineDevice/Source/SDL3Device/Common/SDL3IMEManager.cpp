@@ -4,7 +4,7 @@
 
 #include <SDL3/SDL.h>
 
-extern HWND ApplicationHWnd;
+extern SDL_Window* ApplicationWindow;
 
 class SDL3IMEManager : public IMEManagerInterface
 {
@@ -33,16 +33,16 @@ public:
   virtual void attach(GameWindow *window) override
   {
     if(window == NULL) {
-      SDL_StopTextInput(reinterpret_cast<SDL_Window*>(ApplicationHWnd));
+      SDL_StopTextInput(ApplicationWindow);
     } else {
-      SDL_StartTextInput(reinterpret_cast<SDL_Window*>(ApplicationHWnd));
+      SDL_StartTextInput(ApplicationWindow);
     }
     m_window = window;
   }
   virtual void detatch(void) override
   {
     m_window = nullptr;
-    SDL_StopTextInput(reinterpret_cast<SDL_Window*>(ApplicationHWnd));
+    SDL_StopTextInput(ApplicationWindow);
   }
   virtual void enable(void) override
   {

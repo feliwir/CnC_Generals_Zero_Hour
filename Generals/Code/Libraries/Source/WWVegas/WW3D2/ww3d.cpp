@@ -120,6 +120,8 @@
 #include "framgrab.h"
 #endif
 
+#include <SDL3/SDL.h>
+
 
 const char* DAZZLE_INI_FILENAME="DAZZLE.INI";
 
@@ -214,7 +216,7 @@ unsigned													WW3D::NPatchesLevel=1;
 bool														WW3D::IsTexturingEnabled=true;
 unsigned int										WW3D::IsColoringEnabled=0x00000000;
 
-static HWND												_Hwnd = NULL;		// Not a member to hide windows from WW3D users
+static SDL_Window*										_Window = NULL;		// Not a member to hide windows from WW3D users
 static int												_TextureReduction = 0;
 static int												_TextureMinMipLevels = 1;
 int														WW3D::LastFrameMemoryAllocations;
@@ -271,17 +273,17 @@ void WW3D::Set_Texture_Thumbnail_Mode (TextureThumbnailModeEnum mode)
  * HISTORY:                                                                                    *
  *   3/24/98    GTH : Created.                                                                 *
  *=============================================================================================*/
-WW3DErrorType WW3D::Init(void *hwnd, char *defaultpal)
+WW3DErrorType WW3D::Init(void *window, char *defaultpal)
 {
 	assert(IsInitted == false);
-	WWDEBUG_SAY(("WW3D::Init hwnd = %p\n",hwnd));
-	_Hwnd = (HWND)hwnd;
+	WWDEBUG_SAY(("WW3D::Init window = %p\n",window));
+	_Window = (SDL_Window*)window;
 
 	/*
 	** Initialize d3d, this also enumerates the available devices and resolutions.
 	*/
 	Init_D3D_To_WW3_Conversion();
-	if (!DX8Wrapper::Init(_Hwnd))
+	if (!DX8Wrapper::Init(_Window))
 		return WW3D_ERROR_INITIALIZATION_FAILED;
 	Allocate_Debug_Resources();
 
@@ -471,7 +473,7 @@ WW3DErrorType WW3D::Set_Next_Render_Device(void)
  *=============================================================================================*/
 void *WW3D::Get_Window( void )
 {
-	return _Hwnd;
+	return _Window;
 }
 
 /***********************************************************************************************
@@ -1253,8 +1255,8 @@ void WW3D::Make_Screen_Shot( const char * filename_base )
 	D3DSURFACE_DESC desc;
 	fb->GetDesc(&desc);
 
-	RECT bounds;
-	GetWindowRect(_Hwnd,&bounds);
+	RECT bounds = {0};
+	SDL_GetWindowSizeInPixels(_Window, &bounds.right, &bounds.bottom);
 
 	D3DLOCKED_RECT lrect;
 

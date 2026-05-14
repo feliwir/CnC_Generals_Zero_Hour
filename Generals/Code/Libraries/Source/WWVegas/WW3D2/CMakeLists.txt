@@ -243,11 +243,9 @@ find_package(DXVK CONFIG REQUIRED)
 target_link_libraries(g_ww3d2 PUBLIC g_wwlib g_wwmath g_wwsaveload DXVK::d3d8)
 
 # GLM
-if(SAGE_USE_GLM)
-  find_package(glm CONFIG REQUIRED)
-  target_link_libraries(g_ww3d2 PRIVATE glm::glm)
-  target_compile_definitions(g_ww3d2 PUBLIC SAGE_USE_GLM)
-endif()
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(g_ww3d2 PRIVATE glm::glm)
+
 
 if(SAGE_USE_FONTCONFIG)
   find_package(Fontconfig REQUIRED)

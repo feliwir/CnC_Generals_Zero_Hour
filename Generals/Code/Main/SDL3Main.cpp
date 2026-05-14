@@ -85,7 +85,7 @@ HWND ApplicationHWnd = NULL;  ///< our application window handle
 Bool ApplicationIsWindowed = false;
 SDL3Mouse *TheWin32Mouse = NULL;  ///< shared mouse instance for the SDL3 runtime
 DWORD TheMessageTime = 0;	///< For getting the time that a message was posted from Windows.
-SDL_Window *TheSDL3Window = NULL;
+SDL_Window *ApplicationWindow = NULL;
 
 const Char *g_strFile = "data\\Generals.str";
 const Char *g_csfFile = "data\\%s\\Generals.csf";
@@ -124,10 +124,10 @@ static void destroyApplicationWindow(void)
 {
 	shutdownLoadingScreen();
 
-	if (TheSDL3Window != NULL)
+	if (ApplicationWindow != NULL)
 	{
-		SDL_DestroyWindow(TheSDL3Window);
-		TheSDL3Window = NULL;
+		SDL_DestroyWindow(ApplicationWindow);
+		ApplicationWindow = NULL;
 	}
 
 	ApplicationHWnd = NULL;
@@ -156,12 +156,12 @@ static void renderLoadingScreen(void)
 {
 	SDL_Surface *surface;
 
-	if (TheSDL3Window == NULL)
+	if (ApplicationWindow == NULL)
 	{
 		return;
 	}
 
-	gLoadScreenRenderer = SDL_CreateRenderer(TheSDL3Window, NULL);
+	gLoadScreenRenderer = SDL_CreateRenderer(ApplicationWindow, NULL);
 	if (gLoadScreenRenderer == NULL)
 	{
 		return;
@@ -191,25 +191,25 @@ static void renderLoadingScreen(void)
 
 static Bool initializeAppWindow(Bool runWindowed)
 {
-	SDL_WindowFlags windowFlags = SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_VULKAN;
+	SDL_WindowFlags windowFlags = SDL_WINDOW_HIGH_PIXEL_DENSITY | SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE;
 
 	if (!runWindowed)
 	{
 		windowFlags |= SDL_WINDOW_FULLSCREEN;
 	}
 
-	TheSDL3Window = SDL_CreateWindow("Command and Conquer Generals",
+	ApplicationWindow = SDL_CreateWindow("Command and Conquer Generals",
 		DEFAULT_XRESOLUTION,
 		DEFAULT_YRESOLUTION,
 		windowFlags);
-	if (TheSDL3Window == NULL)
+	if (ApplicationWindow == NULL)
 	{
 		DEBUG_LOG(("Failed to create SDL window: %s\n", SDL_GetError()));
 		return false;
 	}
 
-	ApplicationHWnd = reinterpret_cast<HWND>(TheSDL3Window);
-	renderLoadingScreen();
+	ApplicationHWnd = reinterpret_cast<HWND>(ApplicationWindow);
+	//renderLoadingScreen();
 	return true;
 }
 
