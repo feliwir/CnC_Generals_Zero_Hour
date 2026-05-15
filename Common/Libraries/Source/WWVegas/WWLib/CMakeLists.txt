@@ -1,8 +1,8 @@
 # Target setup
-add_library(g_wwlib)
+add_library(c_wwlib)
 
 target_sources(
-  g_wwlib
+  c_wwlib
   PRIVATE _convert.cpp
           _mono.cpp
           _mono.h
@@ -181,7 +181,7 @@ target_sources(
 
 if(WIN32)
   target_sources(
-    g_wwlib
+    c_wwlib
     PRIVATE ddraw.cpp
             dsurface.cpp
             dsurface.h
@@ -195,11 +195,11 @@ if(WIN32)
             wwcomutil.h)
 endif()
 
-set_target_properties(g_wwlib PROPERTIES OUTPUT_NAME "WWLib"
+set_target_properties(c_wwlib PROPERTIES OUTPUT_NAME "WWLib"
                                          POSITION_INDEPENDENT_CODE TRUE)
 
-target_include_directories(g_wwlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(c_wwlib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 find_package(DXVK CONFIG REQUIRED)
-target_link_libraries(g_wwlib PUBLIC c_library_include g_wwdebug DXVK::d3d8)
+target_link_libraries(c_wwlib PUBLIC c_library_include c_wwdebug DXVK::d3d8)
 
-# DirectDraw target_link_libraries(g_wwlib PRIVATE dxlib::ddraw)
+# DirectDraw target_link_libraries(c_wwlib PRIVATE dxlib::ddraw)

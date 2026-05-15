@@ -1074,8 +1074,8 @@ target_include_directories(
   g_gameengine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Include
                       ${CMAKE_CURRENT_SOURCE_DIR}/Include/Precompiled)
 
-target_link_libraries(g_gameengine PUBLIC g_ww3d2 g_wwmath g_wwlib g_wwsaveload
-                                          c_compression g_wwdownload)
+target_link_libraries(g_gameengine PUBLIC c_ww3d2 c_wwmath c_wwlib c_wwsaveload
+                                          c_compression c_wwdownload)
 
 # GLM
 find_package(glm CONFIG REQUIRED)

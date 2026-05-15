@@ -1,8 +1,8 @@
 # Target setup
-add_library(g_ww3d2)
+add_library(c_ww3d2)
 
 target_sources(
-  g_ww3d2
+  c_ww3d2
   PRIVATE aabtree.cpp
           aabtree.h
           aabtreebuilder.cpp
@@ -231,30 +231,30 @@ target_sources(
           ww3dtrig.h)
 
 if(WIN32)
-  target_sources(g_ww3d2 PRIVATE framgrab.cpp framgrab.h)
+  target_sources(c_ww3d2 PRIVATE framgrab.cpp framgrab.h)
 endif()
 
-set_target_properties(g_ww3d2 PROPERTIES OUTPUT_NAME "WW3D2")
+set_target_properties(c_ww3d2 PROPERTIES OUTPUT_NAME "WW3D2")
 
-target_include_directories(g_ww3d2 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(c_ww3d2 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 find_package(DXVK CONFIG REQUIRED)
 
-target_link_libraries(g_ww3d2 PUBLIC g_wwlib g_wwmath g_wwsaveload DXVK::d3d8)
+target_link_libraries(c_ww3d2 PUBLIC c_wwlib c_wwmath c_wwsaveload DXVK::d3d8)
 
 # GLM
 find_package(glm CONFIG REQUIRED)
-target_link_libraries(g_ww3d2 PRIVATE glm::glm)
+target_link_libraries(c_ww3d2 PRIVATE glm::glm)
 
 
 if(SAGE_USE_FONTCONFIG)
   find_package(Fontconfig REQUIRED)
-  target_link_libraries(g_ww3d2 PRIVATE Fontconfig::Fontconfig)
-  target_compile_definitions(g_ww3d2 PUBLIC SAGE_USE_FONTCONFIG)
+  target_link_libraries(c_ww3d2 PRIVATE Fontconfig::Fontconfig)
+  target_compile_definitions(c_ww3d2 PUBLIC SAGE_USE_FONTCONFIG)
 endif()
 
 if(SAGE_USE_FREETYPE)
   find_package(Freetype CONFIG REQUIRED)
-  target_link_libraries(g_ww3d2 PRIVATE Freetype::Freetype)
-  target_compile_definitions(g_ww3d2 PUBLIC SAGE_USE_FREETYPE)
+  target_link_libraries(c_ww3d2 PRIVATE Freetype::Freetype)
+  target_compile_definitions(c_ww3d2 PUBLIC SAGE_USE_FREETYPE)
 endif()

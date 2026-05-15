@@ -1,0 +1,4 @@
+add_executable(c_buildversionupdate)
+
+target_sources(c_buildversionupdate PRIVATE buildVersionUpdate.cpp)
+set_target_properties(c_buildversionupdate PROPERTIES OUTPUT_NAME "buildVersionUpdate")

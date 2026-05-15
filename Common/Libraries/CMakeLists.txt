@@ -6,3 +6,4 @@ find_package(ICU REQUIRED data i18n io uc)
 target_link_libraries(c_library_include INTERFACE c_compat ICU::data ICU::i18n ICU::io ICU::uc)
 
 add_subdirectory(Source/Compression)
+add_subdirectory(Source/WWVegas)

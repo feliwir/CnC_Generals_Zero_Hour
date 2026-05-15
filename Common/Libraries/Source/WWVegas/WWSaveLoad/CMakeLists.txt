@@ -1,8 +1,8 @@
 # Target setup
-add_library(g_wwsaveload)
+add_library(c_wwsaveload)
 
 target_sources(
-  g_wwsaveload
+  c_wwsaveload
   PRIVATE definition.cpp
           definition.h
           definitionclassids.h
@@ -37,10 +37,10 @@ target_sources(
           wwsaveload.cpp
           wwsaveload.h)
 
-set_target_properties(g_wwsaveload PROPERTIES OUTPUT_NAME "WWSaveLoad")
+set_target_properties(c_wwsaveload PROPERTIES OUTPUT_NAME "WWSaveLoad")
 
-target_include_directories(g_wwsaveload PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-target_include_directories(g_wwsaveload
+target_include_directories(c_wwsaveload PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(c_wwsaveload
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../WWMath)
 
-target_link_libraries(g_wwsaveload PUBLIC c_library_include g_wwlib)
+target_link_libraries(c_wwsaveload PUBLIC c_library_include c_wwlib)

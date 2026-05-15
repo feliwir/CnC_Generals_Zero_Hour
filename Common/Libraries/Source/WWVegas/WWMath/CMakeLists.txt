@@ -1,8 +1,8 @@
 # Target setup
-add_library(g_wwmath)
+add_library(c_wwmath)
 
 target_sources(
-  g_wwmath
+  c_wwmath
   PRIVATE aabox.cpp
           aabox.h
           aabtreecull.cpp
@@ -82,16 +82,16 @@ target_sources(
           wwmath.h
           wwmathids.h)
 
-set_target_properties(g_wwmath PROPERTIES OUTPUT_NAME "WWMath")
+set_target_properties(c_wwmath PROPERTIES OUTPUT_NAME "WWMath")
 
-target_include_directories(g_wwmath PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+target_include_directories(c_wwmath PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
                                            ${CMAKE_CURRENT_SOURCE_DIR}/../)
-target_include_directories(g_wwmath
+target_include_directories(c_wwmath
                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/../WWLib)
 
-target_link_libraries(g_wwmath PUBLIC c_library_include g_wwlib g_wwsaveload)
+target_link_libraries(c_wwmath PUBLIC c_library_include c_wwlib c_wwsaveload)
 
 # GLM
 find_package(glm CONFIG REQUIRED)
-target_link_libraries(g_wwmath PRIVATE glm::glm)
+target_link_libraries(c_wwmath PRIVATE glm::glm)
 

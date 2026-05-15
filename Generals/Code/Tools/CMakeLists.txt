@@ -1,2 +1,0 @@
-add_subdirectory(versionUpdate)
-add_subdirectory(buildVersionUpdate)

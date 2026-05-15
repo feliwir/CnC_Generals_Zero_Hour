@@ -9,7 +9,7 @@ jobs:
   testing:
     name: Ubuntu 64-bit
     runs-on: ubuntu-24.04
-    strategy: 
+    strategy:
       matrix:
         preset: [linux-x64-debug, linux-x64-release]
     steps:
@@ -33,7 +33,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/vcpkg_cache
-          key: vcpkg-${{ matrix.preset }}-${{ hashFiles('vcpkg.json', 'CMakeLists.txt', '**/CMakeLists.txt', 'CMakePresets.json') }}
+          key: vcpkg-${{ matrix.preset }}-${{ hashFiles('vcpkg.json', 'vcpkg-configuration.json', 'CMakePresets.json') }}
 
       # Setup vcpkg: ensures vcpkg is downloaded and built.
       - name: Setup a new (or from cache) vcpkg (and does not build any package)
@@ -41,6 +41,8 @@ jobs:
 
       - name: Run CMake consuming CMakePreset.json and run vcpkg to build packages
         uses: lukka/run-cmake@v10
+        env:
+          VCPKG_BINARY_SOURCES: clear;files,${{ github.workspace }}/vcpkg_cache,readwrite
         with:
           configurePreset: "${{ matrix.preset }}"
           buildPreset: "${{ matrix.preset }}"

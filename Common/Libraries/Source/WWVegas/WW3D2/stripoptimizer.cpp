@@ -20,7 +20,7 @@
 #include "hashtemplate.h"
 #include "wwdebug.h"
 
-template <class T> inline void swap (T& a, T& b)
+template <class T> inline void swap (T& a, T& b) noexcept
 {
 	T t(a);
 	a = b;

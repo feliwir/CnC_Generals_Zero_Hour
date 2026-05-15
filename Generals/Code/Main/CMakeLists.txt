@@ -1,7 +1,7 @@
-add_custom_command(OUTPUT buildVersion.h COMMAND g_buildversionupdate ARGS
+add_custom_command(OUTPUT buildVersion.h COMMAND c_buildversionupdate ARGS
                                                  buildVersion.h)
 
-add_custom_command(OUTPUT generatedVersion.h COMMAND g_versionupdate ARGS
+add_custom_command(OUTPUT generatedVersion.h COMMAND c_versionupdate ARGS
                                                      generatedVersion.h)
 
 add_executable(g_rts_sdl)

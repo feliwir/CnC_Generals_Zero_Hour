@@ -1,4 +1,0 @@
-add_executable(g_buildversionupdate)
-
-target_sources(g_buildversionupdate PRIVATE buildVersionUpdate.cpp)
-set_target_properties(g_buildversionupdate PROPERTIES OUTPUT_NAME "buildVersionUpdate")
