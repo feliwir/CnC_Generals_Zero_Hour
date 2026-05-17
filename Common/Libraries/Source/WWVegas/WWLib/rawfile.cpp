@@ -340,7 +340,7 @@ char const * RawFileClass::Set_Name(char const * filename)
 	/*
 	** If this is a UNIX build, fix the filename from the DOS-like name passed in
 	*/
-	#ifdef _UNIX
+	#if 0 //def _UNIX
 		for (int i=0; i<strlen(nameptr); i++)
 		{
 			if (nameptr[i]=='\\')

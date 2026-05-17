@@ -543,7 +543,7 @@ void SDL3Mouse::initCursorResources(void)
 		for (Int direction=0; direction<m_cursorInfo[cursor].numDirections; direction++)
 		{	if (!cursorResources[cursor][direction] && !m_cursorInfo[cursor].textureName.isEmpty())
 			{	//this cursor has never been loaded before.
-				char resourcePath[256];
+				char resourcePath[256] = {0};
 				//Check if this is a directional cursor
 				if (m_cursorInfo[cursor].numDirections > 1)
 					sprintf(resourcePath,"Data/Cursors/%s%d.ani",m_cursorInfo[cursor].textureName.str(),direction);

@@ -44,6 +44,9 @@ public:
 	virtual Bool getFileInfo(const AsciiString &filename, FileInfo *fileInfo) const;
 
 	virtual Bool createDirectory(AsciiString directory);
+protected:
+	// List of files that we can use for case-insensitive matching.
+	FilenameList m_fileList;
 };
 
 #endif // __SDL3LOCALFILESYSTEM_H

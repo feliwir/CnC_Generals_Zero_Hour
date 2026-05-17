@@ -24,26 +24,10 @@
 #include "Common/GameMemory.h"
 #include "SDL3Device/Common/SDL3LocalFile.h"
 
-namespace
+SDL3LocalFileSystem::SDL3LocalFileSystem() : LocalFileSystem()
 {
-static bool isSubdirectoryMatch(const char *relativePath)
-{
-	if (relativePath == NULL) {
-		return false;
-	}
-
-	while (*relativePath != '\0') {
-		if (*relativePath == '/' || *relativePath == '\\') {
-			return true;
-		}
-		++relativePath;
-	}
-
-	return false;
+	getFileListInDirectory("", "", "*", m_fileList, true);
 }
-}
-
-SDL3LocalFileSystem::SDL3LocalFileSystem() : LocalFileSystem() {}
 
 SDL3LocalFileSystem::~SDL3LocalFileSystem() {}
 
@@ -51,18 +35,29 @@ File *SDL3LocalFileSystem::openFile(const Char *filename, Int access)
 {
 	SDL3LocalFile *file = newInstance(SDL3LocalFile);
 
-	if (strlen(filename) <= 0) {
+	if (strlen(filename) <= 0)
+	{
 		return NULL;
 	}
 
-	if (access & File::WRITE) {
+	FilenameListIter filenameNoCase = std::find_if(m_fileList.begin(), m_fileList.end(), [&filename](const AsciiString &file)
+												   { return file.compareNoCase(filename) == 0; });
+
+	if (filenameNoCase == m_fileList.end())
+	{
+		return NULL;
+	}
+
+	if (access & File::WRITE)
+	{
 		AsciiString string;
-		string = filename;
+		string = *filenameNoCase;
 		AsciiString token;
 		AsciiString dirName;
 		string.nextToken(&token, "\\/");
 		dirName = token;
-		while ((token.find('.') == NULL) || (string.find('.') != NULL)) {
+		while ((token.find('.') == NULL) || (string.find('.') != NULL))
+		{
 			createDirectory(dirName);
 			string.nextToken(&token, "\\/");
 			dirName.concat('/');
@@ -70,11 +65,14 @@ File *SDL3LocalFileSystem::openFile(const Char *filename, Int access)
 		}
 	}
 
-	if (file->open(filename, access) == FALSE) {
+	if (file->open(filenameNoCase->str(), access) == FALSE)
+	{
 		file->close();
 		file->deleteInstance();
 		file = NULL;
-	} else {
+	}
+	else
+	{
 		file->deleteOnClose();
 	}
 
@@ -90,7 +88,8 @@ void SDL3LocalFileSystem::reset() {}
 Bool SDL3LocalFileSystem::doesFileExist(const Char *filename) const
 {
 	SDL_PathInfo pathInfo;
-	if (!SDL_GetPathInfo(filename, &pathInfo)) {
+	if (!SDL_GetPathInfo(filename, &pathInfo))
+	{
 		return FALSE;
 	}
 
@@ -98,34 +97,61 @@ Bool SDL3LocalFileSystem::doesFileExist(const Char *filename) const
 }
 
 void SDL3LocalFileSystem::getFileListInDirectory(const AsciiString &currentDirectory,
-	                                               const AsciiString &originalDirectory,
-	                                               const AsciiString &searchName,
-	                                               FilenameList &filenameList,
-	                                               Bool searchSubdirectories) const
+												 const AsciiString &originalDirectory,
+												 const AsciiString &searchName,
+												 FilenameList &filenameList,
+												 Bool searchSubdirectories) const
 {
 	AsciiString rootPath = originalDirectory;
-	if (rootPath.isEmpty()) {
+	if (rootPath.isEmpty())
+	{
 		rootPath = "./";
 	}
 	rootPath.concat(currentDirectory);
+	// Append a trailing slash if there isn't one
+	if (!rootPath.isEmpty() && rootPath.getCharAt(rootPath.getLength() - 1) != '/' && rootPath.getCharAt(rootPath.getLength() - 1) != '\\')
+	{
+		rootPath.concat('/');
+	}
 
 	int count = 0;
 	char **matches = SDL_GlobDirectory(rootPath.str(), searchName.str(), SDL_GLOB_CASEINSENSITIVE, &count);
-	if (matches == NULL) {
+	if (matches == NULL)
+	{
 		return;
 	}
 
-	for (int i = 0; i < count; ++i) {
+	for (int i = 0; i < count; ++i)
+	{
 		const char *match = matches[i];
-		if (!searchSubdirectories && isSubdirectoryMatch(match)) {
+
+		AsciiString fullPath = rootPath;
+		fullPath.concat(match);
+
+		// Stat the file
+		SDL_PathInfo pathInfo;
+		if (!SDL_GetPathInfo(fullPath.str(), &pathInfo))
+		{
+			DEBUG_LOG(("Failed to stat file '%s' - skipping it.\n", fullPath.str()));
 			continue;
 		}
 
-		AsciiString fullName = rootPath;
-		fullName.concat(match);
-		if (filenameList.find(fullName) == filenameList.end()) {
-			filenameList.insert(fullName);
+		if (searchSubdirectories && pathInfo.type == SDL_PATHTYPE_DIRECTORY)
+		{
+			getFileListInDirectory(currentDirectory, fullPath, searchName, filenameList, searchSubdirectories);
+			continue;
 		}
+		else if (pathInfo.type != SDL_PATHTYPE_FILE)
+		{
+			continue;
+		}
+
+		// Strip any "./" from the beginning of the path, since some code expects that.
+		if (fullPath.getLength() >= 2 && fullPath.getCharAt(0) == '.' && (fullPath.getCharAt(1) == '/' || fullPath.getCharAt(1) == '\\'))
+		{
+			fullPath = fullPath.str() + 2;
+		}
+		filenameList.insert(fullPath);
 	}
 
 	SDL_free(matches);
@@ -133,12 +159,14 @@ void SDL3LocalFileSystem::getFileListInDirectory(const AsciiString &currentDirec
 
 Bool SDL3LocalFileSystem::getFileInfo(const AsciiString &filename, FileInfo *fileInfo) const
 {
-	if (fileInfo == NULL) {
+	if (fileInfo == NULL)
+	{
 		return FALSE;
 	}
 
 	SDL_PathInfo pathInfo;
-	if (!SDL_GetPathInfo(filename.str(), &pathInfo)) {
+	if (!SDL_GetPathInfo(filename.str(), &pathInfo))
+	{
 		return FALSE;
 	}
 
@@ -154,7 +182,8 @@ Bool SDL3LocalFileSystem::getFileInfo(const AsciiString &filename, FileInfo *fil
 
 Bool SDL3LocalFileSystem::createDirectory(AsciiString directory)
 {
-	if (directory.getLength() <= 0) {
+	if (directory.getLength() <= 0)
+	{
 		return FALSE;
 	}
 

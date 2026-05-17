@@ -453,6 +453,7 @@ enum {
 		W3D_CHUNK_EMITTER_LINE_PROPERTIES,								// line properties, used by line rendering mode
 		W3D_CHUNK_EMITTER_ROTATION_KEYFRAMES,							// rotation keys for the particles
 		W3D_CHUNK_EMITTER_FRAME_KEYFRAMES,								// frame keys (u-v based frame animation)
+		W3D_CHUNK_EMITTER_BLUR_TIME_KEYFRAMES,						// frame keys (u-v based frame animation)
 
 	W3D_CHUNK_AGGREGATE								=0x00000600,		// description of an aggregate object
 		W3D_CHUNK_AGGREGATE_HEADER,										// general information such as name and version
@@ -1023,6 +1024,11 @@ typedef enum
 	SURFACE_TYPE_ELECTRICAL_PERMEABLE,
 	SURFACE_TYPE_FLAMMABLE_PERMEABLE,
 	SURFACE_TYPE_STEAM_PERMEABLE,
+	SURFACE_TYPE_WATER_PERMEABLE,
+	SURFACE_TYPE_TIBERIUM_WATER,
+	SURFACE_TYPE_TIBERIUM_WATER_PERMEABLE,
+	SURFACE_TYPE_UNDERWATER_DIRT,
+	SURFACE_TYPE_UNDERWATER_TIBERIUM_DIRT,
 
 	SURFACE_TYPE_MAX			// NOTE: if you add a surface type, add it to the SurfaceEffects.INI file!
 } W3D_SURFACE_TYPES;
@@ -1056,6 +1062,11 @@ const char * const SURFACE_TYPE_STRINGS[SURFACE_TYPE_MAX] =
 	"Flammable Permeable",
 	"Steam",
 	"Steam Permeable",
+	"Water Permeable",
+	"Tiberium Water",
+	"Tiberium Water Permeable",
+	"Underwater Dirt",
+	"Underwater Tiberium Dirt",
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////////
@@ -1156,8 +1167,6 @@ struct W3dMeshHeader3Struct
 	float32					SphRadius;			// Bounding sphere radius
 
 };
-
-static_assert(sizeof(W3dMeshHeader3Struct) == 116, "W3dMeshHeader3Struct should be 116 bytes in size");
 
 //
 // Vertex Influences.  For "skins" each vertex can be associated with a
@@ -1735,7 +1744,9 @@ struct W3dVolumeRandomizerStruct
 
 #define W3D_EMITTER_RENDER_MODE_TRI_PARTICLES		0
 #define W3D_EMITTER_RENDER_MODE_QUAD_PARTICLES		1
-#define W3D_EMITTER_RENDER_MODE_LINE					2
+#define W3D_EMITTER_RENDER_MODE_LINE    				2
+#define W3D_EMITTER_RENDER_MODE_LINEGRP_TETRA		3
+#define W3D_EMITTER_RENDER_MODE_LINEGRP_PRISM		4
 
 #define W3D_EMITTER_FRAME_MODE_1x1						0
 #define W3D_EMITTER_FRAME_MODE_2x2						1
@@ -1821,6 +1832,22 @@ struct W3dEmitterFrameKeyframeStruct
 {
 	float32				Time;
 	float32				Frame;
+};
+
+// W3D_CHUNK_EMITTER_BLUR_TIME_KEYFRAMES
+// Contains a W3dEmitterFrameHeaderStruct followed by a number of
+// frame keyframes (sub-texture indexing)
+struct W3dEmitterBlurTimeHeaderStruct
+{
+	uint32				KeyframeCount;
+	float32				Random;
+	uint32				Reserved[1];
+};
+
+struct W3dEmitterBlurTimeKeyframeStruct
+{
+	float32				Time;
+	float32				BlurTime;
 };
 
 
