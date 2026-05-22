@@ -22,7 +22,7 @@ jobs:
             libxkbcommon-dev libdrm-dev libgbm-dev libgl1-mesa-dev libgles2-mesa-dev \
             libegl1-mesa-dev libdbus-1-dev libibus-1.0-dev libudev-dev libthai-dev libusb-1.0-0-dev \
             libpipewire-0.3-dev libwayland-dev libdecor-0-dev liburing-dev glslang-tools libvulkan-dev \
-            qt6-base-dev qt6-base-private-dev qt6-qpa-plugins
+            qt6-base-dev qt6-base-private-dev qt6-qpa-plugins mesa-vulkan-drivers
 
       - name: Checkout
         uses: actions/checkout@v5
@@ -39,6 +39,12 @@ jobs:
       # Setup vcpkg: ensures vcpkg is downloaded and built.
       - name: Setup a new (or from cache) vcpkg (and does not build any package)
         uses: lukka/run-vcpkg@v11
+
+      # The virtual display is needed for running tests that require a display (e.g. WW3D testss).
+      - name: Start virtual display
+        run: |
+          Xvfb :1 -screen 0 1024x768x24 &
+          echo "DISPLAY=:1" >> $GITHUB_ENV
 
       - name: Run CMake consuming CMakePreset.json and run vcpkg to build packages
         uses: lukka/run-cmake@v10

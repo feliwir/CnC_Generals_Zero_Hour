@@ -58,6 +58,7 @@ int main(int argc, char **argv)
 {
 	std::string inFile = "";
 	std::string outFile = "";
+	bool memDecompress = false;
 	CompressionType compressType = CompressionManager::getPreferredCompression();
 
 	for (int i=1; i<argc; ++i)
@@ -66,6 +67,11 @@ int main(int argc, char **argv)
 		{
 			dumpHelp(argv[0]);
 			return EXIT_SUCCESS;
+		}
+
+		if ( !stricmp(argv[i], "-memdecompress") )
+		{
+			memDecompress = true;
 		}
 
 		if ( !strcmp(argv[i], "-in") )
@@ -146,6 +152,32 @@ int main(int argc, char **argv)
 		DEBUG_LOG(("'%s' is compressed using %s, from %d to %d bytes, %g%% of its original size\n",
 			inFile.c_str(), CompressionManager::getCompressionNameByType(usedType),
 			uncompressedSize, size, size/(double)(uncompressedSize+0.1)*100.0));
+
+		if (memDecompress)
+		{
+			DEBUG_LOG(("Decompressing '%s' in memory...\n", inFile.c_str()));
+			char *compressedData = new char[size];
+			fseek(fp, 0, SEEK_SET);
+			fread(compressedData, 1, size, fp);
+			fclose(fp);
+
+			char *decompressedData = new char[uncompressedSize];
+			int decompressedLen = CompressionManager::decompressData(compressedData, size, decompressedData, uncompressedSize);
+			if (decompressedLen != uncompressedSize)
+			{
+				DEBUG_LOG(("Decompression failed for '%s'\n", inFile.c_str()));
+				delete[] compressedData;
+				delete[] decompressedData;
+				return EXIT_FAILURE;
+			}
+			else
+			{
+				DEBUG_LOG(("Decompression successful for '%s'\n", inFile.c_str()));
+				delete[] compressedData;
+				delete[] decompressedData;
+				return EXIT_SUCCESS;
+			}
+		}
 
 		return EXIT_SUCCESS;
 	}

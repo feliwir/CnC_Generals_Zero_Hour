@@ -75,6 +75,13 @@ void QSdlWindow::Initialize()
         SDL_SetPointerProperty(props, SDL_PROP_WINDOW_CREATE_WIN32_HWND_POINTER, m_pWindowId);
     }
 #endif
+#ifdef __APPLE__
+    if (platform == "cocoa")
+    {
+        qDebug() << "Setting SDL properties for Cocoa.";
+        SDL_SetPointerProperty(props, SDL_PROP_WINDOW_CREATE_COCOA_WINDOW_POINTER, m_pWindowId);
+    }
+#endif
     else
     {
         qWarning() << "Unknown Qt platform. SDL window may not integrate properly.";

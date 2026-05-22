@@ -6,6 +6,7 @@
     "freetype",
     "glm",
     "glslang",
+    "gtest",
     "openal-soft",
     {
       "name": "sdl3",
