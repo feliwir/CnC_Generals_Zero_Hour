@@ -16,7 +16,7 @@ class W3DLoadTest :  public ::testing::TestWithParam<const char*>
     #ifndef _WIN32
         setenv("DXVK_WSI_DRIVER", "SDL3", 1);
     #endif
-        SDL_Window *win = SDL_CreateWindow("MeshTest", 800, 600, SDL_WINDOW_VULKAN);
+        SDL_Window *win = SDL_CreateWindow("MeshTest", 800, 600, SDL_WINDOW_VULKAN | SDL_WINDOW_HIDDEN);
         ASSERT_NE(win, nullptr);
         WW3D::Init(win);
         WW3D::Set_Any_Render_Device();
