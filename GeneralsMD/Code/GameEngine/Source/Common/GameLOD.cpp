@@ -583,7 +583,7 @@ void GameLODManager::applyStaticLODLevel(StaticGameLODLevel level)
 		TheWritableGlobalData->m_useFpsLimit = lodInfo->m_useFpsLimit;
 		TheWritableGlobalData->m_useTrees = requestedTrees;
 	}
-	if (!m_memPassed || isReallyLowMHz()) {
+	if ((m_numRAM > 0 && !m_memPassed) || (m_cpuFreq > 0 && isReallyLowMHz())) {
 		TheWritableGlobalData->m_shellMapOn = false;
 	}
 	if (TheTerrainVisual)
