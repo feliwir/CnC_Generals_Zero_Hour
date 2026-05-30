@@ -207,6 +207,7 @@ class OpenALAudioManager : public AudioManager
 
 		void stopAllSpeech( void );
 		static ALenum getALFormat( uint8_t channels, uint8_t bitsPerSample );
+		static ALenum getALFormatForSampleType( uint8_t channels, int sampleFormat );
 	protected:
 		ProviderInfo m_provider3D[MAXPROVIDERS];
 		UnsignedInt m_providerCount;
@@ -252,4 +253,3 @@ class OpenALAudioManager : public AudioManager
 		ALCcontext *m_alcContext = nullptr;
 		OpenALAudioStream* m_binkAudio = nullptr;
 };
-

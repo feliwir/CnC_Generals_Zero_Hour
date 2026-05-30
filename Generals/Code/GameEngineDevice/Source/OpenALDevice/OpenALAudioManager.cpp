@@ -482,6 +482,23 @@ ALenum OpenALAudioManager::getALFormat(uint8_t channels, uint8_t bitsPerSample)
 	return AL_FORMAT_MONO8;
 }
 
+ALenum OpenALAudioManager::getALFormatForSampleType(uint8_t channels, int sampleFormat)
+{
+	const AVSampleFormat packedFormat = av_get_packed_sample_fmt(static_cast<AVSampleFormat>(sampleFormat));
+	switch (packedFormat) {
+	case AV_SAMPLE_FMT_U8:
+		return getALFormat(channels, 8);
+	case AV_SAMPLE_FMT_S16:
+		return getALFormat(channels, 16);
+	case AV_SAMPLE_FMT_FLT:
+		// OpenAL Soft always supports float32 sample formats.
+		return getALFormat(channels, 32);
+	default:
+		DEBUG_LOG(("Unsupported FFmpeg sample format '%i' (%i channels)", sampleFormat, channels));
+		return AL_NONE;
+	}
+}
+
 //-------------------------------------------------------------------------------------------------
 void OpenALAudioManager::init()
 {
@@ -791,8 +808,12 @@ void OpenALAudioManager::playAudioEvent(AudioEventRTS* event)
 					DEBUG_LOG(("Received audio frame\n"));
 
 					AVSampleFormat sampleFmt = static_cast<AVSampleFormat>(frame->format);
-					const int bytesPerSample = av_get_bytes_per_sample(sampleFmt);
-					ALenum format = OpenALAudioManager::getALFormat(frame->ch_layout.nb_channels, bytesPerSample * 8);
+					const AVSampleFormat packedSampleFmt = av_get_packed_sample_fmt(sampleFmt);
+					const int bytesPerSample = av_get_bytes_per_sample(packedSampleFmt);
+					ALenum format = OpenALAudioManager::getALFormatForSampleType(frame->ch_layout.nb_channels, frame->format);
+					if (format == AL_NONE || bytesPerSample <= 0) {
+						return;
+					}
 					const int frameSize =
 						av_samples_get_buffer_size(NULL, frame->ch_layout.nb_channels, frame->nb_samples, sampleFmt, 1);
 					uint8_t* frameData = frame->data[0];

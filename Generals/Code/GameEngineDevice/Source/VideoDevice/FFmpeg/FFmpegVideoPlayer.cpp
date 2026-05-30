@@ -359,7 +359,11 @@ void FFmpegVideoStream::onFrame(AVFrame *frame, int stream_idx, int stream_type,
 		OpenALAudioStream* audioStream = (OpenALAudioStream*)TheAudio->getHandleForBink();
 		audioStream->update();
 		AVSampleFormat sampleFmt = static_cast<AVSampleFormat>(frame->format);
-		const int bytesPerSample = av_get_bytes_per_sample(sampleFmt);
+		const AVSampleFormat packedSampleFmt = av_get_packed_sample_fmt(sampleFmt);
+		const int bytesPerSample = av_get_bytes_per_sample(packedSampleFmt);
+		if (bytesPerSample <= 0) {
+			return;
+		}
 		const int frameSize = av_samples_get_buffer_size(nullptr, frame->ch_layout.nb_channels, frame->nb_samples, sampleFmt, 1);
 		uint8_t* frameData = frame->data[0];
 		// The format is planar - convert it to interleaved
@@ -386,7 +390,10 @@ void FFmpegVideoStream::onFrame(AVFrame *frame, int stream_idx, int stream_type,
 			frameData = videoStream->m_audioBuffer;
 		}
 
-		ALenum format = OpenALAudioManager::getALFormat(frame->ch_layout.nb_channels, bytesPerSample * 8);
+		ALenum format = OpenALAudioManager::getALFormatForSampleType(frame->ch_layout.nb_channels, frame->format);
+		if (format == AL_NONE) {
+			return;
+		}
 		audioStream->bufferData(frameData, frameSize, format, frame->sample_rate);
 	}
 #endif
@@ -548,6 +555,5 @@ Int		FFmpegVideoStream::width( void )
 {
 	return m_ffmpegFile->getWidth();
 }
-
 
 

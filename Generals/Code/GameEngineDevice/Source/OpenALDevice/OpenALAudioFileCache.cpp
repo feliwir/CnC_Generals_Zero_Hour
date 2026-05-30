@@ -48,9 +48,18 @@ OpenALAudioFileCache::OpenALAudioFileCache() : m_maxSize(0), m_currentlyUsedSize
 Bool OpenALAudioFileCache::decodeFFmpeg(OpenAudioFile* file)
 {
 	std::vector<uint8_t> audioData;
+	ALenum alFormat = AL_NONE;
+	Bool unsupportedFormat = FALSE;
 	auto on_frame = [](AVFrame* frame, int stream_idx, int stream_type, void* user_data) {
-		auto [file, audioData] = *static_cast<std::tuple<OpenAudioFile*, std::vector<uint8_t>*>*>(user_data);
+		auto [file, audioData, alFormat, unsupportedFormat] =
+			*static_cast<std::tuple<OpenAudioFile*, std::vector<uint8_t>*, ALenum*, Bool*>*>(user_data);
 		if (stream_type != AVMEDIA_TYPE_AUDIO) {
+			return;
+		}
+
+		*alFormat = OpenALAudioManager::getALFormatForSampleType(frame->ch_layout.nb_channels, frame->format);
+		if (*alFormat == AL_NONE) {
+			*unsupportedFormat = TRUE;
 			return;
 		}
 
@@ -76,15 +85,19 @@ Bool OpenALAudioFileCache::decodeFFmpeg(OpenAudioFile* file)
 		};
 
 	file->m_ffmpegFile->setFrameCallback(on_frame);
-	auto user_data = std::tuple<OpenAudioFile*, std::vector<uint8_t>*>(file, &audioData);
+		auto user_data = std::tuple<OpenAudioFile*, std::vector<uint8_t>*, ALenum*, Bool*>(file, &audioData, &alFormat, &unsupportedFormat);
 	file->m_ffmpegFile->setUserData(&user_data);
 
 	// Read all packets inside the file
 	while (file->m_ffmpegFile->decodePacket()) {
 	}
 
+	if (unsupportedFormat || alFormat == AL_NONE) {
+		return false;
+	}
+
 	// Fill the buffer with the audio data
-	alBufferData(file->m_buffer, OpenALAudioManager::getALFormat(file->m_ffmpegFile->getNumChannels(), file->m_ffmpegFile->getBytesPerSample() * 8),
+	alBufferData(file->m_buffer, alFormat,
 		audioData.data(), audioData.size(), file->m_ffmpegFile->getSampleRate());
 
 	// Calculate the duration in MS
