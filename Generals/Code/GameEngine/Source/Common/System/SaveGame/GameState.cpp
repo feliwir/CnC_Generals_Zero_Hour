@@ -240,7 +240,7 @@ UnicodeString getUnicodeDateBuffer(SYSTEMTIME timeVal)
 								 dateBuffer, sizeof(dateBuffer) );
 	displayDateBuffer.set(dateBuffer);
 #else 
-	// TODO: implement this for non-windows platforms. for now, just return a blank string.
+	displayDateBuffer.format( u"%04d-%02d-%02d", timeVal.wYear, timeVal.wMonth, timeVal.wDay );
 #endif
 	return displayDateBuffer;
 	//displayDateBuffer.format( L"%ls", dateBuffer );
@@ -278,7 +278,7 @@ UnicodeString getUnicodeTimeBuffer(SYSTEMTIME timeVal)
 								 sizeof(timeBuffer) );
 	displayTimeBuffer.set(timeBuffer);
 #else
-	// TODO: implement this for non-windows platforms. for now, just return a blank string.
+	displayTimeBuffer.format( u"%02d:%02d", timeVal.wHour, timeVal.wMinute );
 #endif
 	return displayTimeBuffer;
 }
