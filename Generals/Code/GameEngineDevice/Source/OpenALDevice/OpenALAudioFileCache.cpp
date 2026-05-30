@@ -85,7 +85,7 @@ Bool OpenALAudioFileCache::decodeFFmpeg(OpenAudioFile* file)
 		};
 
 	file->m_ffmpegFile->setFrameCallback(on_frame);
-		auto user_data = std::tuple<OpenAudioFile*, std::vector<uint8_t>*, ALenum*, Bool*>(file, &audioData, &alFormat, &unsupportedFormat);
+	auto user_data = std::tuple<OpenAudioFile*, std::vector<uint8_t>*, ALenum*, Bool*>(file, &audioData, &alFormat, &unsupportedFormat);
 	file->m_ffmpegFile->setUserData(&user_data);
 
 	// Read all packets inside the file
