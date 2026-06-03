@@ -40,18 +40,37 @@ File *SDL3LocalFileSystem::openFile(const Char *filename, Int access)
 		return NULL;
 	}
 
-	FilenameListIter filenameNoCase = std::find_if(m_fileList.begin(), m_fileList.end(), [&filename](const AsciiString &file)
-												   { return file.compareNoCase(filename) == 0; });
+	AsciiString filenameNoCase(filename);
+	FilenameListIter it = std::find_if(m_fileList.begin(), m_fileList.end(), [&filename](const AsciiString &file)
+									   { 
+													char normalizedFile[1024] = { 0 };
+													// Replace all backslashes with forward slashes for comparison, since SDL treats them as equivalent.
+													strncpy(normalizedFile, filename, sizeof(normalizedFile));
+													for (char *p = normalizedFile; *p; ++p)
+													{
+														if (*p == '\\')
+														{
+															*p = '/';
+														}
+													}
+												return file.compareNoCase(normalizedFile) == 0; 
+										});
 
-	if (filenameNoCase == m_fileList.end())
+	// When there's no CREATE flag, we require that the file already exists.
+	if (it == m_fileList.end())
 	{
-		return NULL;
+		if ((access & File::WRITE) == 0)
+			return NULL;
+	}
+	else
+	{
+		filenameNoCase = *it;
 	}
 
 	if (access & File::WRITE)
 	{
 		AsciiString string;
-		string = *filenameNoCase;
+		string = filenameNoCase;
 		AsciiString token;
 		AsciiString dirName;
 		string.nextToken(&token, "\\/");
@@ -65,7 +84,7 @@ File *SDL3LocalFileSystem::openFile(const Char *filename, Int access)
 		}
 	}
 
-	if (file->open(filenameNoCase->str(), access) == FALSE)
+	if (file->open(filenameNoCase.str(), access) == FALSE)
 	{
 		file->close();
 		file->deleteInstance();

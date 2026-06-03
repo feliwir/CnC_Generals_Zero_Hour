@@ -54,6 +54,7 @@
 #include "GameClient/TerrainVisual.h"
 
 #include "GameNetwork/FirewallHelper.h"
+#include <SDL3/SDL_filesystem.h>
 
 // PUBLIC DATA ////////////////////////////////////////////////////////////////////////////////////
 GlobalData* TheWritableGlobalData = NULL;				///< The global data singleton
@@ -1174,18 +1175,15 @@ void GlobalData::parseGameDataDefinition( INI* ini )
 
 	TheWritableGlobalData->m_userDataDir.clear();
 
-#ifdef _WIN32
 	char temp[_MAX_PATH];
-	if (::SHGetSpecialFolderPath(NULL, temp, CSIDL_PERSONAL, true))
+	const char* userDataDir = SDL_GetUserFolder(SDL_FOLDER_HOME);
+	if (userDataDir != NULL)
 	{
-		if (temp[strlen(temp)-1] != '\\')
-			strcat(temp, "\\");
-		strcat(temp, TheWritableGlobalData->m_userDataLeafName.str());
-		strcat(temp, "\\");
-		CreateDirectory(temp, NULL);
+		AsciiString temp = userDataDir;
+		temp.concat(TheWritableGlobalData->m_userDataLeafName);
+		temp.concat("/");
 		TheWritableGlobalData->m_userDataDir = temp;
 	}
-#endif
 
 	// override INI values with user preferences
 	OptionPreferences optionPref;
