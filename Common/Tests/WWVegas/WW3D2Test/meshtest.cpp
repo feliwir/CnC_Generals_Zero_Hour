@@ -8,7 +8,7 @@
 
 WW3DAssetManager The3DAssetManager;
 
-class W3DLoadTest :  public ::testing::TestWithParam<const char*>
+class W3DMeshLoadTest :  public ::testing::TestWithParam<const char*>
 {
     protected:
     void SetUp() override
@@ -28,7 +28,7 @@ class W3DLoadTest :  public ::testing::TestWithParam<const char*>
     }
 };
 
-TEST_P(W3DLoadTest, LoadFromMemory)
+TEST_P(W3DMeshLoadTest, LoadFromMemory)
 {
     const char* filepath = GetParam();
     RawFileClass* file = new RawFileClass(filepath);
@@ -44,4 +44,4 @@ const char* w3d_files[] = {
     MESH_DATA_PATH "light.w3d",
 };
 
-INSTANTIATE_TEST_SUITE_P(LightW3D, W3DLoadTest, ::testing::ValuesIn(w3d_files));
+INSTANTIATE_TEST_SUITE_P(WW3D2, W3DMeshLoadTest, ::testing::ValuesIn(w3d_files));

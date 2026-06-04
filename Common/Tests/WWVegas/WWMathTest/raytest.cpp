@@ -271,7 +271,7 @@ class RayAABoxTestClass : public ::testing::TestWithParam<RayAABoxTestData>
 protected:
 };
 
-TEST_P(RayAABoxTestClass,RayAABoxTests)
+TEST_P(RayAABoxTestClass, RayAABoxTests)
 {
 	const RayAABoxTestData& testcase = GetParam();
 
@@ -285,7 +285,7 @@ TEST_P(RayAABoxTestClass,RayAABoxTests)
 	EXPECT_NEAR(testcase.Fraction, result.Fraction, WWMATH_EPSILON);
 }
 
-INSTANTIATE_TEST_CASE_P(RayAABoxTests,RayAABoxTestClass,::testing::ValuesIn(RayAABoxTestCases));
+INSTANTIATE_TEST_CASE_P(WWMath,RayAABoxTestClass,::testing::ValuesIn(RayAABoxTestCases));
 
 /*
 ** Test the Cast_Ray function on some random oriented boxes

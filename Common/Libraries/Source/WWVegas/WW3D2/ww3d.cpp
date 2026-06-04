@@ -1229,7 +1229,7 @@ void WW3D::Make_Screen_Shot( const char * filename_base )
 
 	WWASSERT(!IsRendering);
 
-	char filename[80];
+	char filename[255];
 
 	static int frame_number = 1;
 
