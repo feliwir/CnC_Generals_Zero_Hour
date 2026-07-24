@@ -196,9 +196,9 @@ Bool MobNexusContain::isValidContainerFor(const Object* rider, Bool checkCapacit
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-void MobNexusContain::onContaining( Object *rider )
+void MobNexusContain::onContaining( Object *rider, Bool wasSelected )
 {
-	OpenContain::onContaining(rider);
+	OpenContain::onContaining( rider, wasSelected );
 
 	// objects inside a MobNexus are held
 	rider->setDisabled( DISABLED_HELD );

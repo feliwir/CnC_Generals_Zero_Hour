@@ -285,6 +285,13 @@ void OpenContain::addToContain( Object *rider )
 	if( rider == NULL )
 		return;
 
+	Drawable *riderDraw = rider->getDrawable();
+	Bool wasSelected = FALSE;
+	if( riderDraw && riderDraw->isSelected() )
+	{
+		wasSelected = TRUE;
+	}
+
 #if defined(_DEBUG) || defined(_INTERNAL)
 	if( !isValidContainerFor( rider, false ) )
 	{
@@ -331,7 +338,7 @@ void OpenContain::addToContain( Object *rider )
 	// trigger an onContaining event for the object that just "ate" something
 	if( getObject()->getContain() )
 	{
-		getObject()->getContain()->onContaining( rider );
+		getObject()->getContain()->onContaining( rider, wasSelected );
 	}
 
 	// trigger an onContainedBy event for the object that just got "eaten" by us
@@ -620,7 +627,7 @@ void OpenContain::scatterToNearbyPosition(Object* rider)
 }
 
 //-------------------------------------------------------------------------------------------------
-void OpenContain::onContaining( Object * /*rider*/ )
+void OpenContain::onContaining( Object */*rider*/, Bool wasSelected )
 {
 	// Play audio
 	if( m_loadSoundsEnabled )

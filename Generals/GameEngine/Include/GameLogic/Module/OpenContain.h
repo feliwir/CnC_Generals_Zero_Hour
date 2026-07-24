@@ -111,6 +111,7 @@ public:
 	virtual Bool isHijackedVehicleCrateCollide() const { return false; }
 	virtual Bool isRailroad() const { return false;}
 	virtual Bool isSalvageCrateCollide() const { return false; }
+	virtual Bool isSabotageBuildingCrateCollide() const { return FALSE; }
 
 	// UpdateModule
 	virtual UpdateSleepTime update();				///< called once per frame
@@ -140,7 +141,7 @@ public:
 	virtual const Player* getApparentControllingPlayer(const Player* observingPlayer) const { return NULL; }
 	virtual void recalcApparentControllingPlayer() { }
 		
-	virtual void onContaining( Object *obj );		///< object now contains 'obj'
+	virtual void onContaining( Object *obj, Bool wasSelected );		///< object now contains 'obj'
 	virtual void onRemoving( Object *obj );			///< object no longer contains 'obj'
 	virtual void onSelling();///< Container is being sold.  Open responds by kicking people out
 

@@ -64,7 +64,7 @@ public:
 	virtual void pauseCountdown( Bool pause ) = 0;
 	virtual void doSpecialPower( UnsignedInt commandOptions ) = 0;
 	virtual void doSpecialPowerAtObject( Object *obj, UnsignedInt commandOptions ) = 0;
-	virtual void doSpecialPowerAtLocation( const Coord3D *loc, UnsignedInt commandOptions ) = 0;
+	virtual void doSpecialPowerAtLocation( const Coord3D *loc, Real angle, UnsignedInt commandOptions ) = 0;
 	virtual void doSpecialPowerAtMultipleLocations( const Coord3D *locations, Int locCount, UnsignedInt commandOptions ) = 0;
 	virtual void markSpecialPowerTriggered( const Coord3D *location ) = 0;
 	virtual void startPowerRecharge() = 0;	
@@ -134,7 +134,7 @@ public:
 	//
 	virtual void doSpecialPower( UnsignedInt commandOptions );
 	virtual void doSpecialPowerAtObject( Object *obj, UnsignedInt commandOptions );
-	virtual void doSpecialPowerAtLocation( const Coord3D *loc, UnsignedInt commandOptions );
+	virtual void doSpecialPowerAtLocation( const Coord3D *loc, Real angle, UnsignedInt commandOptions );
 	virtual void doSpecialPowerAtMultipleLocations( const Coord3D *locations, Int locCount, UnsignedInt commandOptions );
 
 	/**

@@ -70,7 +70,7 @@ public:
 	virtual void onCapture( Player *oldOwner, Player *newOwner ); // Our main guy goes with us, but our redirected contain needs to do his thing too
 
 	// Contain stuff we need to override to redirect on a condition
-	virtual void onContaining( Object *obj );		///< object now contains 'obj'
+	virtual void onContaining( Object *obj, Bool wasSelected );		///< object now contains 'obj'
 	virtual void onRemoving( Object *obj );			///< object no longer contains 'obj'
 
 	virtual Bool isValidContainerFor(const Object* obj, Bool checkCapacity) const;

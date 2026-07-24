@@ -82,7 +82,7 @@ public:
 																																								// lorenzen add a MobMemberInterface
 	virtual Bool isValidContainerFor( const Object* obj, Bool checkCapacity) const;
 
-	virtual void onContaining( Object *obj );		///< object now contains 'obj'
+	virtual void onContaining( Object *obj, Bool wasSelected );		///< object now contains 'obj'
 	virtual void onRemoving( Object *obj );			///< object no longer contains 'obj'
 	virtual UpdateSleepTime update();							///< called once per frame
 

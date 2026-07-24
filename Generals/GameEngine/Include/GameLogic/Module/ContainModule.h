@@ -118,7 +118,7 @@ public:
 	// you will want to override onContaining() and onRemoving() if you need to
 	// do special actions at those event times for your module
 	//
-	virtual void onContaining( Object *obj ) = 0;		///< object now contains 'obj'
+	virtual void onContaining( Object *obj, Bool wasSelected ) = 0;		///< object now contains 'obj'
 	virtual void onRemoving( Object *obj ) = 0;			///< object no longer contains 'obj'
 	virtual void onCapture( Player *oldOwner, Player *newOwner ) = 0; // Very important to handle capture of container, don't want to differ in teams from passenger to us.
 	virtual void onSelling() = 0;///< Container is being sold.  Most people respond by kicking everyone out, but not all.

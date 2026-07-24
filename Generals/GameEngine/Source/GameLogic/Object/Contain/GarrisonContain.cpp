@@ -1298,11 +1298,11 @@ void GarrisonContain::exitObjectViaDoor( Object *exitObj, ExitDoorType exitDoor 
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-void GarrisonContain::onContaining( Object *obj )
+void GarrisonContain::onContaining( Object *obj, Bool wasSelected )
 {
 
 	// extend base class
-	OpenContain::onContaining( obj );
+	OpenContain::onContaining( obj, wasSelected );
 
 	// get the structure object
 	Object *structure = getObject();

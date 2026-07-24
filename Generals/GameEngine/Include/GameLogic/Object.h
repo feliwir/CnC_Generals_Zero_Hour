@@ -216,7 +216,7 @@ public:
 	void healCompletely();														///< Restore max health to this Object
 
 	void scoreTheKill( const Object *victim );						///< I just killed this object.  
-	void onVeterancyLevelChanged( VeterancyLevel oldLevel, VeterancyLevel newLevel );	///< I just achieved this level right this moment
+	void onVeterancyLevelChanged( VeterancyLevel oldLevel, VeterancyLevel newLevel, Bool provideFeedback = TRUE );	///< I just achieved this level right this moment
 	ExperienceTracker* getExperienceTracker() {return m_experienceTracker;}
 	const ExperienceTracker* getExperienceTracker() const {return m_experienceTracker;}
 	VeterancyLevel getVeterancyLevel() const;
@@ -422,7 +422,7 @@ public:
 	SpecialPowerModuleInterface *getSpecialPowerModule( const SpecialPowerTemplate *specialPowerTemplate ) const;
 	void doSpecialPower( const SpecialPowerTemplate *specialPowerTemplate, UnsignedInt commandOptions, Bool forced = false );	///< execute power
 	void doSpecialPowerAtObject( const SpecialPowerTemplate *specialPowerTemplate, Object *obj, UnsignedInt commandOptions, Bool forced = false );	///< execute power
-	void doSpecialPowerAtLocation( const SpecialPowerTemplate *specialPowerTemplate, const Coord3D *loc, UnsignedInt commandOptions, Bool forced = false );	///< execute power
+	void doSpecialPowerAtLocation( const SpecialPowerTemplate *specialPowerTemplate, const Coord3D *loc, Real angle, UnsignedInt commandOptions, Bool forced = false );	///< execute power
 	void doSpecialPowerAtMultipleLocations( const SpecialPowerTemplate *specialPowerTemplate,
 																					const Coord3D *locations, Int locCount, UnsignedInt commandOptions, Bool forced = false );	///< execute power
 	void doCommandButton( const CommandButton *commandButton, CommandSourceType cmdSource );

@@ -142,7 +142,7 @@ class HeadOffMapState :  public State
 	MEMORY_POOL_GLUE_WITH_USERLOOKUP_CREATE(HeadOffMapState, "HeadOffMapState")		
 	//I'm outta here
 public:
-	HeadOffMapState( StateMachine *machine ) :State( machine, "HeadOffMapState" ) {}
+  HeadOffMapState( StateMachine *machine ) :State( machine, "HeadOffMapState" ) { facingDirectionUponDelivery.zero(); }
 	virtual StateReturnType update();
 	virtual StateReturnType onEnter();
 protected:
@@ -150,6 +150,8 @@ protected:
 	virtual void crc( Xfer *xfer ){};
 	virtual void xfer( Xfer *xfer ){XferVersion cv = 1;	XferVersion v = cv; xfer->xferVersion( &v, cv );}
 	virtual void loadPostProcess(){};
+  
+  Coord3D facingDirectionUponDelivery;
 };
 EMPTY_DTOR(HeadOffMapState)
 

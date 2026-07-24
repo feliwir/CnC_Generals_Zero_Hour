@@ -159,3 +159,11 @@ target_include_directories(c_gameenginedevice
                            INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/Include)
 
 target_link_libraries(c_gameenginedevice INTERFACE c_gameengine)
+
+# An INTERFACE source list propagates through the link graph, so every
+# transitive consumer (device libs, executables, tests) would recompile all
+# of these files. Park the list in a custom property instead; only the
+# per-game engine libraries and the Common test stub compile it.
+get_target_property(_sage_engine_sources c_gameenginedevice INTERFACE_SOURCES)
+set_property(TARGET c_gameenginedevice PROPERTY SAGE_GAME_SOURCES ${_sage_engine_sources})
+set_property(TARGET c_gameenginedevice PROPERTY INTERFACE_SOURCES)

@@ -94,7 +94,7 @@ public:
 	virtual Bool isHealContain() const { return false; } ///< true when container only contains units while healing (not a transport!)
 	virtual Bool isImmuneToClearBuildingAttacks() const { return true; }
 
-	virtual void onContaining( Object *obj );		///< object now contains 'obj'
+	virtual void onContaining( Object *obj, Bool wasSelected );		///< object now contains 'obj'
 	virtual void onRemoving( Object *obj );			///< object no longer contains 'obj'
 	virtual void onSelling();///< Container is being sold.  Tunnel responds by kicking people out if this is the last tunnel.
 

@@ -83,6 +83,7 @@ public:
 	virtual Bool isRailroad() const { return FALSE;};
  	virtual Bool isCarBombCrateCollide() const { return FALSE; }
 	virtual Bool isHijackedVehicleCrateCollide() const { return FALSE; }
+	virtual Bool isSabotageBuildingCrateCollide() const { return FALSE; }
 
 protected:
 

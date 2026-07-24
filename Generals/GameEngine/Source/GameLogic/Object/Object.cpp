@@ -2769,7 +2769,7 @@ Bool Object::hasSpecialPower( SpecialPowerType type ) const
 }
 
 //-------------------------------------------------------------------------------------------------
-void Object::onVeterancyLevelChanged( VeterancyLevel oldLevel, VeterancyLevel newLevel )
+void Object::onVeterancyLevelChanged( VeterancyLevel oldLevel, VeterancyLevel newLevel, Bool provideFeedback )
 {
 	updateUpgradeModules();
 
@@ -2779,7 +2779,7 @@ void Object::onVeterancyLevelChanged( VeterancyLevel oldLevel, VeterancyLevel ne
 
 	BodyModuleInterface* body = getBodyModule();
 	if (body)
-		body->onVeterancyLevelChanged(oldLevel, newLevel);
+		body->onVeterancyLevelChanged( oldLevel, newLevel, provideFeedback );
 	
 	
 	Bool hideAnimationForStealth = ( ! isLocallyControlled() && testStatus(OBJECT_STATUS_STEALTHED));
@@ -4662,7 +4662,7 @@ void Object::doSpecialPowerAtObject( const SpecialPowerTemplate *specialPowerTem
 /** Execute special power */
 //-------------------------------------------------------------------------------------------------
 void Object::doSpecialPowerAtLocation( const SpecialPowerTemplate *specialPowerTemplate, 
-																			 const Coord3D *loc, UnsignedInt commandOptions, Bool forced )
+																			 const Coord3D *loc, Real angle, UnsignedInt commandOptions, Bool forced )
 {
 
 	if (isDisabled())
@@ -4675,7 +4675,7 @@ void Object::doSpecialPowerAtLocation( const SpecialPowerTemplate *specialPowerT
 	// get the module and execute
 	SpecialPowerModuleInterface *mod = getSpecialPowerModule( specialPowerTemplate );
 	if( mod )
-		mod->doSpecialPowerAtLocation( loc, commandOptions );
+		mod->doSpecialPowerAtLocation( loc, angle, commandOptions );
 
 }  
 
@@ -4909,7 +4909,7 @@ void Object::doCommandButtonAtPosition( const CommandButton *commandButton, cons
 				if( commandButton->getSpecialPowerTemplate() )
 				{
 					CommandOption commandOptions = (CommandOption)(commandButton->getOptions() | COMMAND_FIRED_BY_SCRIPT);
-					doSpecialPowerAtLocation( commandButton->getSpecialPowerTemplate(), pos, commandOptions, cmdSource == CMD_FROM_SCRIPT );
+					doSpecialPowerAtLocation( commandButton->getSpecialPowerTemplate(), pos, INVALID_ANGLE, commandOptions, cmdSource == CMD_FROM_SCRIPT );
 				}
 				break;
 			}

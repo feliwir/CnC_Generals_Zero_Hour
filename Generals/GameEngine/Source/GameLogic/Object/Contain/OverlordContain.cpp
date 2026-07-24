@@ -279,19 +279,19 @@ void OverlordContain::iterateContained( ContainIterateFunc func, void *userData,
 }
 
 //-------------------------------------------------------------------------------------------------
-void OverlordContain::onContaining( Object *obj )
+void OverlordContain::onContaining( Object *obj, Bool wasSelected )
 {
 	// Do you mean me the Overlord, or my behavior of passing stuff on to my passengers?
 	if( getRedirectedContain() == NULL )
 	{
-		TransportContain::onContaining( obj );
+		TransportContain::onContaining( obj, wasSelected );
 		activateRedirectedContain();//Am now carrying something
 		return;
 	}
 
-	OpenContain::onContaining(obj);
+	OpenContain::onContaining( obj, wasSelected );
 
-	getRedirectedContain()->onContaining( obj );
+	getRedirectedContain()->onContaining( obj, wasSelected );
 
 }
 

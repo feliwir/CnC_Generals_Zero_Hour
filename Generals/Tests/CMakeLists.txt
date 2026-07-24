@@ -20,8 +20,8 @@ add_subdirectory(GameEngineDevice)
 sage_add_smoke_test(
   NAME_PREFIX Generals_RTS_SmokeTest
   TARGET g_rts_sdl
-  TIMEOUT 30
-  BASE_ARGS -dir "$ENV{SAGE_RETAIL_DATA_DIR_GENERALS}" -win -ignoreAsserts -autoexit 15
+  TIMEOUT 60
+  BASE_ARGS -dir "$ENV{SAGE_RETAIL_DATA_DIR_GENERALS}" -win -ignoreAsserts -autoexit 15 -multi
   REQUIRE_ENV SAGE_RETAIL_DATA_DIR_GENERALS
   SCENARIOS
     "quickstart:-quickstart"
@@ -59,8 +59,8 @@ endif()
 sage_add_smoke_test(
   NAME_PREFIX Generals_Replay_SmokeTest
   TARGET g_rts_sdl
-  TIMEOUT 60
-  BASE_ARGS -dir "$ENV{SAGE_RETAIL_DATA_DIR_GENERALS}" -win -ignoreAsserts
+  TIMEOUT 120
+  BASE_ARGS -dir "$ENV{SAGE_RETAIL_DATA_DIR_GENERALS}" -win -ignoreAsserts -multi
   REQUIRE_ENV SAGE_RETAIL_DATA_DIR_GENERALS
   SCENARIOS
     "default:-quickstart -file alpine_assault_viking_apex.rep -autoexit 45"

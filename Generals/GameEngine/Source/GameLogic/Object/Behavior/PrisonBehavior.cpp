@@ -165,11 +165,11 @@ void PrisonBehavior::onDelete( void )
 
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
-void PrisonBehavior::onContaining( Object *obj )
+void PrisonBehavior::onContaining( Object *obj, Bool wasSelected )
 {
 
 	// extend functionality
-	OpenContain::onContaining( obj );
+	OpenContain::onContaining( obj, wasSelected );
 
 	// objects inside a prison are held
 	obj->setDisabled( DISABLED_HELD );

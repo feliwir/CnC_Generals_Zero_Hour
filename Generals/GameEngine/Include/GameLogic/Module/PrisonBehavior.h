@@ -71,7 +71,7 @@ public:
 	virtual void onDelete( void );
 
 	// contain methods
-	virtual void onContaining( Object *obj );
+	virtual void onContaining( Object *obj, Bool wasSelected );
 	virtual void onRemoving( Object *obj );
 
 protected:

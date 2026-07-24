@@ -42,8 +42,13 @@ jobs:
         with:
           lfs: true
 
-      # Install latest CMake and Ninja.
+      # Install CMake and Ninja. CMake pinned to 4.4.0: 4.4.1 breaks SDL3's
+      # libc feature detection on Linux (libsdl-org/SDL#16072, fix due in
+      # SDL 3.4.14) and the version bump also invalidates the vcpkg binary
+      # cache (CMake version is part of the package ABI hash).
       - uses: lukka/get-cmake@latest
+        with:
+          cmakeVersion: "4.4.0"
 
       # run-vcpkg's binaryCachePath input validates that the path already
       # exists (it doesn't create it), so it must be created before that step
@@ -152,6 +157,7 @@ jobs:
           configurePreset: "${{ matrix.preset }}"
           buildPreset: "${{ matrix.preset }}"
           testPreset: "${{ matrix.preset }}"
+          testPresetAdditionalArgs: "['--parallel']"
           packagePreset: "${{ matrix.preset }}"
       
       - name: Upload code coverage to Codecov

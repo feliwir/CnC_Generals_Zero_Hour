@@ -98,6 +98,7 @@ public:
 	virtual Bool isHijackedVehicleCrateCollide() const { return false; }
 	virtual Bool isRailroad() const { return false;}
 	virtual Bool isSalvageCrateCollide() const { return false; }
+	virtual Bool isSabotageBuildingCrateCollide() const { return FALSE; }
 
 	// UpdateModuleInterface
 	virtual UpdateSleepTime update();

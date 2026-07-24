@@ -39,10 +39,14 @@ class CommandSetUpgradeModuleData : public UpgradeModuleData
 {
 public:
 	AsciiString m_newCommandSet;
+	AsciiString m_newCommandSetAlt;
+	AsciiString m_triggerAlt;
 
 	CommandSetUpgradeModuleData()
 	{
-		m_newCommandSet = AsciiString::TheEmptyString;
+		m_newCommandSet			= AsciiString::TheEmptyString;
+		m_newCommandSetAlt	= AsciiString::TheEmptyString;
+		m_triggerAlt				= "none";
 	}
 
 	static void buildFieldParse(MultiIniFieldParse& p);

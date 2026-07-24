@@ -134,6 +134,7 @@ public:
 	UnsignedInt		m_unpackTime;
 	UnsignedInt		m_packTime;				
 	UnsignedInt		m_cashUpdateDelay;
+	UnsignedInt		m_cashUpdateDelayFast;
 	UnsignedInt		m_regularCashAmount;
 	UnsignedInt		m_veteranCashAmount;
 	UnsignedInt		m_eliteCashAmount;
@@ -146,6 +147,7 @@ public:
 		m_unpackTime = 0;
 		m_packTime = 0;
 		m_cashUpdateDelay = 0;
+		m_cashUpdateDelayFast = 0;
 		m_regularCashAmount = 0;
 		m_veteranCashAmount = 0;
 		m_eliteCashAmount = 0;
@@ -164,6 +166,7 @@ public:
 			{ "PackTime",						INI::parseDurationUnsignedInt,	NULL, offsetof( HackInternetAIUpdateModuleData, m_packTime ) },
 			{ "PackUnpackVariationFactor", INI::parseReal,					NULL, offsetof( HackInternetAIUpdateModuleData, m_packUnpackVariationFactor ) },
 			{ "CashUpdateDelay",		INI::parseDurationUnsignedInt,	NULL, offsetof( HackInternetAIUpdateModuleData, m_cashUpdateDelay ) },
+			{ "CashUpdateDelayFast",INI::parseDurationUnsignedInt,	NULL, offsetof( HackInternetAIUpdateModuleData, m_cashUpdateDelayFast ) },
 			{ "RegularCashAmount",	INI::parseUnsignedInt,	NULL, offsetof( HackInternetAIUpdateModuleData, m_regularCashAmount ) },
 			{ "VeteranCashAmount",	INI::parseUnsignedInt,	NULL, offsetof( HackInternetAIUpdateModuleData, m_veteranCashAmount ) },
 			{ "EliteCashAmount",		INI::parseUnsignedInt,	NULL, offsetof( HackInternetAIUpdateModuleData, m_eliteCashAmount ) },
@@ -197,10 +200,10 @@ public:
 
  	virtual void aiDoCommand(const AICommandParms* parms);
 
-	UnsignedInt getUnpackTime()					const { return getHackInternetAIUpdateModuleData()->m_unpackTime; }
-	UnsignedInt getPackTime()						const { return getHackInternetAIUpdateModuleData()->m_packTime; }
 	Real getPackUnpackVariationFactor() const { return getHackInternetAIUpdateModuleData()->m_packUnpackVariationFactor; }
-	UnsignedInt getCashUpdateDelay()		const { return getHackInternetAIUpdateModuleData()->m_cashUpdateDelay; }
+	UnsignedInt getUnpackTime()					const;
+	UnsignedInt getPackTime()						const;
+	UnsignedInt getCashUpdateDelay()		const;
 	UnsignedInt getRegularCashAmount()	const { return getHackInternetAIUpdateModuleData()->m_regularCashAmount; }
 	UnsignedInt getVeteranCashAmount()	const { return getHackInternetAIUpdateModuleData()->m_veteranCashAmount; }
 	UnsignedInt getEliteCashAmount()		const { return getHackInternetAIUpdateModuleData()->m_eliteCashAmount; }

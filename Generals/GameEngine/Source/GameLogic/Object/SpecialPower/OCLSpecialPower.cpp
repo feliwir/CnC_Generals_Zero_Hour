@@ -31,6 +31,7 @@
 #include "Common/Player.h"
 #include "Common/RandomValue.h"
 #include "Common/Xfer.h"
+#include "Common/ThingFactory.h"
 #include "GameLogic/Object.h"
 #include "GameLogic/ObjectCreationList.h"
 #include "GameLogic/PartitionManager.h"
@@ -70,6 +71,7 @@ OCLSpecialPowerModuleData::OCLSpecialPowerModuleData( void )
 	m_defaultOCL = NULL;
 	m_upgradeOCL.clear();
 	m_createLoc = CREATE_AT_EDGE_NEAR_SOURCE;
+	m_isOCLAdjustPositionToPassable = FALSE;
 }
 
 //-------------------------------------------------------------------------------------------------
@@ -96,6 +98,8 @@ static void parseOCLUpgradePair( INI* ini, void * /*instance*/, void *store, con
 		{ "UpgradeOCL", parseOCLUpgradePair, NULL, offsetof( OCLSpecialPowerModuleData, m_upgradeOCL ) },
 		{ "OCL", ObjectCreationListStore::parseObjectCreationList, NULL, offsetof( OCLSpecialPowerModuleData, m_defaultOCL ) },
 		{ "CreateLocation", INI::parseIndexList, TheOCLCreateLocTypeNames, offsetof( OCLSpecialPowerModuleData, m_createLoc ) },
+		{ "ReferenceObject", INI::parseAsciiString, NULL, offsetof( OCLSpecialPowerModuleData, m_referenceThingName ) },
+		{ "OCLAdjustPositionToPassable", INI::parseBool, NULL, offsetof( OCLSpecialPowerModuleData, m_isOCLAdjustPositionToPassable ) },
 		{ 0, 0, 0, 0 }
 	};
 	p.add(dataFieldParse);
@@ -143,7 +147,7 @@ OCLSpecialPower::~OCLSpecialPower( void )
 //-------------------------------------------------------------------------------------------------
 /** Execute the power */
 //-------------------------------------------------------------------------------------------------
-void OCLSpecialPower::doSpecialPowerAtLocation( const Coord3D *loc, UnsignedInt commandOptions )
+void OCLSpecialPower::doSpecialPowerAtLocation( const Coord3D *loc, Real angle, UnsignedInt commandOptions )
 {
 	if (getObject()->isDisabled())
 		return;
@@ -153,7 +157,7 @@ void OCLSpecialPower::doSpecialPowerAtLocation( const Coord3D *loc, UnsignedInt 
 		return;
 
 	// call the base class action cause we are *EXTENDING* functionality
-	SpecialPowerModule::doSpecialPowerAtLocation( loc, commandOptions );
+	SpecialPowerModule::doSpecialPowerAtLocation( loc, angle, commandOptions );
 
 	const ObjectCreationList* ocl = findOCL();
 
@@ -205,7 +209,7 @@ void OCLSpecialPower::doSpecialPowerAtObject( Object *obj, UnsignedInt commandOp
 	// convert to a location
 	if( !obj )
 		return;
-	doSpecialPowerAtLocation( obj->getPosition(), commandOptions );
+	doSpecialPowerAtLocation( obj->getPosition(), INVALID_ANGLE, commandOptions );
 }  
 
 // ------------------------------------------------------------------------------------------------
@@ -218,10 +222,16 @@ void OCLSpecialPower::doSpecialPower( UnsignedInt commandOptions )
 	creationCoord.set( getObject()->getPosition() );
 	
 	// call the base class action cause we are *EXTENDING* functionality
-	SpecialPowerModule::doSpecialPowerAtLocation( &creationCoord, commandOptions );
+	SpecialPowerModule::doSpecialPowerAtLocation( &creationCoord, INVALID_ANGLE, commandOptions );
 
 	const ObjectCreationList* ocl = findOCL();
 	ObjectCreationList::create( ocl, getObject(), &creationCoord, &creationCoord, false );
+}
+
+// ------------------------------------------------------------------------------------------------
+const ThingTemplate* OCLSpecialPower::getReferenceThingTemplate() const
+{
+	return TheThingFactory->findTemplate( getOCLSpecialPowerModuleData()->m_referenceThingName );
 }
 
 // ------------------------------------------------------------------------------------------------

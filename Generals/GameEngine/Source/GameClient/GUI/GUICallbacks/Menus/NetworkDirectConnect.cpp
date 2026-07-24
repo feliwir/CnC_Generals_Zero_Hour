@@ -121,7 +121,6 @@ void UpdateRemoteIPList()
 	UnicodeString newEntry = unisel;
 	UnicodeString newIP;
 	newEntry.nextToken(&newIP, UnicodeString(u":"));
-
 	Int numFields = u_sscanf_u(newIP.str(), u"%d.%d.%d.%d", &(n1[0]), &(n1[1]), &(n1[2]), &(n1[3]));
 
 	if (numFields != 4) {

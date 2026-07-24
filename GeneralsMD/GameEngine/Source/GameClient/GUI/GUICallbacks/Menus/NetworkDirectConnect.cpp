@@ -31,7 +31,7 @@
 // INCLUDES ///////////////////////////////////////////////////////////////////////////////////////
 #include "Common/STLTypedefs.h"
 
-#include "gamespy/peer/peer.h"
+#include <gamespy/peer/peer.h>
 
 #include "Common/QuotedPrintable.h"
 #include "Common/UserPreferences.h"

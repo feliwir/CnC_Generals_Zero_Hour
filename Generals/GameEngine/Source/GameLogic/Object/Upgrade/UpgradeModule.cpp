@@ -31,6 +31,12 @@
 #include "Common/Xfer.h"
 #include "GameLogic/Module/UpgradeModule.h"
 
+#ifdef _INTERNAL
+// for occasional debugging...
+//#pragma optimize("", off)
+//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
+#endif
+
 // ------------------------------------------------------------------------------------------------
 /** CRC */
 // ------------------------------------------------------------------------------------------------
@@ -151,6 +157,16 @@ Bool UpgradeMux::wouldUpgrade( UpgradeMaskType keyMask ) const
 	}
 	//We can't upgrade!
 	return FALSE;
+}
+
+//-------------------------------------------------------------------------------------------------
+void UpgradeMux::giveSelfUpgrade()
+{
+	// If I have an activation condition, and I haven't activated, and this key matches my condition.
+	performUpgradeFX();
+	processUpgradeRemoval();// Need to execute removals first, to prevent both being on for a moment.
+	upgradeImplementation();
+	setUpgradeExecuted(true);
 }
 
 //-------------------------------------------------------------------------------------------------

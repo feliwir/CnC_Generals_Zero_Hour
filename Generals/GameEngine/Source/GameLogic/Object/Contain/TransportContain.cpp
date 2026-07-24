@@ -206,9 +206,9 @@ Bool TransportContain::isValidContainerFor(const Object* rider, Bool checkCapaci
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-void TransportContain::onContaining( Object *rider )
+void TransportContain::onContaining( Object *rider, Bool wasSelected )
 {
-	OpenContain::onContaining(rider);
+	OpenContain::onContaining( rider, wasSelected );
 	
 	// objects inside a transport are held
 	rider->setDisabled( DISABLED_HELD );

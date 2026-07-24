@@ -115,7 +115,7 @@ public:
 
 	virtual void exitObjectViaDoor( Object *exitObj, ExitDoorType exitDoor );	///< exit one of our content items from us
 	virtual void exitObjectByBudding( Object *newObj, Object *budHost ) { return; };
-	virtual void onContaining( Object *obj );				///< object now contains 'obj'
+	virtual void onContaining( Object *obj, Bool wasSelected );				///< object now contains 'obj'
 	virtual void onRemoving( Object *obj );					///< object no longer contains 'obj'
 
 	// A Garrison Contain must eject all passengers when it crosses the ReallyDamaged threshold.

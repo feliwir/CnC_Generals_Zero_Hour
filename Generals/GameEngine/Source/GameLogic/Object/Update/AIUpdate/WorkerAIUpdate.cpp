@@ -41,6 +41,7 @@
 #include "Common/RandomValue.h"
 #include "Common/GlobalData.h"
 #include "Common/ResourceGatheringManager.h"
+#include "Common/Upgrade.h"
 
 #include "GameClient/Drawable.h"
 #include "GameClient/GameText.h"
@@ -1388,6 +1389,18 @@ void WorkerAIUpdate::startBuildingSound( const AudioEventRTS *sound, ObjectID co
 void WorkerAIUpdate::finishBuildingSound()
 {
 	TheAudio->removeAudioEvent( m_buildingSound.getPlayingHandle() );
+}
+
+//------------------------------------------------------------------------------------------------
+Int WorkerAIUpdate::getUpgradedSupplyBoost() const
+{
+	Player *player = getObject()->getControllingPlayer();
+	static const UpgradeTemplate *workerShoeTemplate = TheUpgradeCenter->findUpgrade( "Upgrade_GLAWorkerShoes" );
+		
+	if (player && workerShoeTemplate && player->hasUpgradeComplete(workerShoeTemplate))
+		return getWorkerAIUpdateModuleData()->m_upgradedSupplyBoost;
+	else
+		return 0;
 }
 
 

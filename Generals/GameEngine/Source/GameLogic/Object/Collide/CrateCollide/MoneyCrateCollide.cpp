@@ -53,6 +53,8 @@ MoneyCrateCollide::~MoneyCrateCollide( void )
 Bool MoneyCrateCollide::executeCrateBehavior( Object *other )
 {
 	UnsignedInt money = getMoneyCrateCollideModuleData()->m_moneyProvided;
+	
+	money += getUpgradedSupplyBoost(other);
 
 	other->getControllingPlayer()->getMoney()->deposit( money );
 	other->getControllingPlayer()->getScoreKeeper()->addMoneyEarned( money );
@@ -63,6 +65,32 @@ Bool MoneyCrateCollide::executeCrateBehavior( Object *other )
 	TheAudio->addAudioEvent(&soundToPlay);
 	
 	return TRUE;
+}
+
+//------------------------------------------------------------------------------------------------
+Int MoneyCrateCollide::getUpgradedSupplyBoost( Object *other ) const
+{
+	Player *player = other->getControllingPlayer();
+	if (!player) return 0;
+
+	// Loop through the upgrade pairs and see if an upgrade is present that adds supply boost
+	std::list<upgradePair>::const_iterator it = getMoneyCrateCollideModuleData()->m_upgradeBoost.begin();
+	while (it != getMoneyCrateCollideModuleData()->m_upgradeBoost.end())
+	{
+		upgradePair info = *it;
+
+		// Check if the player has the desired upgrade. If so return the boost
+		static const UpgradeTemplate *upgradeTemplate = TheUpgradeCenter->findUpgrade( info.type.c_str() );
+		if (player && upgradeTemplate && player->hasUpgradeComplete(upgradeTemplate))
+		{
+			return info.amount;
+		}
+
+		// check next
+		++it;
+	}
+
+	return 0;
 }
 
 // ------------------------------------------------------------------------------------------------

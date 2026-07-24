@@ -140,9 +140,9 @@ void TunnelContain::iterateContained( ContainIterateFunc func, void *userData, B
 }
 
 //-------------------------------------------------------------------------------------------------
-void TunnelContain::onContaining( Object *obj )
+void TunnelContain::onContaining( Object *obj, Bool wasSelected )
 {
-	OpenContain::onContaining(obj);
+	OpenContain::onContaining( obj, wasSelected );
 
 	// objects inside a building are held
 	obj->setDisabled( DISABLED_HELD );

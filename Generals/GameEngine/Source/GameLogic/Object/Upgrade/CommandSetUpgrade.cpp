@@ -26,9 +26,8 @@
 // Author: Graham Smallwood, September 2002
 // Desc:	 UpgradeModule that sets a new override string for Command Set look ups
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-#include "Common/Thing.h"
-
 #include "Common/Xfer.h"
+#include "Common/Player.h"
 #include "GameClient/ControlBar.h"
 #include "GameLogic/Module/CommandSetUpgrade.h"
 #include "GameLogic/Object.h"
@@ -41,7 +40,9 @@ void CommandSetUpgradeModuleData::buildFieldParse(MultiIniFieldParse& p)
 
 	static const FieldParse dataFieldParse[] = 
 	{
-		{ "CommandSet",	INI::parseAsciiString,	NULL, offsetof( CommandSetUpgradeModuleData, m_newCommandSet ) },
+		{ "CommandSet",			INI::parseAsciiString,	NULL, offsetof( CommandSetUpgradeModuleData, m_newCommandSet ) },
+		{ "CommandSetAlt",	INI::parseAsciiString,	NULL, offsetof( CommandSetUpgradeModuleData, m_newCommandSetAlt ) },
+		{ "TriggerAlt",			INI::parseAsciiString,	NULL, offsetof( CommandSetUpgradeModuleData, m_triggerAlt ) },
 		{ 0, 0, 0, 0 }
 	};
   p.add(dataFieldParse);
@@ -64,8 +65,38 @@ CommandSetUpgrade::~CommandSetUpgrade( void )
 void CommandSetUpgrade::upgradeImplementation( )
 {
 	Object *obj = getObject();	
-	obj->setCommandSetStringOverride( getCommandSetUpgradeModuleData()->m_newCommandSet );
 
+	const char * upgradeAlt = getCommandSetUpgradeModuleData()->m_triggerAlt.str();
+	const UpgradeTemplate *upgradeTemplate = TheUpgradeCenter->findUpgrade( upgradeAlt );
+	
+	if (upgradeTemplate)
+	{
+		UpgradeMaskType upgradeMask = upgradeTemplate->getUpgradeMask();
+
+		// See if upgrade is found in the player completed upgrades
+		Player *player = obj->getControllingPlayer();
+		if (player)
+		{
+			UpgradeMaskType playerMask = player->getCompletedUpgradeMask();
+			if (playerMask.testForAny(upgradeMask))
+			{
+				obj->setCommandSetStringOverride( getCommandSetUpgradeModuleData()->m_newCommandSetAlt );
+				TheControlBar->markUIDirty();// Refresh the UI in case we are selected
+				return;
+			}
+		}
+
+		// See if upgrade is found in the object completed upgrades
+		UpgradeMaskType objMask = obj->getObjectCompletedUpgradeMask();
+		if (objMask.testForAny(upgradeMask))
+		{
+			obj->setCommandSetStringOverride( getCommandSetUpgradeModuleData()->m_newCommandSetAlt );
+			TheControlBar->markUIDirty();// Refresh the UI in case we are selected
+			return;
+		}
+	}
+
+	obj->setCommandSetStringOverride( getCommandSetUpgradeModuleData()->m_newCommandSet );
 	TheControlBar->markUIDirty();// Refresh the UI in case we are selected
 }
 

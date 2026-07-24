@@ -1002,6 +1002,39 @@ AsciiString getDefaultMap( Bool isMultiplayer )
 	return AsciiString::TheEmptyString;
 }  // end isValidMap
 
+
+AsciiString getDefaultOfficialMap()
+{
+	if(!TheMapCache)
+		return AsciiString::TheEmptyString;
+	TheMapCache->updateCache();
+
+	MapCache::iterator it = TheMapCache->begin();
+	while (it != TheMapCache->end())
+	{
+		if (it->second.m_isMultiplayer && it->second.m_isOfficial)
+		{
+			return it->first;
+		}
+		++it;
+	}
+	return AsciiString::TheEmptyString;
+}
+
+
+Bool isOfficialMap( AsciiString mapName )
+{
+	if(!TheMapCache || mapName.isEmpty())
+		return FALSE;
+	TheMapCache->updateCache();
+	mapName.toLower();
+	MapCache::iterator it = TheMapCache->find(mapName);
+	if (it != TheMapCache->end())
+		return it->second.m_isOfficial;
+	return FALSE;
+}
+
+
 const MapMetaData *MapCache::findMap(AsciiString mapName)
 {
 	mapName.toLower();

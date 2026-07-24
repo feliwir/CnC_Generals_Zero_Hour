@@ -165,3 +165,6 @@ target_include_directories(z_gameenginedevice
                            PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/Include)
 
 target_link_libraries(z_gameenginedevice PUBLIC c_gameenginedevice z_gameengine)
+
+# Compile the shared Common engine sources into this per-game library.
+target_sources(z_gameenginedevice PRIVATE $<TARGET_PROPERTY:c_gameenginedevice,SAGE_GAME_SOURCES>)

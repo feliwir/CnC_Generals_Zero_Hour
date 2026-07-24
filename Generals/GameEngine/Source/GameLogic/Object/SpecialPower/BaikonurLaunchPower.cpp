@@ -95,7 +95,7 @@ void BaikonurLaunchPower::doSpecialPower( UnsignedInt commandOptions )
 }  
 
 // ------------------------------------------------------------------------------------------------
-void BaikonurLaunchPower::doSpecialPowerAtLocation( const Coord3D *loc, UnsignedInt commandOptions )
+void BaikonurLaunchPower::doSpecialPowerAtLocation( const Coord3D *loc, Real angle, UnsignedInt commandOptions )
 {
 	if (getObject()->isDisabled())
 		return;
@@ -103,7 +103,7 @@ void BaikonurLaunchPower::doSpecialPowerAtLocation( const Coord3D *loc, Unsigned
 	const BaikonurLaunchPowerModuleData *data = getBaikonurLaunchPowerModuleData();
 
 	// call the base class action cause we are *EXTENDING* functionality
-	SpecialPowerModule::doSpecialPowerAtLocation( loc, commandOptions );
+	SpecialPowerModule::doSpecialPowerAtLocation( loc, angle, commandOptions );
 
 	//Create the detonation
 	const ThingTemplate *thing = TheThingFactory->findTemplate( data->m_detonationObject );

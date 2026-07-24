@@ -675,6 +675,10 @@ void GameLogic::logicMessageDispatcher( GameMessage *msg, void *userData )
 			// Location argument 2 is destination
 			Coord3D targetCoord = msg->getArgument(1)->location;
 
+			// Generals messages carry no orientation for special powers; keep the
+			// message format unchanged and pass a neutral angle to the converged API.
+			Real angle = INVALID_ANGLE;
+
 			// Object in way -- if applicable (some specials care, others don't)
 			ObjectID objectID = msg->getArgument( 2 )->objectID;
 			Object *objectInWay = TheGameLogic->findObjectByID( objectID );
@@ -689,7 +693,7 @@ void GameLogic::logicMessageDispatcher( GameMessage *msg, void *userData )
 			{
 				AIGroup* theGroup = TheAI->createGroup();
 				theGroup->add(source);
-				theGroup->groupDoSpecialPowerAtLocation( specialPowerID, &targetCoord, objectInWay, options );
+				theGroup->groupDoSpecialPowerAtLocation( specialPowerID, &targetCoord, angle, objectInWay, options );
 				TheAI->destroyGroup(theGroup);
 			}
 			else
@@ -697,7 +701,7 @@ void GameLogic::logicMessageDispatcher( GameMessage *msg, void *userData )
 				//Use the selected group!
 				if( currentlySelectedGroup )
 				{
-					currentlySelectedGroup->groupDoSpecialPowerAtLocation( specialPowerID, &targetCoord, objectInWay, options );
+					currentlySelectedGroup->groupDoSpecialPowerAtLocation( specialPowerID, &targetCoord, angle, objectInWay, options );
 				}
 			}
 			break;

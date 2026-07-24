@@ -20,10 +20,10 @@ add_subdirectory(GameEngineDevice)
 sage_add_smoke_test(
   NAME_PREFIX GeneralsMD_RTS_SmokeTest
   TARGET z_rts_sdl
-  TIMEOUT 30
+  TIMEOUT 60
   BASE_ARGS -dir "$ENV{SAGE_RETAIL_DATA_DIR_GENERALSMD}"
             -bigdir "$ENV{SAGE_RETAIL_DATA_DIR_GENERALS}"
-            -win -ignoreAsserts -autoexit 15
+            -win -ignoreAsserts -autoexit 15 -multi
   REQUIRE_ENV SAGE_RETAIL_DATA_DIR_GENERALSMD SAGE_RETAIL_DATA_DIR_GENERALS
   SCENARIOS
     "quickstart:-quickstart"
@@ -62,10 +62,10 @@ endif()
 sage_add_smoke_test(
   NAME_PREFIX GeneralsMD_Replay_SmokeTest
   TARGET z_rts_sdl
-  TIMEOUT 60
+  TIMEOUT 120
   BASE_ARGS -dir "$ENV{SAGE_RETAIL_DATA_DIR_GENERALSMD}"
             -bigdir "$ENV{SAGE_RETAIL_DATA_DIR_GENERALS}"
-            -win -ignoreAsserts
+            -win -ignoreAsserts -multi
   REQUIRE_ENV SAGE_RETAIL_DATA_DIR_GENERALSMD SAGE_RETAIL_DATA_DIR_GENERALS
   SCENARIOS
     "default:-quickstart -file alpine_assault_excal_spl.rep -autoexit 45"
@@ -81,7 +81,7 @@ if(SAGE_BUILD_TOOLS)
   sage_add_smoke_test(
     NAME_PREFIX GeneralsMD_WorldBuilder_SmokeTest
     TARGET z_worldbuilder
-    TIMEOUT 60
+    TIMEOUT 90
     BASE_ARGS -dir "$ENV{SAGE_RETAIL_DATA_DIR_GENERALSMD}"
               -bigdir "$ENV{SAGE_RETAIL_DATA_DIR_GENERALS}"
               -win

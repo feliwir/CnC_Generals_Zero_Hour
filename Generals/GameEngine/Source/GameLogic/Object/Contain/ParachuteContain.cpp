@@ -450,9 +450,9 @@ UpdateSleepTime ParachuteContain::update( void )
 
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
-void ParachuteContain::onContaining( Object *rider )
+void ParachuteContain::onContaining( Object *rider, Bool wasSelected )
 {
-	OpenContain::onContaining(rider);	
+	OpenContain::onContaining( rider, wasSelected );	
 
 	// objects inside a transport are held
 	rider->setDisabled( DISABLED_HELD );
