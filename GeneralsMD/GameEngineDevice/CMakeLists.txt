@@ -32,29 +32,23 @@ target_sources(
           Source/W3DDevice/GameClient/Shadow/W3DShadow.cpp
           Source/W3DDevice/GameClient/Shadow/W3DVolumetricShadow.cpp
           Source/W3DDevice/GameClient/TerrainTex.cpp
-          Source/W3DDevice/GameClient/W3DAssetManager.cpp
           Source/W3DDevice/GameClient/W3DBibBuffer.cpp
           Source/W3DDevice/GameClient/W3DBridgeBuffer.cpp
           Source/W3DDevice/GameClient/W3DCustomEdging.cpp
           Source/W3DDevice/GameClient/W3DDebugIcons.cpp
-          Source/W3DDevice/GameClient/W3DDisplay.cpp
           Source/W3DDevice/GameClient/W3DDisplayStringManager.cpp
           Source/W3DDevice/GameClient/W3DFileSystem.cpp
           Source/W3DDevice/GameClient/W3DGameClient.cpp
-          Source/W3DDevice/GameClient/W3DMouse.cpp
           Source/W3DDevice/GameClient/W3DParticleSys.cpp
-          Source/W3DDevice/GameClient/W3DPropBuffer.cpp
           Source/W3DDevice/GameClient/W3DScene.cpp
           Source/W3DDevice/GameClient/W3DShaderManager.cpp
           Source/W3DDevice/GameClient/W3DShroud.cpp
           Source/W3DDevice/GameClient/W3DSmudge.cpp
           Source/W3DDevice/GameClient/W3DTerrainVisual.cpp
-          Source/W3DDevice/GameClient/W3DTreeBuffer.cpp
           Source/W3DDevice/GameClient/W3DView.cpp
           Source/W3DDevice/GameClient/W3dWaypointBuffer.cpp
           Source/W3DDevice/GameClient/Water/W3DWater.cpp
           Source/W3DDevice/GameClient/Water/W3DWaterTracks.cpp
-          Source/W3DDevice/GameLogic/W3DGhostObject.cpp
           Source/W3DDevice/GameLogic/W3DTerrainLogic.cpp
     # ----- Zero Hour additions (not present in Generals) -----
           Include/W3DDevice/GameClient/Module/W3DOverlordAircraftDraw.h

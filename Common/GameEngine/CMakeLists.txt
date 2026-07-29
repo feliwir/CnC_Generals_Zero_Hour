@@ -684,6 +684,19 @@ target_sources(c_gameengine
     Source/GameNetwork/GameSpyOverlay.cpp
     Source/GameNetwork/NetMessageStream.cpp
     Source/GameNetwork/User.cpp
+    Include/GameNetwork/LANAPI.h
+    Source/Common/Recorder.cpp
+    Source/Common/RTS/Team.cpp
+    Source/GameClient/GUI/GameWindow.cpp
+    Source/GameClient/GUI/GUICallbacks/Menus/KeyboardOptionsMenu.cpp
+    Source/GameClient/GUI/GUICallbacks/Menus/WOLBuddyOverlay.cpp
+    Source/GameClient/GUI/GUICallbacks/Menus/WOLLoginMenu.cpp
+    Source/GameClient/Input/Mouse.cpp
+    Source/GameLogic/Object/Update/AIUpdate/WorkerAIUpdate.cpp
+    Source/GameNetwork/FirewallHelper.cpp
+    Source/GameNetwork/GameSpy/Thread/BuddyThread.cpp
+    Source/GameNetwork/LANAPIhandlers.cpp
+    Source/GameNetwork/Network.cpp
 )
 
 set_target_properties(c_gameengine PROPERTIES OUTPUT_NAME "GameEngine"

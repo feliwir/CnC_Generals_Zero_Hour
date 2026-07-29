@@ -118,7 +118,6 @@ target_sources(
           Include/GameNetwork/GameSpyGameInfo.h
           Include/GameNetwork/GameSpyThread.h
           Include/GameNetwork/IPEnumeration.h
-          Include/GameNetwork/LANAPI.h
           Source/Common/Audio/AudioEventRTS.cpp
           Source/Common/Audio/GameAudio.cpp
           Source/Common/Bezier/BezFwdIterator.cpp
@@ -142,17 +141,14 @@ target_sources(
           Source/Common/RTS/PlayerTemplate.cpp
           Source/Common/RTS/ProductionPrerequisite.cpp
           Source/Common/RTS/SpecialPower.cpp
-          Source/Common/RTS/Team.cpp
           Source/Common/RTS/TunnelTracker.cpp
           Source/Common/RandomValue.cpp
-          Source/Common/Recorder.cpp
           Source/Common/SkirmishBattleHonors.cpp
           Source/Common/StateMachine.cpp
           Source/Common/System/BuildAssistant.cpp
           Source/Common/System/DataChunk.cpp
           Source/Common/System/DisabledTypes.cpp
           Source/Common/System/FunctionLexicon.cpp
-          Source/Common/System/MemoryInit.cpp
           Source/Common/System/Radar.cpp
           Source/Common/System/SaveGame/GameState.cpp
           Source/Common/System/SaveGame/GameStateMap.cpp
@@ -180,7 +176,6 @@ target_sources(
           Source/GameClient/GUI/GUICallbacks/InGameChat.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/CreditsMenu.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/DisconnectWindow.cpp
-          Source/GameClient/GUI/GUICallbacks/Menus/KeyboardOptionsMenu.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/LanGameOptionsMenu.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/LanLobbyMenu.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/MainMenu.cpp
@@ -196,11 +191,9 @@ target_sources(
           Source/GameClient/GUI/GUICallbacks/Menus/SinglePlayerMenu.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/SkirmishGameOptionsMenu.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/SkirmishMapSelectMenu.cpp
-          Source/GameClient/GUI/GUICallbacks/Menus/WOLBuddyOverlay.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/WOLGameSetupMenu.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/WOLLadderScreen.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/WOLLobbyMenu.cpp
-          Source/GameClient/GUI/GUICallbacks/Menus/WOLLoginMenu.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/WOLMapSelectMenu.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/WOLMessageWindow.cpp
           Source/GameClient/GUI/GUICallbacks/Menus/WOLQMScoreScreen.cpp
@@ -210,7 +203,6 @@ target_sources(
           Source/GameClient/GUI/Gadget/GadgetCheckBox.cpp
           Source/GameClient/GUI/Gadget/GadgetPushButton.cpp
           Source/GameClient/GUI/Gadget/GadgetTextEntry.cpp
-          Source/GameClient/GUI/GameWindow.cpp
           Source/GameClient/GUI/GameWindowManagerScript.cpp
           Source/GameClient/GUI/GameWindowTransitionsStyles.cpp
           Source/GameClient/GUI/IMEManager.cpp
@@ -220,7 +212,6 @@ target_sources(
           Source/GameClient/GlobalLanguage.cpp
           Source/GameClient/InGameUI.cpp
           Source/GameClient/Input/Keyboard.cpp
-          Source/GameClient/Input/Mouse.cpp
           Source/GameClient/LanguageFilter.cpp
           Source/GameClient/MapUtil.cpp
           Source/GameClient/MessageStream/CommandXlat.cpp
@@ -305,7 +296,6 @@ target_sources(
           Source/GameLogic/Object/Update/AIUpdate/RailroadGuideAIUpdate.cpp
           Source/GameLogic/Object/Update/AIUpdate/SupplyTruckAIUpdate.cpp
           Source/GameLogic/Object/Update/AIUpdate/TransportAIUpdate.cpp
-          Source/GameLogic/Object/Update/AIUpdate/WorkerAIUpdate.cpp
           Source/GameLogic/Object/Update/AssistedTargetingUpdate.cpp
           Source/GameLogic/Object/Update/BattlePlanUpdate.cpp
           Source/GameLogic/Object/Update/BoneFXUpdate.cpp
@@ -351,7 +341,6 @@ target_sources(
           Source/GameLogic/System/GameLogic.cpp
           Source/GameLogic/System/GameLogicDispatch.cpp
           Source/GameNetwork/ConnectionManager.cpp
-          Source/GameNetwork/FirewallHelper.cpp
           Source/GameNetwork/GUIUtil.cpp
           Source/GameNetwork/GameInfo.cpp
           Source/GameNetwork/GameSpy/Chat.cpp
@@ -361,16 +350,13 @@ target_sources(
           Source/GameNetwork/GameSpy/MainMenuUtils.cpp
           Source/GameNetwork/GameSpy/PeerDefs.cpp
           Source/GameNetwork/GameSpy/StagingRoomGameInfo.cpp
-          Source/GameNetwork/GameSpy/Thread/BuddyThread.cpp
           Source/GameNetwork/GameSpy/Thread/GameResultsThread.cpp
           Source/GameNetwork/GameSpy/Thread/PeerThread.cpp
           Source/GameNetwork/GameSpy/Thread/PersistentStorageThread.cpp
           Source/GameNetwork/GameSpy/Thread/PingThread.cpp
           Source/GameNetwork/LANAPI.cpp
           Source/GameNetwork/LANAPICallbacks.cpp
-          Source/GameNetwork/LANAPIhandlers.cpp
           Source/GameNetwork/NAT.cpp
-          Source/GameNetwork/Network.cpp
           Source/GameNetwork/udp.cpp
           Source/GameNetwork/WOLBrowser/WebBrowser.cpp
     # ----- Zero Hour additions (not present in Generals) -----

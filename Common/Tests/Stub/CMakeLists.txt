@@ -288,7 +288,25 @@ set(SAGE_STUB_UNCOMMONIZED_SOURCES
     Common/GameEngine/Source/GameNetwork/FrameMetrics.cpp
     Common/GameEngine/Source/GameNetwork/GameMessageParser.cpp
     Common/GameEngine/Source/GameNetwork/GameSpyOverlay.cpp
-    Common/GameEngine/Source/GameNetwork/User.cpp)
+    Common/GameEngine/Source/GameNetwork/User.cpp
+    Common/GameEngineDevice/Source/W3DDevice/GameClient/W3DAssetManager.cpp
+    Common/GameEngineDevice/Source/W3DDevice/GameClient/W3DDisplay.cpp
+    Common/GameEngineDevice/Source/W3DDevice/GameClient/W3DMouse.cpp
+    Common/GameEngineDevice/Source/W3DDevice/GameClient/W3DPropBuffer.cpp
+    Common/GameEngineDevice/Source/W3DDevice/GameClient/W3DTreeBuffer.cpp
+    Common/GameEngineDevice/Source/W3DDevice/GameLogic/W3DGhostObject.cpp
+    Common/GameEngine/Source/Common/Recorder.cpp
+    Common/GameEngine/Source/Common/RTS/Team.cpp
+    Common/GameEngine/Source/GameClient/GUI/GameWindow.cpp
+    Common/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/KeyboardOptionsMenu.cpp
+    Common/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/WOLBuddyOverlay.cpp
+    Common/GameEngine/Source/GameClient/GUI/GUICallbacks/Menus/WOLLoginMenu.cpp
+    Common/GameEngine/Source/GameClient/Input/Mouse.cpp
+    Common/GameEngine/Source/GameLogic/Object/Update/AIUpdate/WorkerAIUpdate.cpp
+    Common/GameEngine/Source/GameNetwork/FirewallHelper.cpp
+    Common/GameEngine/Source/GameNetwork/GameSpy/Thread/BuddyThread.cpp
+    Common/GameEngine/Source/GameNetwork/LANAPIhandlers.cpp
+    Common/GameEngine/Source/GameNetwork/Network.cpp)
 
 list(TRANSFORM SAGE_STUB_UNCOMMONIZED_SOURCES PREPEND "${CMAKE_SOURCE_DIR}/")
 set_source_files_properties(

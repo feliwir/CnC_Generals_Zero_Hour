@@ -114,6 +114,12 @@ target_sources(
           Source/W3DDevice/GameClient/W3DTerrainBackground.cpp
           Source/W3DDevice/GameClient/W3DTerrainTracks.cpp
           Source/W3DDevice/GameClient/W3DWebBrowser.cpp
+          Source/W3DDevice/GameClient/W3DAssetManager.cpp
+          Source/W3DDevice/GameClient/W3DPropBuffer.cpp
+          Source/W3DDevice/GameClient/W3DTreeBuffer.cpp
+          Source/W3DDevice/GameClient/W3DDisplay.cpp
+          Source/W3DDevice/GameClient/W3DMouse.cpp
+          Source/W3DDevice/GameLogic/W3DGhostObject.cpp
           Source/W3DDevice/GameClient/FlatHeightMap.cpp)
 
 if(SAGE_USE_SDL3)
