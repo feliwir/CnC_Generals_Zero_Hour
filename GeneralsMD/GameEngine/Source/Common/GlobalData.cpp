@@ -950,6 +950,7 @@ GlobalData::GlobalData()
 
 	m_buildMapCache = FALSE;
 	m_initialFile.clear();
+	m_initialCampaign.clear();
 	m_pendingFile.clear();
 
 	for (i = LEVEL_FIRST; i <= LEVEL_LAST; ++i)

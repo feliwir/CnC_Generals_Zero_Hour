@@ -189,6 +189,11 @@ CameraShakeSystemClass::CameraShakeSystemClass(void)
 
 CameraShakeSystemClass::~CameraShakeSystemClass(void)
 {
+	Flush();
+}
+
+void CameraShakeSystemClass::Flush(void)
+{
 	/*
 	** delete all of the objects out of the list
 	*/

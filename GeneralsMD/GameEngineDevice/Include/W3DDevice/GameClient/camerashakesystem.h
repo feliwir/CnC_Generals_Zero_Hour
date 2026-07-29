@@ -70,6 +70,7 @@ public:
 											float duration = 1.5f,
 											float power = 1.0f	);
 	void		Timestep(float dt);
+	void		Flush(void);				///< remove and delete all pending shakers
 	bool		IsCameraShaking(void);
 	void		Update_Camera_Shaker(Vector3 camera_position, Vector3 * shaker_angles);
 

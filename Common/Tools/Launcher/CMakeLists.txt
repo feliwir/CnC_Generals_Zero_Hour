@@ -2,6 +2,13 @@ find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2 QuickDial
 
 set(CMAKE_AUTOMOC ON)
 
+# Our .qml files live in the qml/ subdirectory; NEW makes Qt generate the
+# per-directory qmldir files itself instead of warning about them (QTP0004,
+# introduced in Qt 6.8).
+if(QT_KNOWN_POLICY_QTP0004)
+  qt_policy(SET QTP0004 NEW)
+endif()
+
 qt_add_executable(
   c_launcher
   Main.cpp
@@ -28,6 +35,7 @@ qt_add_qml_module(
   URI SAGELauncher
   VERSION 1.0
   RESOURCE_PREFIX /qt/qml
+  NO_IMPORT_SCAN
   QML_FILES qml/Main.qml qml/GameCard.qml qml/Theme.qml qml/SteamLoginDialog.qml qml/TitleBar.qml qml/AppButton.qml qml/AppSettingsDialog.qml
   RESOURCES assets/covers/generals.jpg
             assets/covers/zerohour.jpg

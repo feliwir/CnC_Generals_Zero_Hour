@@ -85,6 +85,7 @@
 #include "GameClient/FXList.h"
 #include "GameClient/GameClient.h"
 #include "GameClient/Keyboard.h"
+#include "GameClient/CampaignManager.h"
 #include "GameClient/Shell.h"
 #include "GameClient/GameText.h"
 #include "GameClient/ParticleSys.h"
@@ -474,6 +475,34 @@ void GameEngine::init( int argc, char *argv[] )
 				msg->appendIntegerArgument(DIFFICULTY_NORMAL);
 				msg->appendIntegerArgument(0);
 				InitRandom(0);
+			}
+		}
+
+		// -campaign <NAME>: mirror the shell's campaign launch (MainMenu.cpp
+		// prepareCampaignGame/doGameStart) so CI can boot straight into a
+		// campaign's first mission with real campaign context (mission chaining,
+		// rank points), not just a bare single-player map load.
+		if (TheGlobalData->m_initialCampaign.isNotEmpty())
+		{
+			TheCampaignManager->setCampaign(TheGlobalData->m_initialCampaign);
+			AsciiString campaignMap = TheCampaignManager->getCurrentMap();
+			if (campaignMap.isNotEmpty())
+			{
+				TheWritableGlobalData->m_shellMapOn = FALSE;
+				TheWritableGlobalData->m_playIntro = FALSE;
+				TheWritableGlobalData->m_pendingFile = campaignMap;
+
+				GameMessage *msg = TheMessageStream->appendMessage( GameMessage::MSG_NEW_GAME );
+				msg->appendIntegerArgument(GAME_SINGLE_PLAYER);
+				msg->appendIntegerArgument(TheCampaignManager->getGameDifficulty());
+				msg->appendIntegerArgument(TheCampaignManager->getRankPoints());
+				InitRandom(0);
+			}
+			else
+			{
+				fprintf(stderr, "ERROR: -campaign %s: unknown campaign or empty first mission\n",
+					TheGlobalData->m_initialCampaign.str());
+				m_quitting = TRUE;
 			}
 		}
 #endif

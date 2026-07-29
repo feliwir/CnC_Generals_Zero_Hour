@@ -327,6 +327,7 @@ public:
 	Bool m_enforceMaxCameraHeight;		///< Enfoce max camera height while scrolling?
 	Bool m_buildMapCache;
 	AsciiString m_initialFile;				///< If this is specified, load a specific map/replay from the command-line
+	AsciiString m_initialCampaign;			///< -campaign <NAME>: launch straight into a campaign's first mission (CI smoke tests)
 	AsciiString m_pendingFile;				///< If this is specified, use this map at the next game start
 
 	Int m_maxParticleCount;						///< maximum number of particles that can exist
