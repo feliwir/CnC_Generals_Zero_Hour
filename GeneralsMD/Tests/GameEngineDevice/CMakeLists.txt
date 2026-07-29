@@ -2,10 +2,10 @@ find_package(GTest REQUIRED)
 find_package(SDL3 REQUIRED)
 
 add_executable(z_gameenginedevicetest
-    SDL3Device/SDL3LocalFileSystemTest.cpp
+    ${CMAKE_SOURCE_DIR}/Common/Tests/GameEngineDevice/SDL3Device/SDL3LocalFileSystemTest.cpp
     SDL3Device/SDL3BigFileSystemTest.cpp
     VideoDevice/FFmpeg/FFmpegVideoPlayerTest.cpp
-    MainStub.cpp
+    ${CMAKE_SOURCE_DIR}/Common/Tests/MainStub.cpp
 )
 
 # See GeneralsMD/Tests/GameEngine/CMakeLists.txt: the engine/device static

@@ -7,11 +7,11 @@ add_custom_command(OUTPUT generatedVersion.h COMMAND c_versionupdate ARGS
 add_executable(g_rts_sdl)
 target_sources(
   g_rts_sdl
-  PRIVATE SDL3Main.cpp WinMain.h ${CMAKE_CURRENT_BINARY_DIR}/buildVersion.h
+  PRIVATE ${CMAKE_SOURCE_DIR}/Common/Main/SDL3Main.cpp WinMain.h ${CMAKE_CURRENT_BINARY_DIR}/buildVersion.h
           ${CMAKE_CURRENT_BINARY_DIR}/generatedVersion.h)
 
 set_target_properties(g_rts_sdl PROPERTIES OUTPUT_NAME "RTS")
 target_link_libraries(g_rts_sdl PRIVATE g_gameengine g_gameenginedevice)
-target_include_directories(g_rts_sdl PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+target_include_directories(g_rts_sdl PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 # Install/packaging rules for this target live in cmake/Packaging.cmake.

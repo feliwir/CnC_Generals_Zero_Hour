@@ -80,6 +80,40 @@ target_sources(
           Source/W3DDevice/GameClient/WorldHeightMap.cpp
           Source/W3DDevice/GameClient/HeightMap.cpp
           Source/W3DDevice/GameClient/BaseHeightMap.cpp
+          Source/W3DDevice/Common/Thing/W3DThingFactory.cpp
+          Source/W3DDevice/GameClient/Drawable/Draw/W3DDebrisDraw.cpp
+          Source/W3DDevice/GameClient/Drawable/Draw/W3DDefaultDraw.cpp
+          Source/W3DDevice/GameClient/Drawable/Draw/W3DOverlordTankDraw.cpp
+          Source/W3DDevice/GameClient/Drawable/Draw/W3DPoliceCarDraw.cpp
+          Source/W3DDevice/GameClient/Drawable/Draw/W3DProjectileStreamDraw.cpp
+          Source/W3DDevice/GameClient/Drawable/Draw/W3DRopeDraw.cpp
+          Source/W3DDevice/GameClient/Drawable/Draw/W3DScienceModelDraw.cpp
+          Source/W3DDevice/GameClient/Drawable/Draw/W3DSupplyDraw.cpp
+          Source/W3DDevice/GameClient/Drawable/Draw/W3DTankDraw.cpp
+          Source/W3DDevice/GameClient/Drawable/Draw/W3DTankTruckDraw.cpp
+          Source/W3DDevice/GameClient/Drawable/Draw/W3DTracerDraw.cpp
+          Source/W3DDevice/GameClient/GUI/GUICallbacks/W3DControlBar.cpp
+          Source/W3DDevice/GameClient/GUI/GUICallbacks/W3DMOTD.cpp
+          Source/W3DDevice/GameClient/GUI/Gadget/W3DCheckBox.cpp
+          Source/W3DDevice/GameClient/GUI/Gadget/W3DComboBox.cpp
+          Source/W3DDevice/GameClient/GUI/Gadget/W3DHorizontalSlider.cpp
+          Source/W3DDevice/GameClient/GUI/Gadget/W3DListBox.cpp
+          Source/W3DDevice/GameClient/GUI/Gadget/W3DProgressBar.cpp
+          Source/W3DDevice/GameClient/GUI/Gadget/W3DRadioButton.cpp
+          Source/W3DDevice/GameClient/GUI/Gadget/W3DTabControl.cpp
+          Source/W3DDevice/GameClient/GUI/Gadget/W3DTextEntry.cpp
+          Source/W3DDevice/GameClient/GUI/Gadget/W3DVerticalSlider.cpp
+          Source/W3DDevice/GameClient/GUI/W3DGameWindow.cpp
+          Source/W3DDevice/GameClient/GUI/W3DGameWindowManager.cpp
+          Source/W3DDevice/GameClient/W3DDebugDisplay.cpp
+          Source/W3DDevice/GameClient/W3DDisplayString.cpp
+          Source/W3DDevice/GameClient/W3DInGameUI.cpp
+          Source/W3DDevice/GameClient/W3DRoadBuffer.cpp
+          Source/W3DDevice/GameClient/W3DSnow.cpp
+          Source/W3DDevice/GameClient/W3DStatusCircle.cpp
+          Source/W3DDevice/GameClient/W3DTerrainBackground.cpp
+          Source/W3DDevice/GameClient/W3DTerrainTracks.cpp
+          Source/W3DDevice/GameClient/W3DWebBrowser.cpp
           Source/W3DDevice/GameClient/FlatHeightMap.cpp)
 
 if(SAGE_USE_SDL3)
@@ -98,6 +132,10 @@ if(SAGE_USE_SDL3)
             Source/SDL3Device/Common/SDL3BIGFile.cpp
             Source/SDL3Device/Common/SDL3BIGFileSystem.cpp
             Source/SDL3Device/Common/SDL3LocalFile.cpp
+            Source/SDL3Device/Common/SDL3GameEngine.cpp
+            Source/SDL3Device/Common/SDL3IMEManager.cpp
+            Source/SDL3Device/GameClient/SDL3Keyboard.cpp
+            Source/SDL3Device/GameClient/SDL3Mouse.cpp
             Source/SDL3Device/Common/SDL3LocalFileSystem.cpp)
 
   find_package(SDL3 CONFIG REQUIRED)
@@ -124,7 +162,8 @@ endif()
 if(SAGE_USE_MINIAUDIO)
   target_sources(
     c_gameenginedevice
-    INTERFACE Include/MiniAudioDevice/MiniAudioManager.h)
+    INTERFACE Source/MiniAudioDevice/MiniAudioManager.cpp
+              Include/MiniAudioDevice/MiniAudioManager.h)
 endif()
 
 if(WIN32)
@@ -142,6 +181,10 @@ if(WIN32)
             Source/Win32Device/Common/Win32BIGFile.cpp
             Source/Win32Device/Common/Win32BIGFileSystem.cpp
             Source/Win32Device/Common/Win32LocalFile.cpp
+            Source/Win32Device/Common/Win32BIGFile.cpp
+            Source/Win32Device/Common/Win32LocalFileSystem.cpp
+            Source/Win32Device/GameClient/Win32DIKeyboard.cpp
+            Source/Win32Device/GameClient/Win32DIMouse.cpp
             Source/Win32Device/Common/Win32LocalFileSystem.cpp)
 endif()
 

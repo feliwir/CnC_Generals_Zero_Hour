@@ -2,14 +2,14 @@ find_package(GTest REQUIRED)
 find_package(SDL3 REQUIRED)
 
 add_executable(g_gameenginetest
-    Common/AsciiStringTest.cpp
-    Common/CRCTest.cpp
-    Common/DictTest.cpp
-    Common/EncryptTest.cpp
-    Common/INITest.cpp
-    Common/NameKeyGeneratorTest.cpp
-    Common/UnicodeStringTest.cpp
-    MainStub.cpp
+    ${CMAKE_SOURCE_DIR}/Common/Tests/GameEngine/Common/AsciiStringTest.cpp
+    ${CMAKE_SOURCE_DIR}/Common/Tests/GameEngine/Common/CRCTest.cpp
+    ${CMAKE_SOURCE_DIR}/Common/Tests/GameEngine/Common/DictTest.cpp
+    ${CMAKE_SOURCE_DIR}/Common/Tests/GameEngine/Common/EncryptTest.cpp
+    ${CMAKE_SOURCE_DIR}/Common/Tests/GameEngine/Common/INITest.cpp
+    ${CMAKE_SOURCE_DIR}/Common/Tests/GameEngine/Common/NameKeyGeneratorTest.cpp
+    ${CMAKE_SOURCE_DIR}/Common/Tests/GameEngine/Common/UnicodeStringTest.cpp
+    ${CMAKE_SOURCE_DIR}/Common/Tests/MainStub.cpp
 )
 
 # g_gameengine and g_gameenginedevice reference each other's symbols (e.g. the

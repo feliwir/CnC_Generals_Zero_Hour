@@ -153,7 +153,8 @@ qt_add_resources(z_worldbuilder "cursors" PREFIX "/cursors" BASE res FILES
 set_target_properties(z_worldbuilder PROPERTIES OUTPUT_NAME "WorldBuilder")
 
 target_include_directories(z_worldbuilder
-                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include
+                                   ${CMAKE_SOURCE_DIR}/Common/Tools/WorldBuilder/include)
 
 target_link_libraries(z_worldbuilder PRIVATE Qt6::Core Qt6::Widgets Qt6::Gui
                                              z_gameengine z_gameenginedevice c_wwqt6)
