@@ -28,24 +28,24 @@
 #ifndef __STACKDUMP_H_
 #define __STACKDUMP_H_
 
+#include "Common/AsciiString.h"
+#include "Common/Debug.h"	// for DEBUG_STACKTRACE
+
+#ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#ifndef _WIN32
+#else
 class EXCEPTION_POINTERS;
 #endif
 
-#ifndef IG_DEGBUG_STACKTRACE
-//#define IG_DEBUG_STACKTRACE1
-#endif
-
-#if (defined(_DEBUG) || defined(_INTERNAL) || defined(IG_DEBUG_STACKTRACE)) && defined(_WINDOWS)
+// Stack traces are resolved through cpptrace (see StackDump.cpp); the old
+// Win32 dbghelp/StackWalk implementation is retired. Everything is gated
+// behind DEBUG_STACKTRACE (Common/Debug.h) and compiles to no-ops otherwise.
+#ifdef DEBUG_STACKTRACE
 
 // Writes a stackdump (provide a callback : gets called per line)
-// If callback is NULL then will write using OuputDebugString
+// If callback is NULL then will write using DEBUG_LOG
 void StackDump(void (*callback)(const char*));
-
-// Writes a stackdump (provide a callback : gets called per line)
-// If callback is NULL then will write using OuputDebugString
-void StackDumpFromContext(DWORD eip,DWORD esp,DWORD ebp, void (*callback)(const char*));
 
 // Gets count* addresses from the current stack
 void FillStackAddresses(void**addresses, unsigned int count, unsigned int skip = 0);
@@ -57,6 +57,11 @@ void GetFunctionDetails(void *pointer, char*name, size_t nameSize, char*filename
 
 // Dumps out the exception info and stack trace.
 void DumpExceptionInfo( unsigned int u, EXCEPTION_POINTERS* e_info );
+
+// Installs the crash reporting hooks for the calling platform: the SEH
+// translator (DumpExceptionInfo) on MSVC, SIGSEGV/SIGABRT/... handlers that
+// print a stack trace to stderr elsewhere.
+void InstallStackDumpCrashHandlers(void);
 
 #else
 
@@ -72,6 +77,8 @@ __inline void GetFunctionDetails(void *pointer, char*name, size_t nameSize, char
 
 // Dumps out the exception info and stack trace.
 __inline void DumpExceptionInfo( unsigned int u, EXCEPTION_POINTERS* e_info ) {};
+
+__inline void InstallStackDumpCrashHandlers(void) {}
 
 #endif
 

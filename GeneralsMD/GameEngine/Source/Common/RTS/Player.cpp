@@ -1125,8 +1125,11 @@ void Player::becomingLocalPlayer(Bool yes)
 				if( contain )
 				{
 					contain->recalcApparentControllingPlayer();
-					TheRadar->removeObject( object );
-					TheRadar->addObject( object );
+					if( TheRadar )
+					{
+						TheRadar->removeObject( object );
+						TheRadar->addObject( object );
+					}
 				}
 
 				if( object->isKindOf( KINDOF_DISGUISER ) )

@@ -702,7 +702,11 @@ target_sources(c_gameengine
 set_target_properties(c_gameengine PROPERTIES OUTPUT_NAME "GameEngine"
                                               POSITION_INDEPENDENT_CODE TRUE)
 
-target_link_libraries(c_gameengine INTERFACE c_wwvegas c_library_include)
+# StackDump.cpp resolves stack traces through cpptrace (cross-platform,
+# DWARF/dbghelp-backed) instead of the retired Win32 StackWalk implementation.
+find_package(cpptrace CONFIG REQUIRED)
+
+target_link_libraries(c_gameengine INTERFACE c_wwvegas c_library_include cpptrace::cpptrace)
 
 target_include_directories(
   c_gameengine INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/Include)

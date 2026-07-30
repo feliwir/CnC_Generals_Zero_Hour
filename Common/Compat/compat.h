@@ -23,7 +23,7 @@
 
 // OutputDebugString
 #ifndef OutputDebugString
-#define OutputDebugString(str) printf("%s\n", str)
+#define OutputDebugString(str) fputs(str, stdout)
 #endif
 
 #ifndef INVALID_HANDLE_VALUE

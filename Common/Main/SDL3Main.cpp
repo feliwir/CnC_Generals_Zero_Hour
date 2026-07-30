@@ -276,9 +276,7 @@ int main(int argc, char **argv)
 		ApplicationHInstance = GetModuleHandleA(NULL);
 	#endif
 
-	#ifdef _MSC_VER
-		_set_se_translator( DumpExceptionInfo ); // Hook that allows stack trace.
-	#endif
+		InstallStackDumpCrashHandlers(); // Stack trace on crashes: SEH translator on MSVC, fatal-signal handlers elsewhere (no-op unless DEBUG_STACKTRACE)
 
 		// Set DXVK_WSI_DRIVER env variable to SDL3
 		setenv("DXVK_WSI_DRIVER", "SDL3", 1);

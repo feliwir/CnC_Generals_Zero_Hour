@@ -1355,11 +1355,12 @@ Team::~Team()
 {
 //	DEBUG_ASSERTCRASH(getFirstItemIn_TeamMemberList() == NULL, ("Team still has members in existence"));
 
-	TheScriptEngine->notifyOfTeamDestruction(this);
+	if (TheScriptEngine)
+		TheScriptEngine->notifyOfTeamDestruction(this);
 
 	// Tell the players a team is going away.
 	Int i;
-	for (i=0; i<ThePlayerList->getPlayerCount(); i++) {
+	for (i=0; ThePlayerList && i<ThePlayerList->getPlayerCount(); i++) {
 		Player *plyr = ThePlayerList->getNthPlayer(i);
 		if (plyr) {
 			plyr->preTeamDestroy(this);

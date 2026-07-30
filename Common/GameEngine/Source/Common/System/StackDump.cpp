@@ -24,618 +24,250 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "Common/STLTypedefs.h"
+#include "Common/Debug.h"	// defines DEBUG_STACKTRACE -- must come before the #ifdef below
+#include "Common/StackDump.h"
 
 AsciiString g_LastErrorDump;
 
-#if (defined(_DEBUG) || defined(_INTERNAL) || defined(IG_DEBUG_STACKTRACE)) && defined(_WINDOWS)
+#ifdef DEBUG_STACKTRACE
 
-#pragma pack(push, 8)
+#include <cpptrace/cpptrace.hpp>
 
-#pragma comment(linker, "/defaultlib:Dbghelp.lib")
+#include <cstdio>
 
-#include "Common/StackDump.h"
-#include "Common/Debug.h"
-
-
-//*****************************************************************************
-//	Prototypes
-//*****************************************************************************
-BOOL InitSymbolInfo(void);
-void UninitSymbolInfo(void);
-void MakeStackTrace(DWORD myeip,DWORD myesp,DWORD myebp, int skipFrames, void (*callback)(const char*));
-void GetFunctionDetails(void *pointer, char*name, size_t nameSize, char*filename, size_t filenameSize, unsigned int* linenumber, unsigned int* address);
-void WriteStackLine(void*address, void (*callback)(const char*));
-
-//*****************************************************************************
-//	Mis-named globals :-)
-//*****************************************************************************
-static CONTEXT gsContext;
-static Bool gsInit=FALSE;
-
-BOOL (__stdcall *gsSymGetLineFromAddr)(
-		IN  HANDLE                  hProcess,
-		IN  DWORD                   dwAddr,
-		OUT PDWORD                  pdwDisplacement,
-		OUT PIMAGEHLP_LINE          Line
-			);
-
+#ifdef _MSC_VER
+#include <eh.h>	// _set_se_translator
+#endif
 
 //*****************************************************************************
 //*****************************************************************************
-void StackDumpDefaultHandler(const char*line)
+static void StackDumpDefaultHandler(const char* line)
 {
-	DEBUG_LOG((line));
+	// "%s" rather than passing line as the format: demangled symbols can
+	// legitimately contain '%'
+	DEBUG_LOG(("%s", line));
 }
 
+//*****************************************************************************
+// Strip the repository root from source paths so frames read as
+// "Common/GameEngine/..." instead of the full absolute build-machine path.
+// The root is derived from this file's own __FILE__ at compile time.
+//*****************************************************************************
+static const char* stripSourceRoot(const char* filename)
+{
+	static const char thisFile[] = __FILE__;
+	static const char suffix[] = "Common/GameEngine/Source/Common/System/StackDump.cpp";
+	static size_t rootLen = (sizeof(thisFile) >= sizeof(suffix) &&
+		strcmp(thisFile + sizeof(thisFile) - sizeof(suffix), suffix) == 0)
+			? sizeof(thisFile) - sizeof(suffix) : 0;
+
+	if (rootLen > 0 && strncmp(filename, thisFile, rootLen) == 0)
+		return filename + rootLen;
+	return filename;
+}
+
+//*****************************************************************************
+// Format one resolved frame the same way the legacy implementation did:
+// "  <file>(<line>) : <function> 0x<address>", then hand it to the callback
+// (and mirror it into g_LastErrorDump when an error dump is being collected).
+//*****************************************************************************
+static void writeFrameLine(const cpptrace::stacktrace_frame& frame, void (*callback)(const char*))
+{
+	static char line[1024];
+
+	const char* filename = frame.filename.empty() ? "<unknown file>" : stripSourceRoot(frame.filename.c_str());
+	const char* symbol = frame.symbol.empty() ? "<unknown symbol>" : frame.symbol.c_str();
+
+	snprintf(line, sizeof(line), "  %s(%u) : %s 0x%08zx",
+		filename,
+		frame.line.has_value() ? (unsigned int)frame.line.value() : 0u,
+		symbol,
+		(size_t)frame.raw_address);
+
+	if (g_LastErrorDump.isNotEmpty())
+	{
+		g_LastErrorDump.concat(line);
+		g_LastErrorDump.concat("\n");
+	}
+
+	callback(line);
+	callback("\n");
+}
 
 //*****************************************************************************
 //*****************************************************************************
 void StackDump(void (*callback)(const char*))
 {
-	if (callback == NULL) 
+	if (callback == NULL)
 	{
 		callback = StackDumpDefaultHandler;
 	}
 
-	InitSymbolInfo();
-
-	DWORD myeip,myesp,myebp;
-
-_asm
-{
-MYEIP1:
- mov eax, MYEIP1
- mov dword ptr [myeip] , eax
- mov eax, esp
- mov dword ptr [myesp] , eax
- mov eax, ebp
- mov dword ptr [myebp] , eax
-}
-
-
-	MakeStackTrace(myeip,myesp,myebp, 2, callback);
-}
-
-
-//*****************************************************************************
-//*****************************************************************************
-void StackDumpFromContext(DWORD eip,DWORD esp,DWORD ebp, void (*callback)(const char*))
-{
-	if (callback == NULL) 
+	// skip this function's own frame
+	cpptrace::stacktrace trace = cpptrace::generate_trace(1);
+	for (const cpptrace::stacktrace_frame& frame : trace.frames)
 	{
-		callback = StackDumpDefaultHandler;
-	}
-
-	InitSymbolInfo();
-
-	MakeStackTrace(eip,esp,ebp, 0,  callback);
-}
-
-
-//*****************************************************************************
-//*****************************************************************************
-BOOL InitSymbolInfo()
-{
-	if (gsInit == TRUE) 
-		return TRUE;
-
-	gsInit = TRUE;
-
-	atexit(UninitSymbolInfo);
-
-	// See if we have the line from address function
-	// We use GetProcAddress to stop link failures at dll loadup
-	HINSTANCE hInstDebugHlp = GetModuleHandle("dbghelp.dll");
-
-	gsSymGetLineFromAddr = (BOOL (__stdcall *)(	IN  HANDLE,IN  DWORD,OUT PDWORD,OUT PIMAGEHLP_LINE))
-							GetProcAddress(hInstDebugHlp , "SymGetLineFromAddr");
-
-	char pathname[_MAX_PATH+1];
-	char drive[10];
-	char directory[_MAX_PATH+1];
-	HANDLE process;
-
-
-	::SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_UNDNAME | SYMOPT_LOAD_LINES | SYMOPT_OMAP_FIND_NEAREST);
-
-	process = GetCurrentProcess();
-
-	//Get the apps name
-	::GetModuleFileName(NULL, pathname, _MAX_PATH);
-
-	// turn it into a search path
-	_splitpath(pathname, drive, directory, NULL, NULL);
-	snprintf(pathname, sizeof(pathname), "%s:\\%s", drive, directory);
-
-	// append the current directory to build a search path for SymInit
-	::lstrcat(pathname, ";.;");
-
-	if(::SymInitialize(process, pathname, FALSE))
-	{
-		// regenerate the name of the app
-		::GetModuleFileName(NULL, pathname, _MAX_PATH);
-		if(::SymLoadModule(process, NULL, pathname, NULL, 0, 0))
-		{
-				//Load any other relevant modules (ie dlls) here
-				return TRUE;
-		}
-		::SymCleanup(process);
-	}
-
-	return(FALSE);
-}
-
-
-//*****************************************************************************
-//*****************************************************************************
-void UninitSymbolInfo(void)
-{
-	if (gsInit == FALSE)
-	{
-		return;
-	}
-
-	gsInit = FALSE;
-
-	::SymCleanup(GetCurrentProcess());
-}
-
-
-
-//*****************************************************************************
-//*****************************************************************************
-void MakeStackTrace(DWORD myeip,DWORD myesp,DWORD myebp, int skipFrames, void (*callback)(const char*))
-{
-STACKFRAME      stack_frame;
-BOOL            b_ret = TRUE;
-
-HANDLE thread = GetCurrentThread();
-HANDLE process = GetCurrentProcess();
-
-memset(&gsContext, 0, sizeof(CONTEXT));
-gsContext.ContextFlags = CONTEXT_FULL;
-
-memset(&stack_frame, 0, sizeof(STACKFRAME));
-stack_frame.AddrPC.Mode = AddrModeFlat;
-stack_frame.AddrPC.Offset = myeip;
-stack_frame.AddrStack.Mode = AddrModeFlat;
-stack_frame.AddrStack.Offset = myesp;
-stack_frame.AddrFrame.Mode = AddrModeFlat;
-stack_frame.AddrFrame.Offset = myebp;
-{
-/*
-    if(GetThreadContext(thread, &gsContext))
-    {
-        memset(&stack_frame, 0, sizeof(STACKFRAME));
-        stack_frame.AddrPC.Mode = AddrModeFlat;
-        stack_frame.AddrPC.Offset = gsContext.Eip;
-        stack_frame.AddrStack.Mode = AddrModeFlat;
-        stack_frame.AddrStack.Offset = gsContext.Esp;
-        stack_frame.AddrFrame.Mode = AddrModeFlat;
-        stack_frame.AddrFrame.Offset = gsContext.Ebp;
-*/
-
-		//{
-			callback("Call Stack\n**********\n");
-
-			// Skip some ?
-			unsigned int skip = skipFrames;
-			while (b_ret&&skip)
-			{
-					b_ret = StackWalk(      IMAGE_FILE_MACHINE_I386,
-											process,
-											thread,
-											&stack_frame,
-											NULL, //&gsContext,
-											NULL,
-											SymFunctionTableAccess,
-											SymGetModuleBase,
-											NULL);
-					skip--;
-			}
-
-			skip = 30;
-			while(b_ret&&skip)
-			{
-
-					b_ret = StackWalk(      IMAGE_FILE_MACHINE_I386,
-											process,
-											thread,
-											&stack_frame,
-											NULL, //&gsContext,
-											NULL,
-											SymFunctionTableAccess,
-											SymGetModuleBase,
-											NULL);
-					
-
-					
-					if (b_ret) WriteStackLine((void *) stack_frame.AddrPC.Offset, callback);
-					skip--;
-			}
+		writeFrameLine(frame, callback);
 	}
 }
 
-
 //*****************************************************************************
-//*****************************************************************************
-void GetFunctionDetails(void *pointer, char*name, size_t nameSize, char*filename, size_t filenameSize, unsigned int* linenumber, unsigned int* address)
-{
-	InitSymbolInfo();
-	if (name)
-	{
-		strncpy(name, "<Unknown>", nameSize);
-		name[nameSize - 1] = '\0';
-	}
-	if (filename)
-	{
-		strncpy(filename, "<Unknown>", filenameSize);
-		filename[filenameSize - 1] = '\0';
-	}
-	if (linenumber)
-	{
-		*linenumber = 0xFFFFFFFF;
-	}
-	if (address)
-	{
-		*address = 0xFFFFFFFF;
-	}
-
-	ULONG displacement = 0;
-
-    HANDLE process = ::GetCurrentProcess();
-
-    char symbol_buffer[512 + sizeof(IMAGEHLP_SYMBOL)];
-    memset(symbol_buffer, 0, sizeof(symbol_buffer));
-
-    PIMAGEHLP_SYMBOL psymbol = (PIMAGEHLP_SYMBOL)symbol_buffer;
-    psymbol->SizeOfStruct = sizeof(symbol_buffer);
-    psymbol->MaxNameLength = 512;
-
-    if (SymGetSymFromAddr(process, (DWORD) pointer, &displacement, psymbol))
-    {
-		if (name)
-		{
-			strncpy(name, psymbol->Name, nameSize - 1);
-			name[nameSize - 1] = '\0';
-			strncat(name, "();", nameSize - strlen(name) - 1);
-		}
-
-		// Get line now
-		if (gsSymGetLineFromAddr)
-		{
-			// Unsupported for win95/98 at least with my current dbghelp.dll
-
-			IMAGEHLP_LINE line;
-			memset(&line,0,sizeof(line));
-			line.SizeOfStruct = sizeof(line);
-
-		
-			if (gsSymGetLineFromAddr(process, (DWORD) pointer, &displacement, &line))
-			{
-				if (filename)
-				{
-					strncpy(filename, line.FileName, filenameSize);
-					filename[filenameSize - 1] = '\0';
-				}
-				if (linenumber)
-				{
-					*linenumber = (unsigned int)line.LineNumber;
-				}
-				if (address)
-				{
-					*address = (unsigned int)line.Address;
-				}
-			} 					
-		}
-    }
-}
-
-
-//*****************************************************************************
-// Gets last x addresses from the stack
+// Gets count* addresses from the current stack
 //*****************************************************************************
 void FillStackAddresses(void**addresses, unsigned int count, unsigned int skip)
 {
-	InitSymbolInfo();
+	// +1 to skip this function's own frame, like the legacy implementation
+	cpptrace::raw_trace trace = cpptrace::generate_raw_trace(skip + 1, count);
 
-	STACKFRAME	stack_frame;
-
-	
-	HANDLE thread = GetCurrentThread();
-	HANDLE process = GetCurrentProcess();
-
-    memset(&gsContext, 0, sizeof(CONTEXT));
-    gsContext.ContextFlags = CONTEXT_FULL;
-
-	DWORD myeip,myesp,myebp;
-_asm
-{
-MYEIP2:
- mov eax, MYEIP2
- mov dword ptr [myeip] , eax
- mov eax, esp
- mov dword ptr [myesp] , eax
- mov eax, ebp
- mov dword ptr [myebp] , eax
- xor eax,eax
-}
-memset(&stack_frame, 0, sizeof(STACKFRAME));
-stack_frame.AddrPC.Mode = AddrModeFlat;
-stack_frame.AddrPC.Offset = myeip;
-stack_frame.AddrStack.Mode = AddrModeFlat;
-stack_frame.AddrStack.Offset = myesp;
-stack_frame.AddrFrame.Mode = AddrModeFlat;
-stack_frame.AddrFrame.Offset = myebp;
-
-{
-/*
-    if(GetThreadContext(thread, &gsContext))
-    {
-        memset(&stack_frame, 0, sizeof(STACKFRAME));
-        stack_frame.AddrPC.Mode = AddrModeFlat;
-        stack_frame.AddrPC.Offset = gsContext.Eip;
-        stack_frame.AddrStack.Mode = AddrModeFlat;
-        stack_frame.AddrStack.Offset = gsContext.Esp;
-        stack_frame.AddrFrame.Mode = AddrModeFlat;
-        stack_frame.AddrFrame.Offset = gsContext.Ebp;
-*/
-
-		Bool stillgoing = TRUE;
-//	unsigned int cd = count;
-
-		// Skip some?
-		while (stillgoing&&skip)
-		{
-			stillgoing = StackWalk(IMAGE_FILE_MACHINE_I386,
-								process,
-								thread,
-								&stack_frame,
-								NULL,	//&gsContext,
-								NULL,
-								SymFunctionTableAccess,
-								SymGetModuleBase,
-								NULL) != 0;
-			skip--;
-		}
-
-		while(stillgoing&&count)
-		{
-			stillgoing = StackWalk(IMAGE_FILE_MACHINE_I386,
-								process,
-								thread,
-								&stack_frame,
-								NULL, //&gsContext,
-								NULL,
-								SymFunctionTableAccess,
-								SymGetModuleBase,
-								NULL) != 0;
-			if (stillgoing)
-			{
-				*addresses  = (void*)stack_frame.AddrPC.Offset;				
-				addresses++;
-				count--;
-			}
-		}
-
-		// Fill remainder
-		while (count)
-		{
-			*addresses = NULL;
-			addresses++;
-			count--;
-		}
-
-	}
-/*
-	else
+	unsigned int i = 0;
+	for (; i < trace.frames.size() && i < count; ++i)
 	{
-		memset(addresses,NULL,count*sizeof(void*));
+		addresses[i] = (void*)trace.frames[i];
 	}
-*/	
+	// Fill remainder: StackDumpFromAddresses stops at the first NULL.
+	for (; i < count; ++i)
+	{
+		addresses[i] = NULL;
+	}
 }
-
-
 
 //*****************************************************************************
 // Do full stack dump using an address array
 //*****************************************************************************
 void StackDumpFromAddresses(void**addresses, unsigned int count, void (*callback)(const char *))
 {
-	if (callback == NULL) 
+	if (callback == NULL)
 	{
 		callback = StackDumpDefaultHandler;
 	}
 
-	InitSymbolInfo();
-
-	while ((count--) && (*addresses!=NULL))
+	cpptrace::raw_trace trace;
+	for (unsigned int i = 0; i < count && addresses[i] != NULL; ++i)
 	{
-		WriteStackLine(*addresses,callback);	
-		addresses++;
-	}	
+		trace.frames.push_back((cpptrace::frame_ptr)addresses[i]);
+	}
+
+	cpptrace::stacktrace resolved = trace.resolve();
+	for (const cpptrace::stacktrace_frame& frame : resolved.frames)
+	{
+		writeFrameLine(frame, callback);
+	}
 }
 
-
 //*****************************************************************************
 //*****************************************************************************
-void WriteStackLine(void*address, void (*callback)(const char*))
+void GetFunctionDetails(void *pointer, char*name, size_t nameSize, char*filename, size_t filenameSize, unsigned int* linenumber, unsigned int* address)
 {
-	static char line[MAX_PATH];
-	static char function_name[512];
-	static char filename[MAX_PATH];
-	unsigned int linenumber;
-	unsigned int addr;
+	cpptrace::raw_trace trace;
+	trace.frames.push_back((cpptrace::frame_ptr)pointer);
+	cpptrace::stacktrace resolved = trace.resolve();
 
-	GetFunctionDetails(address, function_name, sizeof(function_name), filename, sizeof(filename), &linenumber, &addr);
-    snprintf(line, sizeof(line), "  %s(%d) : %s 0x%08p", filename, linenumber, function_name, address);
-		if (g_LastErrorDump.isNotEmpty()) {
-			g_LastErrorDump.concat(line);
-			g_LastErrorDump.concat("\n");
-		}
-	callback(line);
-	callback("\n");
+	const char* symbol = "<unknown symbol>";
+	const char* file = "<unknown file>";
+	unsigned int line = 0;
+
+	if (!resolved.frames.empty())
+	{
+		const cpptrace::stacktrace_frame& frame = resolved.frames.front();
+		if (!frame.symbol.empty())
+			symbol = frame.symbol.c_str();
+		if (!frame.filename.empty())
+			file = frame.filename.c_str();
+		if (frame.line.has_value())
+			line = (unsigned int)frame.line.value();
+	}
+
+	if (name && nameSize)
+	{
+		strncpy(name, symbol, nameSize - 1);
+		name[nameSize - 1] = 0;
+	}
+	if (filename && filenameSize)
+	{
+		strncpy(filename, file, filenameSize - 1);
+		filename[filenameSize - 1] = 0;
+	}
+	if (linenumber)
+		*linenumber = line;
+	if (address)
+		*address = (unsigned int)(size_t)pointer;
 }
 
-
 //*****************************************************************************
+// Dumps out the exception info and stack trace. Keeps the signature required
+// by MSVC's _set_se_translator(); on other platforms e_info is unused. The
+// legacy per-exception-code descriptions and register dump went away with the
+// dbghelp implementation -- the stack trace is the part everything relies on.
 //*****************************************************************************
 void DumpExceptionInfo( unsigned int u, EXCEPTION_POINTERS* e_info )
 {
-   DEBUG_LOG(( "\n********** EXCEPTION DUMP ****************\n" ));
-	/*
-	** List of possible exceptions
-	*/
-	 g_LastErrorDump.clear(); 
+	DEBUG_LOG(( "\n********** EXCEPTION DUMP ****************\n" ));
 
-	static const unsigned int _codes[] = {
-		EXCEPTION_ACCESS_VIOLATION,
-		EXCEPTION_ARRAY_BOUNDS_EXCEEDED,
-		EXCEPTION_BREAKPOINT,
-		EXCEPTION_DATATYPE_MISALIGNMENT,
-		EXCEPTION_FLT_DENORMAL_OPERAND,
-		EXCEPTION_FLT_DIVIDE_BY_ZERO,
-		EXCEPTION_FLT_INEXACT_RESULT,
-		EXCEPTION_FLT_INVALID_OPERATION,
-		EXCEPTION_FLT_OVERFLOW,
-		EXCEPTION_FLT_STACK_CHECK,
-		EXCEPTION_FLT_UNDERFLOW,
-		EXCEPTION_ILLEGAL_INSTRUCTION,
-		EXCEPTION_IN_PAGE_ERROR,
-		EXCEPTION_INT_DIVIDE_BY_ZERO,
-		EXCEPTION_INT_OVERFLOW,
-		EXCEPTION_INVALID_DISPOSITION,
-		EXCEPTION_NONCONTINUABLE_EXCEPTION,
-		EXCEPTION_PRIV_INSTRUCTION,
-		EXCEPTION_SINGLE_STEP,
-		EXCEPTION_STACK_OVERFLOW,
-		0xffffffff
-	};
+	g_LastErrorDump.clear();
 
-	/*
-	** Information about each exception type.
-	*/
-	static char const * _code_txt[] = {
-		"Error code: EXCEPTION_ACCESS_VIOLATION\nDescription: The thread tried to read from or write to a virtual address for which it does not have the appropriate access.",
-		"Error code: EXCEPTION_ARRAY_BOUNDS_EXCEEDED\nDescription: The thread tried to access an array element that is out of bounds and the underlying hardware supports bounds checking.",
-		"Error code: EXCEPTION_BREAKPOINT\nDescription: A breakpoint was encountered.",
-		"Error code: EXCEPTION_DATATYPE_MISALIGNMENT\nDescription: The thread tried to read or write data that is misaligned on hardware that does not provide alignment. For example, 16-bit values must be aligned on 2-byte boundaries; 32-bit values on 4-byte boundaries, and so on.",
-		"Error code: EXCEPTION_FLT_DENORMAL_OPERAND\nDescription: One of the operands in a floating-point operation is denormal. A denormal value is one that is too small to represent as a standard floating-point value.",
-		"Error code: EXCEPTION_FLT_DIVIDE_BY_ZERO\nDescription: The thread tried to divide a floating-point value by a floating-point divisor of zero.",
-		"Error code: EXCEPTION_FLT_INEXACT_RESULT\nDescription: The result of a floating-point operation cannot be represented exactly as a decimal fraction.",
-		"Error code: EXCEPTION_FLT_INVALID_OPERATION\nDescription: Some strange unknown floating point operation was attempted.",
-		"Error code: EXCEPTION_FLT_OVERFLOW\nDescription: The exponent of a floating-point operation is greater than the magnitude allowed by the corresponding type.",
-		"Error code: EXCEPTION_FLT_STACK_CHECK\nDescription: The stack overflowed or underflowed as the result of a floating-point operation.",
-		"Error code: EXCEPTION_FLT_UNDERFLOW\nDescription:	The exponent of a floating-point operation is less than the magnitude allowed by the corresponding type.",
-		"Error code: EXCEPTION_ILLEGAL_INSTRUCTION\nDescription:	The thread tried to execute an invalid instruction.",
-		"Error code: EXCEPTION_IN_PAGE_ERROR\nDescription:	The thread tried to access a page that was not present, and the system was unable to load the page. For example, this exception might occur if a network connection is lost while running a program over the network.",
-		"Error code: EXCEPTION_INT_DIVIDE_BY_ZERO\nDescription: The thread tried to divide an integer value by an integer divisor of zero.",
-		"Error code: EXCEPTION_INT_OVERFLOW\nDescription: The result of an integer operation caused a carry out of the most significant bit of the result.",
-		"Error code: EXCEPTION_INVALID_DISPOSITION\nDescription: An exception handler returned an invalid disposition to the exception dispatcher. Programmers using a high-level language such as C should never encounter this exception.",
-		"Error code: EXCEPTION_NONCONTINUABLE_EXCEPTION\nDescription: The thread tried to continue execution after a noncontinuable exception occurred.",
-		"Error code: EXCEPTION_PRIV_INSTRUCTION\nDescription: The thread tried to execute an instruction whose operation is not allowed in the current machine mode.",
-		"Error code: EXCEPTION_SINGLE_STEP\nDescription: A trace trap or other single-instruction mechanism signaled that one instruction has been executed.",
-		"Error code: EXCEPTION_STACK_OVERFLOW\nDescription: The thread used up its stack.",
-		"Error code: ?????\nDescription: Unknown exception."
-	};
+	static char buf[128];
+	snprintf(buf, sizeof(buf), "Exception code: 0x%08x\n", u);
+	DEBUG_LOG(( buf ));
+	// seed g_LastErrorDump so writeFrameLine() mirrors the trace into it
+	g_LastErrorDump.concat(buf);
 
-	DEBUG_LOG( ("Dump exception info\n") );
-	CONTEXT *context = e_info->ContextRecord;
-	/*
-	** The following are set for access violation only
-	*/
-	int access_read_write=-1;
-	unsigned long access_address = 0;
-	AsciiString msg; 
+	DEBUG_LOG(( "Stack Dump:\n" ));
+	StackDump(NULL);
 
-// DOUBLE_DEBUG does a DEBUG_LOG, and concats to g_LastErrorDump.  jba.
-#define DOUBLE_DEBUG(x) { msg.format x; g_LastErrorDump.concat(msg); DEBUG_LOG( x ); }
+	DEBUG_LOG(( "**********************************************\n" ));
+}
 
-	if ( e_info->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION )
-	{
-		DOUBLE_DEBUG (("Exception is access violation\n"));
-		access_read_write = e_info->ExceptionRecord->ExceptionInformation[0];  // 0=read, 1=write
-		access_address = e_info->ExceptionRecord->ExceptionInformation[1];
-	}
-	else
-	{
-		DOUBLE_DEBUG (("Exception code is %x\n", e_info->ExceptionRecord->ExceptionCode));
-	}
-	Int *winMainAddr = (Int *)WinMain;
-	DOUBLE_DEBUG(("WinMain at %x\n", winMainAddr));
-	/*
-	** Match the exception type with the error string and print it out
-	*/
-	for ( int i=0 ; _codes[i] != 0xffffffff ; i++ )
-	{
-		if ( _codes[i] == e_info->ExceptionRecord->ExceptionCode )
-		{
-			DEBUG_LOG ( ("Found exception description\n") );
-			break;
-		}
-	}
-	DOUBLE_DEBUG( ("%s\n", _code_txt[i]));
-	/** For access violations, print out the violation address and if it was read or write.
-	*/
-	if ( e_info->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION )
-	{
-		if ( access_read_write )
-		{
-			DOUBLE_DEBUG( ("Access address:%08X was written to.\n", access_address));
-		}
-		else
-		{
-			DOUBLE_DEBUG( ("Access address:%08X was read from.\n", access_address));
-		}
-	}
+//*****************************************************************************
+// Crash-signal handler (non-Windows). A SIGSEGV/SIGABRT/... never reaches the
+// assert machinery above, so without this the process dies without printing
+// anything -- headless/CI runs then only report "SEGFAULT" with no location.
+// Writes to stderr (captured by ctest) rather than the debug log: the log
+// layer takes critical sections we must not touch from a signal handler.
+//*****************************************************************************
+#ifndef _WIN32
 
-	DOUBLE_DEBUG (("\nStack Dump:\n"));
-	StackDumpFromContext(context->Eip, context->Esp, context->Ebp, NULL);
+#include <csignal>
 
-	DOUBLE_DEBUG (("\nDetails:\n"));
+static void crashHandlerWriteLine(const char* line)
+{
+	fputs(line, stderr);
+}
 
-	DOUBLE_DEBUG (("Register dump...\n"));
+static void crashSignalHandler(int sig)
+{
+	// Re-arm the default action first: if anything below faults again, the
+	// process still terminates instead of recursing.
+	signal(sig, SIG_DFL);
 
-	/*
-	** Dump the registers.
-	*/
-	DOUBLE_DEBUG ( ( "Eip:%08X\tEsp:%08X\tEbp:%08X\n", context->Eip, context->Esp, context->Ebp));
-	DOUBLE_DEBUG ( ( "Eax:%08X\tEbx:%08X\tEcx:%08X\n", context->Eax, context->Ebx, context->Ecx));
-	DOUBLE_DEBUG ( ( "Edx:%08X\tEsi:%08X\tEdi:%08X\n", context->Edx, context->Esi, context->Edi));
-	DOUBLE_DEBUG ( ( "EFlags:%08X \n", context->EFlags));
-	DOUBLE_DEBUG ( ( "CS:%04x  SS:%04x  DS:%04x  ES:%04x  FS:%04x  GS:%04x\n", context->SegCs, context->SegSs, context->SegDs, context->SegEs, context->SegFs, context->SegGs));
+	char header[64];
+	snprintf(header, sizeof(header), "\nFATAL: received signal %d\nStack Dump:\n", sig);
+	fputs(header, stderr);
 
-	/*
-	** Dump the bytes at EIP. This will make it easier to match the crash address with later versions of the game.
-	*/
-	char scrap[512];
-	DOUBLE_DEBUG ( ("EIP bytes dump...\n"));
-	wsprintf (scrap, "\nBytes at CS:EIP (%08X)  : ", context->Eip);
+	// Resolving the trace allocates, so this is not strictly async-signal-
+	// safe -- acceptable for a last-resort crash report: if it hangs or
+	// faults, the re-armed default action above still kills the process.
+	StackDump(crashHandlerWriteLine);
+	fflush(stderr);
 
-	unsigned char *eip_ptr = (unsigned char *) (context->Eip);
-	char bytestr[32];
+	// Re-raise so the wait status reports the real signal (ctest classifies
+	// SEGFAULT and friends from it).
+	raise(sig);
+}
 
-	for (int c = 0 ; c < 32 ; c++)
-	{
-		if (IsBadReadPtr(eip_ptr, 1))
-		{
-			lstrcat (scrap, "?? ");
-		}
-		else
-		{
-			sprintf (bytestr, "%02X ", *eip_ptr);
-			strcat (scrap, bytestr);
-		}
-		eip_ptr++;
-	}
+#endif // !_WIN32
 
-	strcat (scrap, "\n");
-	DOUBLE_DEBUG ( ( (scrap)));
-  DEBUG_LOG(( "********** END EXCEPTION DUMP ****************\n\n" ));
-}																									 
-
-
-#pragma pack(pop)
-
+void InstallStackDumpCrashHandlers(void)
+{
+#if defined(_MSC_VER)
+	// SEH translator: turns structured exceptions (access violation etc.)
+	// into DumpExceptionInfo calls. Note this is per-thread -- threads that
+	// want it must install it themselves (see e.g. BuddyThread.cpp).
+	_set_se_translator( DumpExceptionInfo );
+#elif !defined(_WIN32)
+	const int sigs[] = { SIGSEGV, SIGABRT, SIGBUS, SIGFPE, SIGILL };
+	for (size_t i = 0; i < sizeof(sigs) / sizeof(sigs[0]); ++i)
+		signal(sigs[i], crashSignalHandler);
 #endif
+}
 
+#endif // DEBUG_STACKTRACE

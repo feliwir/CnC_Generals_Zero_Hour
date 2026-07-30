@@ -415,6 +415,7 @@ void GameLogic::reset( void )
 	m_inputEnabledMemory = TRUE;
 	m_mouseVisibleMemory = TRUE;
 	setFPMode();
+	m_startNewGame = FALSE;
 
 	// destroy all objects
 	destroyAllObjectsImmediate();

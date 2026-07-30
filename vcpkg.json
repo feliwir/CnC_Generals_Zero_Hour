@@ -1,6 +1,7 @@
 {
   "name": "rts",
   "dependencies": [
+    "cpptrace",
     "ffmpeg",
     "fontconfig",
     "freetype",

@@ -73,7 +73,7 @@ PlayerList::PlayerList() :
 }
 
 //-----------------------------------------------------------------------------
-PlayerList::~PlayerList() 
+PlayerList::~PlayerList()
 {
 	try {
 		// the world is happier if we reinit things before destroying them,
@@ -84,6 +84,9 @@ PlayerList::~PlayerList()
 	}
 	for( Int i = 0; i < MAX_PLAYER_COUNT; ++i )
 		delete m_players[ i ];
+
+	if (ThePlayerList == this)
+		ThePlayerList = NULL;
 }
 
 //-----------------------------------------------------------------------------

@@ -8,6 +8,7 @@ This repository includes source code for Command & Conquer Generals, and its exp
 
 ## Dependencies
 
+[![cpptrace](https://img.shields.io/vcpkg/v/cpptrace?label=cpptrace)](https://vcpkg.io/en/package/cpptrace)
 [![ffmpeg](https://img.shields.io/vcpkg/v/ffmpeg?label=ffmpeg)](https://vcpkg.io/en/package/ffmpeg)
 [![fontconfig](https://img.shields.io/vcpkg/v/fontconfig?label=fontconfig)](https://vcpkg.io/en/package/fontconfig)
 [![freetype](https://img.shields.io/vcpkg/v/freetype?label=freetype)](https://vcpkg.io/en/package/freetype)
