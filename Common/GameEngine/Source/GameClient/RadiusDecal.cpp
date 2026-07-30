@@ -34,12 +34,6 @@
 #include "GameClient/Shadow.h"
 #include "GameLogic/GameLogic.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // ------------------------------------------------------------------------------------------------
 RadiusDecalTemplate::RadiusDecalTemplate() : 
 	m_shadowType(SHADOW_ALPHA_DECAL), 

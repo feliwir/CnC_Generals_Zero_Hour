@@ -64,12 +64,6 @@
 
 #include <unicode/ustring.h>
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
 // Note: if you add more columns, you must modify the .wnd files and change the listbox properties (yuck!)
 enum {

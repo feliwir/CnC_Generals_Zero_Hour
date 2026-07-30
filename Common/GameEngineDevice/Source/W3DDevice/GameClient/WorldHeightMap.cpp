@@ -55,12 +55,6 @@
 
 #include "Common/File.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 #define K_OBSOLETE_HEIGHT_MAP_VERSION 8
 
 #define PATHFIND_CLIFF_SLOPE_LIMIT_F	9.8f	

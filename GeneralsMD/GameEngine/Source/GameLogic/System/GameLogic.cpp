@@ -129,12 +129,6 @@ extern void externalAddTree(Coord3D location, Real scale, Real angle, AsciiStrin
 #endif
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 
 

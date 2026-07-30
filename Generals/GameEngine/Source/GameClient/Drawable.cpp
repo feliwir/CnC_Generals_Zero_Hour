@@ -74,12 +74,6 @@
 #include "GameClient/Shadow.h"
 #include "GameClient/GameText.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 #define VERY_TRANSPARENT_HEATVISION (0.001f)
 #define HEATVISION_FADE_SCALAR (0.8f)
 

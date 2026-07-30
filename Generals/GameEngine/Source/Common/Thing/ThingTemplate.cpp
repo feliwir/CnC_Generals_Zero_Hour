@@ -69,12 +69,6 @@
 #include "GameLogic/Powers.h"
 #include "GameLogic/Weapon.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 const Int USE_EXP_VALUE_FOR_SKILL_VALUE = -999;

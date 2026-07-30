@@ -66,12 +66,6 @@
 #include "GameLogic/TurretAI.h"
 #include "GameLogic/Weapon.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 static Bool cannotPossiblyAttackObject( State *thisState, void* userData );
 
 //----------------------------------------------------------------------------------------------------------

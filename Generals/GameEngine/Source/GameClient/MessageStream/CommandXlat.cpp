@@ -83,12 +83,6 @@
 #include "GameNetwork/GameSpyOverlay.h"
 #include "GameNetwork/GameSpy/BuddyThread.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 #if defined(_DEBUG) || defined(_INTERNAL)
 /*non-static*/ Real TheSkateDistOverride = 0.0f;

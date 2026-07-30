@@ -44,12 +44,6 @@
 #include "GameLogic/ScriptEngine.h"
 #include "GameLogic/GameLogic.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 SwayClientUpdate::SwayClientUpdate( Thing *thing, const ModuleData* moduleData ) :

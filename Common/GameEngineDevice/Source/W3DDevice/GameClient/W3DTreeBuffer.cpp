@@ -90,12 +90,6 @@ enum
 #include <d3dx9math.h>
 #include <d3dx9tex.h>
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // If TEST_AND_BLEND is defined, it will do an alpha test and blend.  Otherwise just alpha test. jba. [5/30/2003]
 #define dontTEST_AND_BLEND 1
 

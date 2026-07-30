@@ -59,12 +59,6 @@
 #include "GameLogic/SidesList.h"
 #include "GameLogic/TerrainLogic.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // PUBLIC DATA ////////////////////////////////////////////////////////////////////////////////////
 GameState *TheGameState = NULL;
 

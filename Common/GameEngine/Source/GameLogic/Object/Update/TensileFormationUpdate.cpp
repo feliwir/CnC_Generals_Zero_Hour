@@ -50,12 +50,6 @@
 
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 #define MAP_XY_FACTOR			(10.0f)	 //How wide and tall each height map square is in world space.
 #define MAP_HEIGHT_SCALE	(MAP_XY_FACTOR/16.0f)		//divide all map heights by 8.

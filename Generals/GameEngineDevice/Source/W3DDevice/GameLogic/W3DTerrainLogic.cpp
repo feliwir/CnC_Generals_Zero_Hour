@@ -41,12 +41,6 @@
 #include "GameLogic/AI.h"
 #include "GameLogic/AIPathfind.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 W3DTerrainLogic::W3DTerrainLogic():

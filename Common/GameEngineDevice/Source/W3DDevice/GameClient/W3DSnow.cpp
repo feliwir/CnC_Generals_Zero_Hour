@@ -28,12 +28,6 @@
 #include "WW3D2/assetmgr.h"
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 #define D3DFVF_POINTVERTEX (D3DFVF_XYZ)
 #define SNOW_BUFFER_SIZE 4096	//size of vertex buffer holding particles.
 #define SNOW_BATCH_SIZE	2048	//we render at most this many particles per drawprimitive call.  This number * 6 must be less than 65536 to fit into index buffer.

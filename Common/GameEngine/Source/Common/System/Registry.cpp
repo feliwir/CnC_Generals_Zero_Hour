@@ -28,12 +28,6 @@
 // Author: Matthew D. Campbell, December 2001
 #include "Common/Registry.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 #ifdef _WINDOWS
 
 Bool  getStringFromRegistry(HKEY root, AsciiString path, AsciiString key, AsciiString& val)

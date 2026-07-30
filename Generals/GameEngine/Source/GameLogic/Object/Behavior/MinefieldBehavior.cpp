@@ -46,12 +46,6 @@
 #include "GameLogic/Module/AutoHealBehavior.h"
 #include "GameLogic/Weapon.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // detonation never puts our health below this, since we probably auto-regen
 const Real MIN_HEALTH = 0.1f;
 

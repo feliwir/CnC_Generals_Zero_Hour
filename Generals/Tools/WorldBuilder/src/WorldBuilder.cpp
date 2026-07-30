@@ -83,12 +83,6 @@
 #include "Win32Device/Common/Win32LocalFileSystem.h"
 #include "Win32Device/Common/Win32BIGFileSystem.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 static SubsystemInterfaceList TheSubsystemListRecord;
 
 template<class SUBSYSTEM>

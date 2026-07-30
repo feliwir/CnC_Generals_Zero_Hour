@@ -63,12 +63,6 @@
 #include "GameLogic/Module/StealthUpdate.h"
 #include "GameLogic/Module/ContainModule.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 //-------------------------------------------------------------------------------------------------
 SpecialAbilityUpdate::SpecialAbilityUpdate( Thing *thing, const ModuleData* moduleData ) : UpdateModule( thing, moduleData )

@@ -33,12 +33,6 @@
 #include "GameLogic/GameLogic.h"
 #include "GameLogic/Module/DestroyDie.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 DestroyDie::DestroyDie( Thing *thing, const ModuleData* moduleData ) : DieModule( thing, moduleData )

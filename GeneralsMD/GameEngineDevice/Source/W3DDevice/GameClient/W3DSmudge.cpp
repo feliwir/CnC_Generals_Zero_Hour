@@ -43,12 +43,6 @@
 #include "WW3D2/camera.h"
 #include "WW3D2/sortingrenderer.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 SmudgeManager *TheSmudgeManager=NULL;
 
 W3DSmudgeManager::W3DSmudgeManager(void)

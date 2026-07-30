@@ -43,12 +43,6 @@
 #include "strtok_r.h"
 #include "osdep.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 GameInfo *TheGameInfo = NULL;
 

@@ -38,12 +38,6 @@
 #include "Win32Device/Common/Win32BIGFileSystem.h"
 #include "Common/Registry.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 static const char *BIGFileIdentifier = "BIGF";
 
 Win32BIGFileSystem::Win32BIGFileSystem() : ArchiveFileSystem() {

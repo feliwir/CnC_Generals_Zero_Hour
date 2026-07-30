@@ -40,12 +40,6 @@
 #include "GameLogic/Module/AIUpdate.h"
 #include "GameLogic/PartitionManager.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 SquishCollide::SquishCollide( Thing *thing, const ModuleData* moduleData ) : CollideModule( thing, moduleData )

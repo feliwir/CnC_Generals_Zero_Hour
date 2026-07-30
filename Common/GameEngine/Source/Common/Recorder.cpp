@@ -45,12 +45,6 @@
 
 #include <unicode/ustdio.h>
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 Int REPLAY_CRC_INTERVAL = 100;
 
 const char *replayExtention = ".rep";

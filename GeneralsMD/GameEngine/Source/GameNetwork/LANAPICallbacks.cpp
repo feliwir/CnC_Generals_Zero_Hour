@@ -48,12 +48,6 @@
 LANAPI *TheLAN = NULL;
 extern Bool LANbuttonPushed;
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //Colors used for the chat dialogs
 const Color playerColor =  GameMakeColor(255,255,255,255);
 const Color gameColor =  GameMakeColor(255,255,255,255);

@@ -42,12 +42,6 @@
 // MODULE DATA ////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 enum 
 {
 	CREATE_ABOVE_LOCATION_HEIGHT = 300,

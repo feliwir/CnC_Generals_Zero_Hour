@@ -60,12 +60,6 @@
 #include "GameLogic/Module/SpecialPowerModule.h"
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 SabotageCommandCenterCrateCollide::SabotageCommandCenterCrateCollide( Thing *thing, const ModuleData* moduleData ) : CrateCollide( thing, moduleData )

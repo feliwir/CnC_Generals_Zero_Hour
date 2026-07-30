@@ -52,12 +52,6 @@
 #include "GameLogic/Weapon.h"
 #include "GameClient/Drawable.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 const Real BEGIN_MIDPOINT_RATIO = 0.35f;
 const Real END_MIDPOINT_RATIO = 0.65f;
 

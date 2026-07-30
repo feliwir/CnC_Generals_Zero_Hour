@@ -92,12 +92,6 @@
 #include "WW3D2/ww3d.h"
 
 #include "W3DDevice/GameClient/camerashakesystem.h"
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 
 // 30 fps

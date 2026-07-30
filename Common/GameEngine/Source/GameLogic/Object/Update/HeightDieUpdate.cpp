@@ -43,12 +43,6 @@
 #include "GameLogic/Module/HeightDieUpdate.h"
 #include "GameLogic/Module/PhysicsUpdate.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 HeightDieUpdateModuleData::HeightDieUpdateModuleData( void )

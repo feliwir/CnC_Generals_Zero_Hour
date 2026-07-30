@@ -75,12 +75,6 @@
 #include "buildVersion.h"
 #include "generatedVersion.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma message("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // GLOBALS ////////////////////////////////////////////////////////////////////
 HINSTANCE ApplicationHInstance = NULL;  ///< our application instance
 HWND ApplicationHWnd = NULL;  ///< our application window handle

@@ -53,12 +53,6 @@
 #include "GameLogic/Object.h"
 #include "GameLogic/ScriptEngine.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // PUBLIC /////////////////////////////////////////////////////////////////////////////////////////
 
 static const ModelConditionFlagType theOpeningFlags[DOOR_COUNT_MAX] = 

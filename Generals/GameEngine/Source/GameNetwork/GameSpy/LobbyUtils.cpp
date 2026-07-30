@@ -64,12 +64,6 @@
 
 #include <unicode/ustring.h>
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
 enum {
 	COLUMN_NAME = 0,

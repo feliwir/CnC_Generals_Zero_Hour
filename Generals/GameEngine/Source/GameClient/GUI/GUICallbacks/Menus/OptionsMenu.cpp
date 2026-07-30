@@ -75,12 +75,6 @@
 // This is for non-RC builds only!!!
 #define VERBOSE_VERSION u"Release"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 static NameKeyType		comboBoxOnlineIPID	= NAMEKEY_INVALID;
 static GameWindow *		comboBoxOnlineIP		= NULL;

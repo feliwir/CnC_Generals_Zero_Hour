@@ -45,12 +45,6 @@
 
 #include "Common/MiniLog.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // enable this for trying to track down why SBServers are losing their keyvals  -MDC 2/20/2003
 #undef SERVER_DEBUGGING
 #ifdef SERVER_DEBUGGING
@@ -80,12 +74,6 @@ static LogClass s_stateChangedLog("StateChanged.txt");
 // we're not in a rush, ok?
 // -MDC 2/14/2003
 #define USE_BROADCAST_KEYS
-
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
 
 int isThreadHosting = 0;
 static UnsignedInt s_lastStateChangedHeartbeat = 0;

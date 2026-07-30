@@ -65,12 +65,6 @@
 
 void WOLDisplaySlotList( void );
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 extern std::list<PeerResponse> TheLobbyQueuedUTMs;
 extern void MapSelectorTooltip(GameWindow *window, WinInstanceData *instData,	UnsignedInt mouse);
 

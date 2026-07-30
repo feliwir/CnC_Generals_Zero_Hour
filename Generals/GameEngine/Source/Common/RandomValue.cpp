@@ -38,12 +38,6 @@
 
 //#define DETERMINISTIC				// to allow repetition for debugging
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 #undef DEBUG_RANDOM_CLIENT
 #undef DEBUG_RANDOM_LOGIC
 #undef DEBUG_RANDOM_AUDIO

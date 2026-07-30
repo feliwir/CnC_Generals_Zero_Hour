@@ -58,12 +58,6 @@
 #endif
 #include <unicode/ustdio.h>
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // -----------------------------------------------------
 
 /*static*/ UnicodeString UnicodeString::TheEmptyString;

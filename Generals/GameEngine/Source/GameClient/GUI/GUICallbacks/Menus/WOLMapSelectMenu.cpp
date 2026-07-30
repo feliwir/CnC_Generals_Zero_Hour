@@ -42,12 +42,6 @@
 #include "GameClient/MapUtil.h"
 #include "GameNetwork/GUIUtil.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
 static NameKeyType buttonBack = NAMEKEY_INVALID;
 static NameKeyType buttonOK = NAMEKEY_INVALID;

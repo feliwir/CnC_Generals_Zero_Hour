@@ -31,12 +31,6 @@
 #include "Common/Thing.h"
 #include "GameClient/Smudge.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 DLListClass<Smudge> SmudgeSet::m_freeSmudgeList;	///<list of unused smudges for use by SmudgeSets.
 
 SmudgeManager::SmudgeManager(void)

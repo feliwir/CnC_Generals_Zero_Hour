@@ -98,12 +98,6 @@
 #include "W3DDevice/GameClient/W3DSmudge.h"
 #include "W3DDevice/GameClient/W3DSnow.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 extern FlatHeightMapRenderObjClass *TheFlatHeightMap;
 extern HeightMapRenderObjClass *TheHeightMap;
 

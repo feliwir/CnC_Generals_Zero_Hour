@@ -49,12 +49,6 @@
 #include "GameLogic/Weapon.h"
 #include "GameLogic/WeaponSet.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-------------------------------------------------------------------------------------------------
 const FieldParse* DeliverPayloadData::getFieldParse()
 {

@@ -32,12 +32,6 @@
 #include "GameNetwork/NetworkInterface.h"
 #include "GameNetwork/NetworkUtil.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //--------------------------------------------------------------------------
 // Packet-level encryption is an XOR operation, for speed reasons.  To get
 // the max throughput, we only XOR whole 4-byte words, so the last bytes

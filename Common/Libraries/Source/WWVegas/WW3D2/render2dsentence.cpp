@@ -63,12 +63,6 @@ static void LogFtError(const char *text, FT_Error error)
 #endif
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma message("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 ////////////////////////////////////////////////////////////////////////////////////
 //	Local constants
 ////////////////////////////////////////////////////////////////////////////////////

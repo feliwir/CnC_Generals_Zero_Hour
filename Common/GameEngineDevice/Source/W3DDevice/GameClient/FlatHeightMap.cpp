@@ -93,12 +93,6 @@
 #include "Common/PerfTimer.h"
 #include "Common/UnitTimings.h" //Contains the DO_UNIT_TIMINGS define jba.		 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 FlatHeightMapRenderObjClass *TheFlatHeightMap = NULL;
 
 //-----------------------------------------------------------------------------

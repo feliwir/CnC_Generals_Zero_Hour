@@ -38,12 +38,6 @@
 #include "W3DDevice/GameClient/Module/W3DPropDraw.h"
 #include "W3DDevice/GameClient/BaseHeightMap.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-------------------------------------------------------------------------------------------------
 W3DPropDrawModuleData::W3DPropDrawModuleData() 
 {

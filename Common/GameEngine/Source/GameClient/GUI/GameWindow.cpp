@@ -62,12 +62,6 @@
 #include "GameClient/GadgetStaticText.h"
 #include "GameClient/Mouse.h"
 #include "GameClient/SelectionXlat.h"
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // DEFINES ////////////////////////////////////////////////////////////////////
 
 // PRIVATE TYPES //////////////////////////////////////////////////////////////

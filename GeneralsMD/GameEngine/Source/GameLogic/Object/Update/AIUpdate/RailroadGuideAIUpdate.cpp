@@ -60,12 +60,6 @@ static const Int INVALID_PATH = -1;
 
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 #define FRAMES_UNPULLED_LONG_ENOUGH_TO_UNHITCH (2)
 

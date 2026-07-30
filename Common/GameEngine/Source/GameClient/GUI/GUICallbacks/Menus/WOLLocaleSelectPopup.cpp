@@ -49,12 +49,6 @@
 #include "GameNetwork/GameSpy/PersistentStorageDefs.h"
 #include "GameNetwork/GameSpy/PersistentStorageThread.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
 // window ids ------------------------------------------------------------------------------
 static NameKeyType parentLocaleSelectID = NAMEKEY_INVALID;

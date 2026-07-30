@@ -48,12 +48,6 @@
 //-----------------------------------------------------------------------------
 #include "Common/GlobalData.h"
 #include "Common/NameKeyGenerator.h"
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma message("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 //-----------------------------------------------------------------------------
 // USER INCLUDES //////////////////////////////////////////////////////////////

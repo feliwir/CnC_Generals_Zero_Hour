@@ -75,12 +75,6 @@
 #include "Common/GameLOD.h"
 // #include "benchmark.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 /** Interface definition for custom shaders we define in our app.  These shaders can perform more complex
 	operations than those allowed in the WW3D2 shader system.
 */

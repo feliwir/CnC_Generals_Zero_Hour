@@ -54,12 +54,6 @@
 
 const Real CLOSE_ENOUGH = (25.0f);
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 static Bool hasAttackedMeAndICanReturnFire( State *thisState, void* /*userData*/ )
 {
 	Object *obj = thisState->getMachineOwner();

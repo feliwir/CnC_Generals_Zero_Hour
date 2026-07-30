@@ -58,13 +58,7 @@
 #include "Common/Registry.h"
 #include "GameClient/HeaderTemplate.h"
 #include "GameClient/GameFont.h"
-#include "GameClient/GlobalLanguage.h"
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-//-----------------------------------------------------------------------------
+#include "GameClient/GlobalLanguage.h"//-----------------------------------------------------------------------------
 // DEFINES ////////////////////////////////////////////////////////////////////
 //-----------------------------------------------------------------------------
 const FieldParse HeaderTemplateManager::m_headerFieldParseTable[] =

@@ -43,12 +43,6 @@
 #include "GameLogic/Module/ContainModule.h"
 #include "GameLogic/Module/PhysicsUpdate.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 enum
 {
 	GROUND_CHECK_DELAY = 10,		///< Check for colliding with the ground only after this long, to prevent hitting on the way up

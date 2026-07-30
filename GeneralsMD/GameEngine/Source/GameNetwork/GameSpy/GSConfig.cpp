@@ -34,12 +34,6 @@
 #include "GameNetwork/GameSpy/GSConfig.h"
 #include "GameNetwork/RankPointValue.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 ///////////////////////////////////////////////////////////////////////////////////////
 
 GameSpyConfigInterface *TheGameSpyConfig = NULL;

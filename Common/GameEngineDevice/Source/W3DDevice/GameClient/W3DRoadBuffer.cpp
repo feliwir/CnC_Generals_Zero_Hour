@@ -71,12 +71,6 @@
 
 static const Real TEE_WIDTH_ADJUSTMENT = 1.03f;
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-----------------------------------------------------------------------------
 //         Private Data                                                     
 //-----------------------------------------------------------------------------

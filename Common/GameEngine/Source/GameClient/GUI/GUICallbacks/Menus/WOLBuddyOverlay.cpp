@@ -57,12 +57,6 @@
 
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // window ids ------------------------------------------------------------------------------
 static NameKeyType parentID = NAMEKEY_INVALID;
 static NameKeyType buttonHideID = NAMEKEY_INVALID;

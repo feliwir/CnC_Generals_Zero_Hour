@@ -31,12 +31,6 @@
 #include "Common/PlayerList.h"
 #include "GameLogic/GameLogic.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 #ifndef ELEMENTS_OF
 #define ELEMENTS_OF(a) (sizeof(a)/sizeof((a)[0]))
 #endif

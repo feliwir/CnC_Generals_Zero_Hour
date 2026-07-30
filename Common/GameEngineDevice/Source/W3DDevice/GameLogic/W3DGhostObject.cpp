@@ -51,12 +51,6 @@
 #include "WW3D2/matinfo.h"
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 /**This class will hold all information about a W3D RenderObject needed to
 reconstruct it if necessary*/
 class W3DRenderObjectSnapshot : public Snapshot

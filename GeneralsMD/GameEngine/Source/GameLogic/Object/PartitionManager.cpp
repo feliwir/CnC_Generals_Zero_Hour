@@ -98,12 +98,6 @@
 	UnsignedInt s_gcoPerfFrame = 0xffffffff;
 #endif 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 extern void addIcon(const Coord3D *pos, Real width, Int numFramesDuration, RGBColor color);
 
 const Real HUGE_DIST_SQR = (HUGE_DIST*HUGE_DIST);

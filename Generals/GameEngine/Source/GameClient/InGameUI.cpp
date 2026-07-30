@@ -88,12 +88,6 @@
 
 #include <unicode/ustdio.h>
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 // ------------------------------------------------------------------------------------------------
 static const Real placementOpacity = 0.45f;

@@ -68,12 +68,6 @@
 #include "GameNetwork/GameSpy/ThreadUtils.h"
 #include "GameNetwork/GameSpy/MainMenuUtils.h"
 #include "GameNetwork/WOLBrowser/WebBrowser.h"
-
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
 static Bool isShuttingDown = FALSE;
 static Bool buttonPushed = FALSE;

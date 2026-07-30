@@ -38,12 +38,6 @@
 #include "GameClient/Drawable.h"
 #include "GameClient/InGameUI.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 #if defined(_DEBUG) || defined(_INTERNAL)
 #define NO_DEBUG_SUPPLY_STATE
 #endif

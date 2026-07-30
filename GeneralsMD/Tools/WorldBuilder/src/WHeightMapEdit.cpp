@@ -44,12 +44,6 @@ extern const char* NEUTRAL_TEAM_INTERNAL_STR;
 #include "Common/DataChunk.h"
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 int WorldHeightMapEdit::m_numGlobalTextureClasses=0;
 TGlobalTextureClass WorldHeightMapEdit::m_globalTextureClasses[NUM_TEXTURE_CLASSES];
 /** Destructor -.

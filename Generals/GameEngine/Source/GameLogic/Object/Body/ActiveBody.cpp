@@ -57,12 +57,6 @@
 #include "GameLogic/Module/DieModule.h"
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 #define YELLOW_DAMAGE_PERCENT (0.25f)
 
 // FORWARD REFERENCES /////////////////////////////////////////////////////////////////////////////

@@ -40,12 +40,6 @@
 #include "Common/WellKnownKeys.h"
 #include "Common/QuotedPrintable.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 class MapMetaDataReader
 {
 public:

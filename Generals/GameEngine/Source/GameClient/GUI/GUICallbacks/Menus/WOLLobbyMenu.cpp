@@ -69,12 +69,6 @@
 #include "GameNetwork/GameSpy/PersistentStorageThread.h"
 #include "GameNetwork/GameSpy/LobbyUtils.h"
 #include "GameNetwork/RankPointValue.h"
-
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
 static void refreshGameList( Bool forceRefresh = FALSE );
 static void refreshPlayerList( Bool forceRefresh = FALSE );
 

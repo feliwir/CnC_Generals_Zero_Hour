@@ -45,12 +45,6 @@
 #include "Lib/Trig.h"
 #include "GameLogic/TerrainLogic.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //=============================================================================
 /** Constructor */
 //=============================================================================

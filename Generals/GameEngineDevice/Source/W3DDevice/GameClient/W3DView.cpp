@@ -88,12 +88,6 @@
 #include "WW3D2/predlod.h"
 #include "WW3D2/ww3d.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 
 // 30 fps

@@ -109,12 +109,6 @@ static void drawFramerateBar(void);
 #include <SDL3/SDL.h>
 extern SDL_Window* ApplicationWindow;
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // DEFINE AND ENUMS ///////////////////////////////////////////////////////////
 #define W3D_DISPLAY_DEFAULT_BIT_DEPTH 32
 

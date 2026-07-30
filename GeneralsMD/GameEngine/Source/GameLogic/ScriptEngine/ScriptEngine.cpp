@@ -61,12 +61,6 @@
 
 #include <SDL3/SDL.h>
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // These are for debugger window
 static int st_LastCurrentFrame;
 static int st_CurrentFrame;

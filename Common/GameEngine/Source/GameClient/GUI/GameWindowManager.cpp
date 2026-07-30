@@ -62,12 +62,6 @@ UnsignedInt WindowLayoutCurrentVersion = 2;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // PRIVATE FUNCTIONS //////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //
 // with this statis set to true, the window system will propogate mouse position
 // messages to windows.  You may want to disable this if you feel the mouse position

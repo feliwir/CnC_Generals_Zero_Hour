@@ -49,12 +49,6 @@
 #include "GameClient/Drawable.h"
 #include "GameClient/GameText.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-----------------------------------------------------------------------------
 ProductionPrerequisite::ProductionPrerequisite() 
 {

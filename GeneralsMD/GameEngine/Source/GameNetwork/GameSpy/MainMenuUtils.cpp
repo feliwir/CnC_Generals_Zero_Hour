@@ -57,12 +57,6 @@
 
 #include <SDL3_net/SDL_net.h>
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 ///////////////////////////////////////////////////////////////////////////////////////
 
 static Bool checkingForPatchBeforeGameSpy = FALSE;

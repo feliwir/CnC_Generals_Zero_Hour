@@ -43,12 +43,6 @@
 #include "GameLogic/Module/BodyModule.h"
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 // FORWARD REFERENCES /////////////////////////////////////////////////////////////////////////////
 enum ObjectID : int;

@@ -53,12 +53,6 @@
 #include "WW3D2/texture.h"
 #include "WW3D2/dx8caps.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
 enum { OVERLAY_REFRESH_RATE = 6 };  ///< over updates once this many frames

@@ -42,12 +42,6 @@
 #include "WaypointOptions.h"
 #include "Common/UnicodeString.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 static const Int K_LOCAL_TEAMS_VERSION_1 = 1;
 
 #define SCRIPT_DIALOG_SECTION "ScriptDialog"

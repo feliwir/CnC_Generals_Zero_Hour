@@ -69,12 +69,6 @@
 
 #include "GameNetwork/WOLBrowser/WebBrowser.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 #ifdef ALLOW_NON_PROFILED_LOGIN
 Bool GameSpyUseProfiles = false;
 #endif // ALLOW_NON_PROFILED_LOGIN

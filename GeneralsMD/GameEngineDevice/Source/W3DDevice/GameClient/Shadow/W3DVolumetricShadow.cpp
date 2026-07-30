@@ -61,12 +61,6 @@
 #include "WWShade/shdmesh.h"
 #include "WWShade/shdsubmesh.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // Global Variables and Functions /////////////////////////////////////////////
 
 W3DVolumetricShadowManager	*TheW3DVolumetricShadowManager=NULL;

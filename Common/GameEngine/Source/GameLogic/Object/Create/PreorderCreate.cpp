@@ -34,12 +34,6 @@
 #include "GameLogic/Object.h"
 #include "GameLogic/Module/PreorderCreate.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 PreorderCreate::PreorderCreate( Thing *thing, const ModuleData* moduleData ) : CreateModule( thing, moduleData )

@@ -109,12 +109,6 @@
 
 // PRIVATE TYPES //////////////////////////////////////////////////////////////
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma message("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // PRIVATE DATA ///////////////////////////////////////////////////////////////
 
 static SubsystemInterfaceList _TheSubsystemList;

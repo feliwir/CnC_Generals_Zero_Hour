@@ -55,12 +55,6 @@
 
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 #define STRAY_MULTIPLIER 2.0f // Multiplier from stating diestance from tunnel, to max distance from
 

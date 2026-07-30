@@ -53,12 +53,6 @@
 #include "GameClient/DisconnectMenu.h"
 #include "GameLogic/ScriptEngine.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
 static WindowLayout *quitMenuLayout = NULL;

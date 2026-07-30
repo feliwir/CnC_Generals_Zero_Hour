@@ -42,12 +42,6 @@
 #include "GameNetwork/GameSpy/PersistentStorageThread.h"
 #include "GameNetwork/GameSpy/GSConfig.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 /*
  * In case you're wondering, we do this weird connection pairing scheme
  * to speed up the negotiation process, especially in cases where there

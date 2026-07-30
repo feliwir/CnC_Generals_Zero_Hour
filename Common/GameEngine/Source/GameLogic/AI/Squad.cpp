@@ -49,12 +49,6 @@
 #include "GameLogic/GameLogic.h"
 #include "GameLogic/Object.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // addObject //////////////////////////////////////////////////////////////////////////////////////
 void Squad::addObject(Object *objectToAdd)
 {

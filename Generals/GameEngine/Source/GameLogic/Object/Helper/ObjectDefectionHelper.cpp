@@ -35,12 +35,6 @@
 #include "GameLogic/Object.h"
 #include "GameLogic/Module/ObjectDefectionHelper.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // ------------------------------------------------------------------------------------------------
 // ------------------------------------------------------------------------------------------------
 ObjectDefectionHelper::~ObjectDefectionHelper( void )

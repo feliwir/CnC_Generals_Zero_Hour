@@ -59,12 +59,6 @@
 #include "GameLogic/Module/AIUpdate.h"
 #include "GameLogic/Module/StealthDetectorUpdate.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 BattlePlanUpdateModuleData::BattlePlanUpdateModuleData()

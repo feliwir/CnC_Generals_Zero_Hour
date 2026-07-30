@@ -59,12 +59,6 @@
 #include "GameLogic/Module/SabotageSupplyCenterCrateCollide.h"
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 SabotageSupplyCenterCrateCollide::SabotageSupplyCenterCrateCollide( Thing *thing, const ModuleData* moduleData ) : CrateCollide( thing, moduleData )

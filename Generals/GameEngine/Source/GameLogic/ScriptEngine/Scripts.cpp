@@ -64,12 +64,6 @@
 #include "GameLogic/SidesList.h"
 
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 static Script *s_mtScript = NULL;
 static ScriptGroup *s_mtGroup = NULL;

@@ -40,12 +40,6 @@
 #define DEFINE_PARTICLE_SYSTEM_NAMES
 #include "GameClient/ParticleSys.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 #define PROFILE_ERROR_LIMIT	0.94f	//fraction of profiled result needed to get a match.  Allows some room for error/fluctuation.
 
 //Hack to get access to a static method on the W3DDevice side. -MW

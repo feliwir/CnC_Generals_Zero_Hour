@@ -78,12 +78,6 @@
 //#define _PLAYTEST
 //#endif
 // 10-20  GS  Made this a project setting so we can set it in one place.  (It has spread to several files, inclding MessageStream.h)
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 
 // PRIVATE DATA ///////////////////////////////////////////////////////////////////////////////////
 

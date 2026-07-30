@@ -76,12 +76,6 @@
 #include "Common/GameLOD.h"
 // #include "benchmark.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 // Turn this on to turn off pixel shaders. jba[4/3/2003]
 #define do_not_DISABLE_PIXEL_SHADERS 1
 

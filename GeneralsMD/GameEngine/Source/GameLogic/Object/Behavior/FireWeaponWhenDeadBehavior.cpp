@@ -48,12 +48,6 @@
 #include "GameLogic/Weapon.h"
 #include "GameClient/Drawable.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma MESSAGE("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 const Int MAX_IDX = 32;
 
 const Real BEGIN_MIDPOINT_RATIO = 0.35f;

@@ -25,12 +25,6 @@
 #include "EditParameter.h"
 #include "GameLogic/ScriptEngine.h"
 
-#ifdef _INTERNAL
-// for occasional debugging...
-//#pragma optimize("", off)
-//#pragma message("************************************** WARNING, optimization disabled for debugging purposes")
-#endif
-
 LRESULT CMyTreeCtrl::WindowProc(	UINT message, WPARAM wParam, LPARAM lParam )
 {
 	if (message==WM_KEYDOWN) {
