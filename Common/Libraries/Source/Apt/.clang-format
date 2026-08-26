@@ -1,0 +1,9 @@
+BreakBeforeBraces: Allman
+AllowShortIfStatementsOnASingleLine: false
+IndentWidth: 4
+IndentCaseLabels: false
+ColumnLimit: 0
+AlignConsecutiveAssignments:
+  Enabled: true
+  EnumAssignments: true
+SortIncludes: false

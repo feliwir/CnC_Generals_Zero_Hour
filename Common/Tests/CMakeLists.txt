@@ -84,5 +84,6 @@ endfunction()
 
 add_subdirectory(Stub)
 add_subdirectory(GameEngineDevice)
+add_subdirectory(Apt)
 add_subdirectory(Compression)
 add_subdirectory(WWVegas)

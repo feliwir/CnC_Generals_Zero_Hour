@@ -1,6 +1,3 @@
-// Include the standard library and GoogleTest headers first: Compression.h
-// pulls in Lib/BaseType.h which defines min()/max() function-like macros that
-// otherwise clash with the C++ standard headers.
 #include <gtest/gtest.h>
 
 #include <cctype>

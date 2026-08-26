@@ -7,3 +7,7 @@ target_link_libraries(c_library_include INTERFACE c_compat ICU::data ICU::i18n I
 
 add_subdirectory(Source/Compression)
 add_subdirectory(Source/WWVegas)
+add_subdirectory(Source/Apt)
+if(SAGE_USE_FREETYPE)
+    add_subdirectory(Source/AptFT)
+endif()
